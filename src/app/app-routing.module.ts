@@ -1,24 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+// Components
+import { AuthComponent } from './authentication/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-// Components
-import { AuthComponent } from './auth/auth.component';
-
 const routes: Routes = [
+    // {
+    //     path: '',
+    //     redirectTo: 'auth',
+    //     pathMatch: 'full'
+    // },
     {
         path: '',
-        redirectTo: 'auth',
-        pathMatch: 'full'
+        component: DashboardComponent
     },
     {
         path: 'auth',
         component: AuthComponent
-    },
-    {
-        path: 'dashboard',
-        component: DashboardComponent
     }
 ];
 
