@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-card-header class="align-items-center flex-column flex-column-reverse">
+        <img src="../../assets/img/company-logo.jpg" alt="" class="company-logo mb-3">
+        <mat-card-title class="h1">Вход в систему</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="signIn()">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Логин</mat-label>
+                <input matInput hideRequiredMarker formControlName="phone" placeholder="934114400" type="tel"
+                    maxlength="9" value="" />
+                <mat-icon matSuffix>local_phone</mat-icon>
+
+                <mat-error *ngIf="phone.errors?.required">Введите номер телефона</mat-error>
+                <mat-error *ngIf="phone.errors?.minlength">
+                    Номер не может быть менее {{ phone.errors.minlength.requiredLength }} цифр
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Пароль</mat-label>
+                <input matInput hideRequiredMarker formControlName="password" placeholder="**********"
+                    type="password" />
+                <mat-icon matSuffix>lock</mat-icon>
+
+                <mat-error *ngIf="password.errors?.required">Введите пароль</mat-error>
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between mb-3">
+                <mat-checkbox formControlName="remember">Запомнить меня</mat-checkbox>
+                <a href="#" class="link">Забыл пароль</a>
+            </div>
+
+            <button mat-raised-button color="primary" type="submit" class="btn-lg btn-block">Войти</button>
+        </form>
+    </mat-card-content>
+</mat-card>
