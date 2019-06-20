@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -11,7 +12,8 @@ import {
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
 } from '@angular/material';
 
 import { AuthComponent } from './auth.component';
@@ -24,7 +26,8 @@ const materialModules = [
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
 ];
 
 @NgModule({
@@ -35,7 +38,14 @@ const materialModules = [
         materialModules,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: () => localStorage.getItem('access_token'),
+                whitelistedDomains: ['192.168.88.246:4200'],
+                blacklistedRoutes: ['192.168.88.246:4200/auth']
+            }
+        })
     ],
     exports: [AuthComponent, SignInComponent]
 })

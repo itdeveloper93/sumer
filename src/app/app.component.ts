@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
+import { routerTransition } from './router-transitions';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+    selector: 'app-root',
+    animations: [routerTransition],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'sumer';
+    getState(outlet) {
+        return outlet.activatedRouteData.state;
+    }
 }

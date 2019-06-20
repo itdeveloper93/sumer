@@ -1,8 +1,9 @@
-import { SignInService } from './sign-in.service';
-import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { Component, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-sign-in',
@@ -23,12 +24,11 @@ export class SignInComponent {
         remember: new FormControl(false)
     });
 
-    private _invalidCredentials: boolean;
-
     constructor(
-        private _snackbar: MatSnackBar,
-        private _authService: SignInService,
-        private _router: Router
+        private snackbar: MatSnackBar,
+        private authService: AuthService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {}
 
     /**
@@ -59,17 +59,21 @@ export class SignInComponent {
             password: this.form.value.password
         };
 
-        this._authService.signIn(credentials).subscribe(response => {
-            console.log(response);
+        this.form.disable();
 
-            // if (response) this._router.navigate(['/']);
-            // else this._invalidCredentials = true;
+        this.authService.signIn(credentials).subscribe(response => {
+            if (response) {
+                const returnUrl = this.route.snapshot.queryParamMap.get(
+                    'returnUrl'
+                );
+                this.router.navigate([returnUrl || '/']);
+            } else {
+                this.snackbar.open('Неверные логин или пароль', '', {
+                    duration: 5000
+                });
+            }
+
+            this.form.enable();
         });
-
-        if (this._invalidCredentials) {
-            this._snackbar.open('Неверные логин или пароль', '', {
-                duration: 5000
-            });
-        }
     }
 }

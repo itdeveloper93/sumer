@@ -1,3 +1,6 @@
-<p>
-  dashboard works!
-</p>
+<button mat-raised-button color="warn" *ngIf="authService.isSignedIn()" (click)="authService.signOut()">
+    Выйти из системы
+</button>
+<button mat-raised-button color="warn" *ngIf="authService.isSignedIn()" (click)="getUserList()">
+    Запрос
+</button>

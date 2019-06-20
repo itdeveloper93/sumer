@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../authentication/auth.service';
+import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.sass']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
+    constructor(private authService: AuthService, private http: HttpClient) {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+    /**
+     * Test GET request
+     */
+    getUserList() {
+        return this.http
+            .get(environment.API.URL + 'Account/UserAll')
+            .subscribe(response => {
+                console.log(response);
+            });
+    }
 }
