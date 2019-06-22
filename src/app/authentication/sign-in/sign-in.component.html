@@ -20,7 +20,7 @@
 
     <div class="d-flex justify-content-between mb-3">
         <mat-checkbox formControlName="remember">Запомнить меня</mat-checkbox>
-        <a href="#" class="link">Забыл пароль</a>
+        <a href="#" class="link" (click)="resetPassword(); false">Забыл пароль</a>
     </div>
 
     <button mat-raised-button color="primary" type="submit" class="btn-lg btn-block"

@@ -6,9 +6,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-export interface SignInResponse {
+interface SignInResponse {
     isSuccess: boolean;
     token: string;
+}
+
+interface ResetPasswordResponse {
+    isSuccess: boolean;
+    token: string;
+    password: string;
 }
 
 @Injectable({
@@ -57,5 +63,22 @@ export class AuthService {
         const isExpired = this.jwtHelper.isTokenExpired(token);
 
         return !isExpired;
+    }
+
+    resetPassword(credentials) {
+        this.isRequesting = true;
+
+        return this.http
+            .post<ResetPasswordResponse>(
+                environment.API.URL + 'Account/ForgotPassword',
+                JSON.stringify(credentials)
+            )
+            .pipe(tap(() => (this.isRequesting = false)))
+            .pipe(
+                map(response => {
+                    if (response.password) return true;
+                    return false;
+                })
+            );
     }
 }

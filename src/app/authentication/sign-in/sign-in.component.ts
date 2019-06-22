@@ -1,6 +1,5 @@
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { Component, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +22,11 @@ export class SignInComponent {
         password: new FormControl('password1', [Validators.required]),
         remember: new FormControl(false)
     });
+
+    /**
+     * Set up custom event to emit up to AuthComponent
+     */
+    @Output() onResetPassLinkClick = new EventEmitter<boolean>();
 
     constructor(
         private snackbar: MatSnackBar,
@@ -75,5 +79,14 @@ export class SignInComponent {
 
             this.form.enable();
         });
+    }
+
+    /**
+     * Determines whether the user clicked "Забыл пароль".
+     * And emits custom event up to AuthComponent
+     * @param reset
+     */
+    resetPassword() {
+        this.onResetPassLinkClick.emit(true);
     }
 }

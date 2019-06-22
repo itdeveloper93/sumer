@@ -12,12 +12,14 @@ import { AuthModule } from './authentication/auth.module';
 import { AuthService } from './authentication/auth.service';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
     declarations: [AppComponent, DashboardComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        MaterialModule,
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
