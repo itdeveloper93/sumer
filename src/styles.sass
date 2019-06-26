@@ -1,3 +1,22 @@
+@import './sass/_mixins/_media'
+@import './sass/_vars'
+
+::placeholder
+    color: $white
+  
+:-ms-input-placeholder
+    color: $white
+  
+::-ms-input-placeholder
+    color: $white
+
+*
+    outline: none !important
+
+body,
+mat-card.mat-card
+    color: $black
+
 body,
 app-entrance
     min-height: 100vh
@@ -8,3 +27,17 @@ app-entrance
     flex: 1 1 auto
     align-self: auto
     display: block
+
+a
+    color: $purple
+    transition: .2s ease
+
+    &:hover
+        color: darken($purple, 10%)
+        text-decoration: none
+    
+    &.link
+        border-bottom: 1px dashed $purple
+
+        &:hover
+            border-bottom-color: transparent

@@ -1,3 +1,6 @@
+@import '../../sass/_mixins/_media'
+@import '../../sass/_vars'
+
 .auth
     min-height: 100vh
     background-image: url('./img/bg.png')
@@ -5,11 +8,22 @@
 
     .progress-spinner
         z-index: 1
+        left: 0
+        top: 0
+        right: 0
+        bottom: 0
 
-    .mat-card
-        padding: 35px
-        width: 400px
-        max-width: 100%
-
-        .company-logo
-            max-width: 180px
+    .company-logo
+        max-width: 150px
+        +respond-to(phone)
+            max-width: 140px
+    
+    mat-card
+        max-width: 400px
+        padding: 45px 50px
+        box-shadow: $shadow-xl !important
+        +respond-to(phone)
+            padding: 35px
+    
+    mat-card-title
+        font-size: 1.5rem

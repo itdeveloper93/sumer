@@ -5,11 +5,11 @@
 export const environment = {
     production: false,
     JWT: {
-        whitelistedDomains: ['192.168.88.242:4200'],
-        blacklistedRoutes: ['192.168.88.242:4200/auth']
+        whitelistedDomains: ['localhost:4200'],
+        blacklistedRoutes: ['localhost:4200/auth']
     },
     API: {
-        URL: 'https://192.168.88.243:45456/api/'
+        URL: 'https://samr-dev.azurewebsites.net/api/'
     }
 };
 

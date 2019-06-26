@@ -2,20 +2,15 @@ import { Router } from '@angular/router';
 import { environment } from './../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-
-interface SignInResponse {
-    isSuccess: boolean;
-    token: string;
-}
-
-interface ResetPasswordResponse {
-    isSuccess: boolean;
-    token: string;
-    password: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { map, tap, catchError } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import SignInResponseInterface, {
+    SignInCredentials
+} from './sign-in/sign-in.interface';
+import ResetPasswordResponseInterface, {
+    ResetPasswordCredentials
+} from './reset-password/reset-password.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -29,19 +24,22 @@ export class AuthService {
         private router: Router
     ) {}
 
-    signIn(credentials): Observable<any> {
-        this.isRequesting = true;
-
+    signIn(credentials: SignInCredentials): Observable<any> {
         return this.http
-            .post<SignInResponse>(
+            .post<SignInResponseInterface>(
                 environment.API.URL + 'Account/Login',
-                JSON.stringify(credentials)
+                JSON.stringify(credentials),
+                {
+                    observe: 'response'
+                }
             )
-            .pipe(tap(() => (this.isRequesting = false)))
             .pipe(
                 map(response => {
-                    if (response.token) {
-                        localStorage.setItem('auth_token', response.token);
+                    if (response.ok && response.body.meta.success) {
+                        localStorage.setItem(
+                            'auth_token',
+                            response.body.data.token
+                        );
                         return true;
                     }
 
@@ -65,18 +63,19 @@ export class AuthService {
         return !isExpired;
     }
 
-    resetPassword(credentials) {
-        this.isRequesting = true;
-
+    resetPassword(credentials: ResetPasswordCredentials): Observable<boolean> {
         return this.http
-            .post<ResetPasswordResponse>(
-                environment.API.URL + 'Account/ForgotPassword',
-                JSON.stringify(credentials)
+            .post<ResetPasswordResponseInterface>(
+                environment.API.URL + 'Account/ResetPassword',
+                JSON.stringify(credentials),
+                {
+                    observe: 'response'
+                }
             )
             .pipe(tap(() => (this.isRequesting = false)))
             .pipe(
                 map(response => {
-                    if (response.password) return true;
+                    if (response.ok && response.body.meta.success) return true;
                     return false;
                 })
             );

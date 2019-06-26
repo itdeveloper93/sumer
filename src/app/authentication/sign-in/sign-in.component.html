@@ -18,11 +18,11 @@
         <mat-error *ngIf="password.errors?.required">Введите пароль</mat-error>
     </mat-form-field>
 
-    <div class="d-flex justify-content-between mb-3">
-        <mat-checkbox formControlName="remember">Запомнить меня</mat-checkbox>
+    <div class="d-flex justify-content-between mb-4 align-items-center">
+        <mat-checkbox formControlName="remember" color="primary">Запомнить</mat-checkbox>
         <a href="#" class="link" (click)="resetPassword(); false">Забыл пароль</a>
     </div>
 
-    <button mat-raised-button color="primary" type="submit" class="btn-lg btn-block"
+    <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block"
         [disabled]="authService.isRequesting">Войти</button>
 </form>
