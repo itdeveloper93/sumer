@@ -13,9 +13,10 @@ import { AuthService } from './authentication/auth.service';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
+import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 
 @NgModule({
-    declarations: [AppComponent, DashboardComponent],
+    declarations: [AppComponent, DashboardComponent, DashboardLayoutComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,

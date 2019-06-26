@@ -24,7 +24,7 @@ export class AuthService {
         private router: Router
     ) {}
 
-    signIn(credentials: SignInCredentials): Observable<any> {
+    signIn(credentials: SignInCredentials): Observable<boolean> {
         return this.http
             .post<SignInResponseInterface>(
                 environment.API.URL + 'Account/Login',

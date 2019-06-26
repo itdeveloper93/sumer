@@ -57,7 +57,7 @@ export class ResetPasswordComponent {
 
                     setTimeout(() => this.undo(), 5000);
                 },
-                error => {
+                (error: Response) => {
                     this.authComponent.switchFormState(this.form, 'enable');
 
                     switch (error.status) {
@@ -68,7 +68,9 @@ export class ResetPasswordComponent {
 
                     if (error.status >= 500) {
                         this.snackbar.open(
-                            'Ошибка на сервере. Обратитесь к администратору'
+                            `Ошибка ${
+                                error.status
+                            }. Обратитесь к администратору`
                         );
                     }
                 },

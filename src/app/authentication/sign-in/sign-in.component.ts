@@ -75,7 +75,7 @@ export class SignInComponent {
                 );
                 this.router.navigate([returnUrl || '/']);
             },
-            error => {
+            (error: Response) => {
                 this.authComponent.switchFormState(this.form, 'enable');
 
                 switch (error.status) {
@@ -86,7 +86,7 @@ export class SignInComponent {
 
                 if (error.status >= 500) {
                     this.snackbar.open(
-                        'Ошибка на сервере. Обратитесь к администратору'
+                        `Ошибка ${error.status}. Обратитесь к администратору`
                     );
                 }
             },
