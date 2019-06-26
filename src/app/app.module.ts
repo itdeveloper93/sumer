@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -14,9 +14,15 @@ import { AuthService } from './authentication/auth.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
+import { HeaderComponent } from './layout/header/header.component';
 
 @NgModule({
-    declarations: [AppComponent, DashboardComponent, DashboardLayoutComponent],
+    declarations: [
+        AppComponent,
+        DashboardComponent,
+        DashboardLayoutComponent,
+        HeaderComponent
+    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -35,6 +41,7 @@ import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.co
         },
         AuthService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule {}
