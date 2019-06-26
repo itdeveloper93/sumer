@@ -18,7 +18,7 @@ export class AuthComponent implements OnInit {
      */
     forgotPassword = false;
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(public authService: AuthService, private router: Router) {}
 
     ngOnInit() {
         if (localStorage.getItem('auth_token')) this.router.navigate(['/']);

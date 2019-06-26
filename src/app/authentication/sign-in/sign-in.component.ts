@@ -32,7 +32,7 @@ export class SignInComponent {
 
     constructor(
         private snackbar: MatSnackBar,
-        private authService: AuthService,
+        public authService: AuthService,
         private authComponent: AuthComponent,
         private router: Router,
         private route: ActivatedRoute

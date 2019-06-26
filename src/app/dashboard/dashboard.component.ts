@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
     styleUrls: ['./dashboard.component.sass']
 })
 export class DashboardComponent {
-    constructor(private authService: AuthService, private http: HttpClient) {}
+    constructor(public authService: AuthService, private http: HttpClient) {}
 
     /**
      * Test GET request

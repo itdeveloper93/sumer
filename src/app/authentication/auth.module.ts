@@ -12,6 +12,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MaterialModule } from '../material/material.module';
 
+export function jwtTokenGetter() {
+    return localStorage.getItem('access_token');
+}
+
 @NgModule({
     declarations: [AuthComponent, SignInComponent, ResetPasswordComponent],
     imports: [
@@ -23,7 +27,7 @@ import { MaterialModule } from '../material/material.module';
         HttpClientModule,
         JwtModule.forRoot({
             config: {
-                tokenGetter: () => localStorage.getItem('access_token'),
+                tokenGetter: jwtTokenGetter,
                 whitelistedDomains: environment.JWT.whitelistedDomains,
                 blacklistedRoutes: environment.JWT.blacklistedRoutes
             }
