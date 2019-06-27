@@ -15,13 +15,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
 import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
 import { HeaderComponent } from './layout/header/header.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         DashboardComponent,
         DashboardLayoutComponent,
-        HeaderComponent
+        HeaderComponent,
+        BreadcrumbsComponent
     ],
     imports: [
         BrowserModule,

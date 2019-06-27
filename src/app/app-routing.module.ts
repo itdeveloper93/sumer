@@ -16,11 +16,21 @@ const routes: Routes = [
             {
                 path: '',
                 component: DashboardComponent,
-                data: { state: 'dashboard' }
+                data: { breadcrumb: 'Рабочий стол' },
+                children: [
+                    {
+                        path: 'dashboard',
+                        component: DashboardComponent,
+                        data: { breadcrumb: 'Рабочий стол 2' }
+                    }
+                ]
             }
         ]
     },
-    { path: 'auth', component: AuthComponent, data: { state: 'auth' } },
+    {
+        path: 'auth',
+        component: AuthComponent
+    },
     { path: '**', redirectTo: '' }
 ];
 
