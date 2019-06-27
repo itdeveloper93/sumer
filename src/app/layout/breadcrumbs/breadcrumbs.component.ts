@@ -102,8 +102,6 @@ export class BreadcrumbsComponent implements OnInit {
             );
         }
 
-        console.log(newBreadcrumbs);
-
         return newBreadcrumbs;
     }
 }

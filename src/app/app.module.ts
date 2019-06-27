@@ -13,9 +13,10 @@ import { AuthService } from './authentication/auth.service';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
-import { DashboardLayoutComponent } from './dashboard-layout/dashboard-layout.component';
+import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { HeaderComponent } from './layout/header/header.component';
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component';
+import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
         DashboardComponent,
         DashboardLayoutComponent,
         HeaderComponent,
-        BreadcrumbsComponent
+        BreadcrumbsComponent,
+        MiniProfileComponent
     ],
     imports: [
         BrowserModule,

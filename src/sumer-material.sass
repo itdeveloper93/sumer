@@ -94,13 +94,18 @@ label.mat-checkbox-layout
     padding: 0 !important
 
 .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label
-    transform: translate(.2em, -1.7em) scale(0.75)
+    transform: translateY(-1.7em) scale(0.75)
 
 .mat-focused mat-icon
     color: $purple !important
 
 .mat-form-field-invalid mat-icon
     color: $red !important
+
+.mat-form-field-appearance-outline .mat-form-field-outline-end, 
+.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-gap
+    border-width: 2px !important
 
 
 // MatCheckbox
@@ -111,3 +116,6 @@ label.mat-checkbox-layout
 // MatSideNav
 .mat-drawer-container
     background-color: transparent
+
+.mat-drawer-side
+    border: 0
