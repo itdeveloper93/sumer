@@ -1,3 +1,4 @@
+@import '../../../sass/_mixins/_media'
 @import '../../../sass/_vars'
 
 // MatSideNav
@@ -8,3 +9,9 @@ mat-sidenav-container
         width: 300px
         background-color: $black
         color: $light-grey
+        +respond-to(phone)
+            width: 100%
+
+    mat-sidenav-content
+        +respond-to(tablet)
+            width: 100%

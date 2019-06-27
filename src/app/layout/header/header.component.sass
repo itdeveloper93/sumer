@@ -1,3 +1,4 @@
+@import '../../../sass/_mixins/_media'
 @import '../../../sass/_vars'
 
 
@@ -6,6 +7,20 @@
     background-color: #fff
     font-size: 1rem
     color: $black
+    +respond-to(tablet)
+        height: 70px
+    +respond-to(phone-land)
+        height: 60px
 
-.logos
-    max-width: 120px
+    .logos
+        max-width: 120px
+        +respond-to(phone-land)
+            max-width: 90px
+
+    .sidebar-trigger
+        line-height: 1
+        margin-top: 4px
+
+        mat-icon
+            font-size: 2rem
+            color: $purple

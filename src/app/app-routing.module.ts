@@ -16,7 +16,14 @@ const routes: Routes = [
             {
                 path: '',
                 component: DashboardComponent,
-                data: { breadcrumb: 'Рабочий стол' }
+                data: { breadcrumb: 'Рабочий стол' },
+                children: [
+                    {
+                        path: 'notifications',
+                        component: DashboardComponent,
+                        data: { breadcrumb: 'Уведомления' }
+                    }
+                ]
             }
         ]
     },

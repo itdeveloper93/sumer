@@ -17,6 +17,8 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { HeaderComponent } from './layout/header/header.component';
 import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component';
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +27,8 @@ import { MiniProfileComponent } from './layout/mini-profile/mini-profile.compone
         DashboardLayoutComponent,
         HeaderComponent,
         BreadcrumbsComponent,
-        MiniProfileComponent
+        MiniProfileComponent,
+        NotificationWidgetComponent
     ],
     imports: [
         BrowserModule,
@@ -35,7 +38,8 @@ import { MiniProfileComponent } from './layout/mini-profile/mini-profile.compone
         FormsModule,
         ReactiveFormsModule,
         AuthModule,
-        HttpClientModule
+        HttpClientModule,
+        LayoutModule
     ],
     providers: [
         {

@@ -13,6 +13,10 @@
 *
     outline: none !important
 
+html
+    +respond-to(tablet)
+        font-size: 14px
+
 body,
 mat-card.mat-card
     color: $black
@@ -52,6 +56,12 @@ a
 .container-fluid
     padding-right: 30px
     padding-left: 30px
+    +respond-to(tablet)
+        padding-left: 15px
+        padding-right: 15px
 
 .border-bottom
     border-color: $light-grey
+
+.rounded
+    border-radius: 6px !important

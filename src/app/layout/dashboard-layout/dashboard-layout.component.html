@@ -1,6 +1,9 @@
 <mat-sidenav-container>
-    <mat-sidenav mode="side" opened>
+    <mat-sidenav mode="side" [(opened)]="isSidebarOpened" #sidenav>
         <mini-profile></mini-profile>
+        <div class="p-4">
+            <notification-widget></notification-widget>
+        </div>
     </mat-sidenav>
     <mat-sidenav-content>
         <app-header></app-header>
