@@ -19,6 +19,8 @@ import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
+import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
+import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { NotificationWidgetComponent } from './layout/notification-widget/notifi
         HeaderComponent,
         BreadcrumbsComponent,
         MiniProfileComponent,
-        NotificationWidgetComponent
+        NotificationWidgetComponent,
+        MainNavigationComponent
     ],
     imports: [
         BrowserModule,
@@ -39,7 +42,8 @@ import { NotificationWidgetComponent } from './layout/notification-widget/notifi
         ReactiveFormsModule,
         AuthModule,
         HttpClientModule,
-        LayoutModule
+        LayoutModule,
+        NgMaterialMultilevelMenuModule
     ],
     providers: [
         {

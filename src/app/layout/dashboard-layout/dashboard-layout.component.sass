@@ -2,16 +2,22 @@
 @import '../../../sass/_vars'
 
 // MatSideNav
-mat-sidenav-container
-    min-height: 100vh
+mat-sidenav
+    width: 300px
+    background-color: $black
+    color: $light-grey
+    +respond-to(phone)
+        width: 100%
 
-    mat-sidenav
-        width: 300px
-        background-color: $black
-        color: $light-grey
-        +respond-to(phone)
-            width: 100%
+mat-sidenav-content
+    +respond-to(tablet)
+        width: 100%
 
-    mat-sidenav-content
-        +respond-to(tablet)
-            width: 100%
+.nav-link 
+    color: $light-grey
+    background-color: transparent
+    padding-top: .75rem
+    padding-bottom: .75rem
+
+    &:hover
+        background-color: lighten($black, 10%)

@@ -12,6 +12,6 @@ export class NotificationWidgetService {
     constructor() {}
 
     getNotificationCount() {
-        return 1;
+        return 22;
     }
 }

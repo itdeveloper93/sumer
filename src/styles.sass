@@ -35,9 +35,11 @@ app-entrance
     align-self: auto
     display: block
 
+a, button
+    transition: all .2s ease
+
 a
     color: $purple
-    transition: .2s ease
 
     &:hover
         color: darken($purple, 10%)
@@ -65,3 +67,41 @@ a
 
 .rounded
     border-radius: 6px !important
+
+
+// NgMaterialMultilevelMenu
+ng-material-multilevel-menu
+    .mat-list-item-content
+        padding-left: 1.5rem !important
+        padding-right: 1.5rem !important
+    
+    mat-icon
+        font-size: 21px !important
+    
+    .anml-data
+        text-transform: inherit !important
+    
+    mat-divider
+        display: none !important
+    
+    mat-list-item
+        &:hover
+            background-color: lighten($black, 10%) !important
+            color: $light-grey
+            transition: background-color .2s
+        
+        &.selected-amml-item
+            background-color: $purple !important
+            color: #fff !important
+
+    .amml-submenu
+        margin-left: 0 !important
+
+        mat-list-item
+            color: $grey !important
+            padding-left: 37px !important
+
+            &:hover,
+            &.active-amml-item
+                background-color: transparent !important
+                color: lighten($purple, 10%) !important
