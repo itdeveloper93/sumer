@@ -1,0 +1,9 @@
+<a [routerLink]="['/user/', user.id]" class="mini-profile py-2 px-3 py-lg-3 px-lg-4 d-flex align-items-center">
+    <div class="media align-items-center">
+        <img src="{{ user.avatarUrl }}" alt="{{ user.fullName }}" class="avatar rounded-circle mr-2 mr-lg-3">
+        <div class="media-body">
+            <span class="full-name d-block">{{ user.fullName }}</span>
+            <span class="position">{{ user.position }}</span>
+        </div>
+    </div>
+</a>

@@ -1,15 +1,18 @@
-<div class="auth w-100 d-flex justify-content-center align-items-center">
-    <mat-spinner class="progress-spinner position-absolute" *ngIf="authService.isRequesting"></mat-spinner>
-    <mat-card>
-        <mat-card-header class="align-items-center flex-column flex-column-reverse">
-            <img src="../../assets/img/company-logo.png" alt="" class="company-logo mb-4 pt-1">
-            <mat-card-title class="h1">{{ cardTitle }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <app-sign-in (onResetPassLinkClick)="setForgotPasswordState($event)" *ngIf="!forgotPassword">
-            </app-sign-in>
-            <app-reset-password (onResetPassLinkClick)="setForgotPasswordState($event)" *ngIf="forgotPassword">
-            </app-reset-password>
-        </mat-card-content>
-    </mat-card>
+<div class="auth d-flex justify-content-center align-items-center">
+    <div class="container">
+        <mat-card class="mx-auto">
+            <mat-spinner class="progress-spinner position-absolute m-auto" *ngIf="authService.isRequesting">
+            </mat-spinner>
+            <mat-card-header class="align-items-center flex-column flex-column-reverse">
+                <img src="../../assets/img/company-logo.png" alt="" class="company-logo mb-3 mb-md-4 pt-1">
+                <mat-card-title class="mb-3 mb-md-4 mat-card-title">{{ cardTitle || 'Вход в систему' }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <sign-in (onResetPassLinkClick)="setForgotPasswordState($event)" *ngIf="!forgotPassword">
+                </sign-in>
+                <reset-password (onResetPassLinkClick)="setForgotPasswordState($event)" *ngIf="forgotPassword">
+                </reset-password>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>

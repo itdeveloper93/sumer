@@ -10,7 +10,10 @@ import {
     MatSnackBarModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MAT_SNACK_BAR_DEFAULT_OPTIONS
+    MAT_SNACK_BAR_DEFAULT_OPTIONS,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatRippleModule
 } from '@angular/material';
 
 const modules = [
@@ -21,7 +24,10 @@ const modules = [
     MatIconModule,
     MatSnackBarModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatRippleModule
 ];
 
 @NgModule({

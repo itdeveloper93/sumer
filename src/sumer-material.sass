@@ -1,4 +1,5 @@
 @import '~@angular/material/theming'
+@import './sass/_vars'
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -6,19 +7,131 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core()
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$sumer-app-primary: mat-palette($mat-indigo)
-$sumer-app-accent: mat-palette($mat-pink, A200, A100, A400)
+// Custom color palettes
+$sumer-pinkish: (50: #eae8ff, 100: #cbc5ff, 200: #a99eff, 300: #8777fe, 400: #6d5afe, 500: #533dfe, 600: #4c37fe, 700: #422ffe, 800: #3927fe, 900: #291afd, A100: #ffffff, A200: #fdfcff, A400: #ccc9ff, A700: #b4b0ff, contrast: (50: #000000, 100: #000000, 200: #000000, 300: #000000, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #000000, A700: #000000))
 
-// The warn palette is optional (defaults to red).
-$sumer-app-warn: mat-palette($mat-red)
+$primary: mat-palette($sumer-pinkish)
+$accent: mat-palette($mat-green, 600)
+$warn: mat-palette($mat-red)
 
 // Create the theme object (a Sass map containing all of the palettes).
-$sumer-app-theme: mat-light-theme($sumer-app-primary, $sumer-app-accent, $sumer-app-warn)
+$theme: mat-light-theme($primary, $accent, $warn)
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($sumer-app-theme)
+@include angular-material-theme($theme)
+
+
+// MatCard
+mat-card.mat-card
+    padding: 45px
+    box-shadow: $shadow !important
+
+// MatCheckbox
+label.mat-checkbox-layout
+    margin-bottom: 0
+
+
+// MatButton
+.mat-button
+    background-color: $white
+    color: $grey
+
+.mat-button-focus-overlay
+    background-color: $grey
+
+.mat-button, 
+.mat-flat-button, 
+.mat-icon-button, 
+.mat-stroked-button
+    line-height: 50px !important
+
+.mat-flat-button.mat-primary[disabled], 
+.mat-flat-button.mat-accent[disabled], 
+.mat-flat-button.mat-warn[disabled], 
+.mat-flat-button[disabled][disabled], 
+.mat-raised-button.mat-primary[disabled], 
+.mat-raised-button.mat-accent[disabled], 
+.mat-raised-button.mat-warn[disabled], 
+.mat-raised-button[disabled][disabled], 
+.mat-fab.mat-primary[disabled], 
+.mat-fab.mat-accent[disabled], 
+.mat-fab.mat-warn[disabled], 
+.mat-fab[disabled][disabled], 
+.mat-mini-fab.mat-primary[disabled], 
+.mat-mini-fab.mat-accent[disabled], 
+.mat-mini-fab.mat-warn[disabled], 
+.mat-mini-fab[disabled][disabled]
+    background-color: $light-grey
+
+
+// MatFormField
+.mat-form-field
+    &-label
+        color: $grey
+
+    mat-icon
+        transition: .1s ease
+
+.mat-form-field-appearance-outline .mat-form-field-outline,
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon
+    color: $grey
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick
+    color: $black
+.mat-form-field-appearance-outline .mat-form-field-infix
+    padding: .8em 0 1.1em 0
+
+.mat-form-field-label-wrapper
+    left: 5px !important
+
+.mat-input-element
+    padding: 0 5px !important
+    height: 17px
+
+.mat-form-field-appearance-outline .mat-form-field-subscript-wrapper
+    padding: 0 !important
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label
+    transform: translateY(-1.7em) scale(0.75)
+
+.mat-focused mat-icon
+    color: $purple !important
+
+.mat-form-field-invalid mat-icon
+    color: $red !important
+
+.mat-form-field-appearance-outline .mat-form-field-outline-end, 
+.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-gap
+    border-width: 2px !important
+
+
+// MatCheckbox
+.mat-checkbox-frame
+    border-color: $grey
+
+
+// MatSideNav
+mat-sidenav-container
+    min-height: 100vh
+
+.mat-drawer-container
+    background-color: transparent
+
+    .mat-drawer-inner-container
+        display: flex
+        flex-direction: column
+
+.mat-drawer-side
+    border: 0
+
+.mat-drawer-inner-container
+    overflow: overlay !important
+
+
+// MatIcon
+mat-icon
+    width: auto !important
+    height: auto !important

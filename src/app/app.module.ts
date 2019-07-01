@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -13,9 +13,35 @@ import { AuthService } from './authentication/auth.service';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
+import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component';
+import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
+import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
+import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
+
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    suppressScrollX: true,
+    wheelPropagation: false
+};
 
 @NgModule({
-    declarations: [AppComponent, DashboardComponent],
+    declarations: [
+        AppComponent,
+        DashboardComponent,
+        DashboardLayoutComponent,
+        HeaderComponent,
+        BreadcrumbsComponent,
+        MiniProfileComponent,
+        NotificationWidgetComponent,
+        MainNavigationComponent
+    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -24,7 +50,10 @@ import { MaterialModule } from './material/material.module';
         FormsModule,
         ReactiveFormsModule,
         AuthModule,
-        HttpClientModule
+        HttpClientModule,
+        LayoutModule,
+        NgMaterialMultilevelMenuModule,
+        PerfectScrollbarModule
     ],
     providers: [
         {
@@ -32,8 +61,13 @@ import { MaterialModule } from './material/material.module';
             useClass: GlobalHttpHeadersInterceptorService,
             multi: true
         },
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        },
         AuthService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule {}

@@ -5,15 +5,33 @@ import { Routes, RouterModule } from '@angular/router';
 // Components
 import { AuthComponent } from './authentication/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: DashboardComponent,
-        data: { state: 'home' },
-        canActivate: [AuthGuard]
+        component: DashboardLayoutComponent,
+        canActivate: [AuthGuard],
+        children: [
+            {
+                path: '',
+                component: DashboardComponent,
+                data: { breadcrumb: 'Рабочий стол' },
+                children: [
+                    {
+                        path: 'notifications',
+                        component: DashboardComponent,
+                        data: { breadcrumb: 'Уведомления' }
+                    }
+                ]
+            }
+        ]
     },
-    { path: 'auth', component: AuthComponent, data: { state: 'auth' } }
+    {
+        path: 'auth',
+        component: AuthComponent
+    },
+    { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

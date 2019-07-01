@@ -1,6 +1,33 @@
+@import './sass/_mixins/_media'
+@import './sass/_vars'
+
+::placeholder
+    color: $white
+  
+:-ms-input-placeholder
+    color: $white
+  
+::-ms-input-placeholder
+    color: $white
+
+*
+    outline: none !important
+
+html
+    +respond-to(tablet)
+        font-size: 14px
+
+body,
+mat-card.mat-card
+    color: $black
+
 body,
 app-entrance
     min-height: 100vh
+
+body
+    background-color: #F5F7F8
+    height: 10000px
 
 app-root,
 app-entrance
@@ -8,3 +35,101 @@ app-entrance
     flex: 1 1 auto
     align-self: auto
     display: block
+
+a, button
+    transition: all .2s ease
+
+a
+    color: $purple
+
+    &:hover
+        color: darken($purple, 10%)
+        text-decoration: none
+    
+    &.link
+        border-bottom: 1px dashed $purple
+
+        &:hover
+            border-bottom-color: transparent
+
+.row
+    width: 100%
+
+.container,
+.container-fluid
+    padding-right: 30px
+    padding-left: 30px
+    +respond-to(tablet)
+        padding-left: 15px
+        padding-right: 15px
+
+.border-bottom
+    border-color: $light-grey
+
+.rounded
+    border-radius: 6px !important
+
+
+// NgMaterialMultilevelMenu
+ng-material-multilevel-menu
+    .mat-list-item-content
+        padding-left: 1.5rem !important
+        padding-right: 1.5rem !important
+    
+    mat-icon
+        font-size: 21px !important
+    
+    .anml-data
+        text-transform: inherit !important
+    
+    mat-divider
+        display: none !important
+    
+    mat-list-item
+        &:hover
+            background-color: lighten($black, 10%) !important
+            color: $light-grey
+            transition: background-color .2s
+        
+        &.selected-amml-item
+            background-color: $purple !important
+            color: #fff !important
+
+    .amml-submenu
+        margin-left: 0 !important
+
+        mat-list-item
+            color: $grey !important
+            padding-left: 37px !important
+
+            &:hover,
+            &.active-amml-item
+                background-color: transparent !important
+                color: lighten($purple, 10%) !important
+
+
+// ngx-perfect-scrollbar
+perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y, 
+perfect-scrollbar > .ps.ps--scrolling-x > .ps__rail-x,
+.ps .ps__rail-x:hover, 
+.ps .ps__rail-y:hover, 
+.ps .ps__rail-x:focus, 
+.ps .ps__rail-y:focus, 
+.ps .ps__rail-x.ps--clicking, 
+.ps .ps__rail-y.ps--clicking
+    background-color: transparent !important
+
+.ps__rail-y.ps--clicking .ps__thumb-y,
+.ps__thumb-y
+    background-color: rgba(255, 255, 255, 0.25) !important
+    width: 6px !important
+
+.ps__rail-y:hover > .ps__thumb-y, 
+.ps__rail-y:focus > .ps__thumb-y
+    background-color: rgba(255, 255, 255, 0.5) !important
+
+mat-sidenav perfect-scrollbar .ps-content
+    display: flex
+    flex-direction: column
+    height: 100%
+

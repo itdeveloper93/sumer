@@ -2,27 +2,23 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../auth.service';
+import { AuthComponent } from '../auth.component';
 
 @Component({
-    selector: 'app-reset-password',
+    selector: 'reset-password',
     templateUrl: './reset-password.component.html',
     styleUrls: ['./reset-password.component.sass']
 })
 export class ResetPasswordComponent {
     /**
-     * Determines if the user has forgotten the
-     * password
-     */
-    forgot: boolean;
-
-    /**
      * Register form and it's controls
      */
     form = new FormGroup({
-        phone: new FormControl('934114400', [
+        phone: new FormControl('', [
             Validators.required,
             Validators.minLength(9),
-            Validators.maxLength(9)
+            Validators.maxLength(9),
+            Validators.pattern('^[0-9]*$')
         ])
     });
 
@@ -33,7 +29,8 @@ export class ResetPasswordComponent {
 
     constructor(
         private snackbar: MatSnackBar,
-        private authService: AuthService
+        public authService: AuthService,
+        private authComponent: AuthComponent
     ) {}
 
     /**
@@ -45,32 +42,47 @@ export class ResetPasswordComponent {
     }
 
     resetPassword() {
-        this.form.disable();
+        // Don't submit if form has errors
+        if (this.form.invalid) return false;
+
+        this.authComponent.switchFormState(this.form, 'disable');
 
         this.authService
             .resetPassword({ phoneNumber: this.phone.value })
-            .subscribe(response => {
-                this.form.enable();
-
-                if (response) {
+            .subscribe(
+                response => {
                     this.snackbar.open(
                         'Новый пароль отправлен на номер ' + this.phone.value
                     );
 
-                    setTimeout(() => {
-                        this.undoResetPassword();
-                    }, 5000);
-                } else {
-                    this.snackbar.open('Неверный номер телефона');
-                }
-            });
+                    setTimeout(() => this.undo(), 5000);
+                },
+                (error: Response) => {
+                    this.authComponent.switchFormState(this.form, 'enable');
+
+                    switch (error.status) {
+                        case 400:
+                            this.snackbar.open('Неверный номер телефона');
+                            break;
+                    }
+
+                    if (error.status >= 500) {
+                        this.snackbar.open(
+                            `Ошибка ${
+                                error.status
+                            }. Обратитесь к администратору`
+                        );
+                    }
+                },
+                () => this.authComponent.switchFormState(this.form, 'enable')
+            );
     }
 
     /**
      * Determines whether the user clicked "Отмена".
      * And emits custom event up to AuthComponent
      */
-    undoResetPassword() {
+    undo() {
         this.onResetPassLinkClick.emit(false);
     }
 }
