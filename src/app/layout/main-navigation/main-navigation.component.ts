@@ -18,7 +18,7 @@ export class MainNavigationComponent implements OnInit {
         {
             label: 'Рабочий стол',
             icon: 'desktop_windows',
-            link: ''
+            link: '/'
         },
         {
             label: 'Новости и информация',

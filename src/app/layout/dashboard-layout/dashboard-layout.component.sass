@@ -21,3 +21,18 @@ mat-sidenav-content
 
     &:hover
         background-color: lighten($black, 10%)
+
+
+app-header
+    position: fixed
+    width: calc(100% - 300px)
+    +respond-to(tablet)
+        width: 100%
+
+
+.container-fluid
+    padding-top: 120px
+    +respond-to(tablet)
+        padding-top: 85px
+    +respond-to(phone-land)
+        padding-top: 75px

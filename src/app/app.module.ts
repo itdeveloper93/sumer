@@ -22,6 +22,15 @@ import { NotificationWidgetComponent } from './layout/notification-widget/notifi
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    suppressScrollX: true,
+    wheelPropagation: false
+};
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -43,13 +52,18 @@ import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
         AuthModule,
         HttpClientModule,
         LayoutModule,
-        NgMaterialMultilevelMenuModule
+        NgMaterialMultilevelMenuModule,
+        PerfectScrollbarModule
     ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: GlobalHttpHeadersInterceptorService,
             multi: true
+        },
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         AuthService
     ],
