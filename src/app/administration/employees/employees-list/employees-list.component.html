@@ -1,0 +1,151 @@
+<div class="container-fluid">
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <div class="row">
+        <div class="col-12 col-lg-7 col-xl-9">
+            <mat-card class="p-0 table-responsive mb-3">
+                <loading-indicator *ngIf="isRequesting"></loading-indicator>
+                <table mat-table [dataSource]="employees" class="stripped">
+                    <ng-container matColumnDef="photo">
+                        <th mat-header-cell *matHeaderCellDef>Фото</th>
+                        <td mat-cell *matCellDef="let employee">
+                            <img
+                                src="{{ employee.photoPath }}"
+                                alt="{{ employee.fullName }}"
+                                class="avatar rounded-circle"
+                            />
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fullName">
+                        <th mat-header-cell *matHeaderCellDef>ФИО</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.fullName }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="departmentAndPosition">
+                        <th mat-header-cell *matHeaderCellDef>Подразделение, должность</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.department }},<br />
+                            {{ employee.position }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hireDate">
+                        <th mat-header-cell *matHeaderCellDef>Дата приема</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.hireDate | date }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lockDate">
+                        <th mat-header-cell *matHeaderCellDef>Дата блокировки</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.lockDate | date }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lockReason">
+                        <th mat-header-cell *matHeaderCellDef>Причина</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.lockReason }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hasAccount">
+                        <th mat-header-cell *matHeaderCellDef>Пользователь</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            class="text-center"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            <table-badge
+                                state="{{ employee.hasAccount }}"
+                                value="{{ employee.hasAccount ? 'да' : 'нет' }}"
+                            ></table-badge>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="contacts">
+                        <th mat-header-cell *matHeaderCellDef>Контакты</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let employee"
+                            [routerLink]="['/administration/employees', employee.id]"
+                        >
+                            {{ employee.phone }},<br />
+                            {{ employee.email }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">Действия</th>
+                        <td mat-cell *matCellDef="let employee" class="text-right">
+                            <button
+                                mat-mini-fab
+                                class="mat-fab-basic mr-3"
+                                matTooltip="Просмотреть карточку"
+                                matTooltipPosition="above"
+                                [routerLink]="['/administration/employees', employee.id]"
+                            >
+                                <mat-icon>remove_red_eye</mat-icon>
+                            </button>
+                            <button
+                                mat-mini-fab
+                                class="mat-fab-basic"
+                                matTooltip="Редактировать данные"
+                                matTooltipPosition="above"
+                                [routerLink]="[
+                                    '/administration/employees/edit-essentials',
+                                    employee.id
+                                ]"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </mat-card>
+
+            <mat-card class="p-0">
+                <mat-paginator
+                    [pageSizeOptions]="pageSizeOptions"
+                    class="rounded"
+                    [disabled]="isRequesting"
+                ></mat-paginator>
+            </mat-card>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-3">
+            <button (click)="export()" mat-flat-button color="accent" class="w-100 mb-4"
+                >Выгрузить список в Excel</button
+            >
+            <employees-filter (onFilter)="get($event)"></employees-filter>
+        </div>
+    </div>
+</div>
+<floating-fab link="/add" title="Добавить сотрудника" icon="add"></floating-fab>

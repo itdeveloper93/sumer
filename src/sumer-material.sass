@@ -25,8 +25,22 @@ $theme: mat-light-theme($primary, $accent, $warn)
 
 // MatCard
 mat-card.mat-card
-    padding: 45px
+    padding: 30px
     box-shadow: $shadow !important
+
+    mat-card-header
+        margin-bottom: 15px
+
+        .mat-card-header-text
+            margin: 0
+        
+        .mat-card-title
+            font-size: 22px
+            line-height: 28px
+    
+    .mat-card-actions
+        margin: 0 !important
+        padding: 0 !important
 
 // MatCheckbox
 label.mat-checkbox-layout
@@ -38,14 +52,24 @@ label.mat-checkbox-layout
     background-color: $white
     color: $grey
 
+    .material-icons
+        font-size: 16px
+
 .mat-button-focus-overlay
     background-color: $grey
 
 .mat-button, 
 .mat-flat-button, 
-.mat-icon-button, 
 .mat-stroked-button
     line-height: 50px !important
+    padding: 0 27px !important
+
+    &-sm
+        line-height: 36px !important
+        padding: 0 18px !important
+
+        &.has-icon
+            padding-left: 10px !important
 
 .mat-flat-button.mat-primary[disabled], 
 .mat-flat-button.mat-accent[disabled], 
@@ -135,3 +159,125 @@ mat-sidenav-container
 mat-icon
     width: auto !important
     height: auto !important
+
+.mat-list-base .mat-list-item
+    font-size: 1rem !important
+
+
+// MatTable
+table
+    width: 100%
+
+    tr
+        &.mat-header-row,
+        &.mat-footer-row, 
+        &.mat-row
+            height: 66px !important
+    
+        &.mat-header-row
+            background-color: lighten($black, 5%)
+    
+            .mat-header-cell
+                font-size: 1rem
+                color: $white
+    
+    .mat-cell,
+    .mat-footer-cell,
+    .mat-header-cell
+        font-size: 1rem !important
+        padding: 10px !important
+
+        &:first-of-type
+            padding-left: 20px !important
+        
+        &:last-of-type
+            padding-right: 20px !important
+    
+    .mat-cell, 
+    .mat-footer-cell
+        color: lighten($black, 5%)
+    
+    .mat-header-cell
+        &:first-of-type
+            border-top-left-radius: 4px
+        
+        &:last-of-type
+            border-top-right-radius: 4px
+    
+    &.stripped
+        tr:nth-child(even)
+            background-color: lighten($white, 3%)
+
+        td.mat-cell, 
+        td.mat-footer-cell, 
+        th.mat-header-cell
+            border: 0
+
+
+// MatPaginator
+.mat-paginator, 
+.mat-paginator-page-size .mat-select-trigger
+    font-size: 1rem
+
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger
+    color: $grey
+
+
+// MatSlideToggle
+mat-slide-toggle
+    width: 100% !important
+
+    .mat-slide-toggle-label
+        justify-content: space-between
+
+
+// MatSelect
+mat-select
+    padding: 0 4px
+
+.mat-form-field-appearance-outline .mat-select-arrow-wrapper
+    transform: translateY(-4%) !important
+
+.mat-select-arrow
+    color: $grey
+
+span.mat-select-value-text
+    color: $black
+
+
+// MatTab
+.mat-tab-label, 
+.mat-tab-link
+    color: $black !important
+
+// Shadows are cut inside the tab content element,
+// so we need to aplly paddings to push inner
+// content and negative margins to pull conntent
+// back.
+.mat-tab-body-wrapper
+    margin: -1rem
+
+.mat-tab-body-content
+    padding: 1rem
+
+
+// MatDivider
+.mat-divider
+    border-top-color: transparentize($light-grey, .5)
+    position: initial !important
+
+
+// MatList
+.mat-list
+    &.no-mt
+        margin-top: -15px !important
+
+    &.no-mb
+        margin-bottom: -20px !important
+
+    .mat-list-item
+        color: $black
+
+        &-content
+            padding: 0 !important
+            width: 100%

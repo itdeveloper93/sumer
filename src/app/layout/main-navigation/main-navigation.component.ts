@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'main-navigation',
@@ -111,23 +112,44 @@ export class MainNavigationComponent implements OnInit {
             label: 'Администрирование',
             icon: 'settings_input_component',
             items: [
-                { label: 'Сотрудники', link: '/admin/employees' },
+                {
+                    label: 'Сотрудники',
+                    items: [
+                        {
+                            label: 'Активные',
+                            link: '/administration/employees/active'
+                        },
+                        {
+                            label: 'Заблокированные',
+                            link: '/administration/employees/locked'
+                        }
+                    ]
+                },
                 {
                     label: 'Пользователи',
-                    link: '/admin/users'
+                    items: [
+                        {
+                            label: 'Активные',
+                            link: '/administration/users/active'
+                        },
+                        {
+                            label: 'Заблокированные',
+                            link: '/administration/users/locked'
+                        }
+                    ]
                 },
                 {
                     label: 'Административно-территориальное деление',
-                    link: '/admin/administrative-divisions'
+                    link: '/administration/administrative-divisions'
                 },
                 {
                     label: 'Организационная структура SUMR',
-                    link: '/admin/organizational structure'
+                    link: '/administration/organizational-structure'
                 }
             ]
         }
     ];
-    constructor() {}
+    constructor(private router: Router) {}
 
     ngOnInit() {}
 }

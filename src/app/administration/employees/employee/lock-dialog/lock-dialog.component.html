@@ -1,0 +1,25 @@
+<div class="postiton-relative">
+    <h4 class="mb-4">Заблокировать сотрудника</h4>
+    <form
+        [formGroup]="form"
+        (ngSubmit)="lock('e5db7b7c-1fec-4c5b-6e95-08d70063ef9e', form.value.lockReason)"
+        #filterForm="ngForm"
+    >
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Причина</mat-label>
+            <mat-select formControlName="lockReason">
+                <mat-option *ngFor="let lockReason of lockReasons" [value]="lockReason.id">{{
+                    lockReason.name
+                }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button
+            mat-flat-button
+            color="warn"
+            type="submit"
+            class="btn-lg btn-block"
+            [disabled]="isRequesting"
+            >Заблокировать</button
+        >
+    </form>
+</div>
