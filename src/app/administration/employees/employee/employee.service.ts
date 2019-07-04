@@ -45,8 +45,6 @@ export interface LockReason {
     providedIn: 'root'
 })
 export class EmployeeService {
-    isRequesting = false;
-
     constructor(private http: HttpClient) {}
 
     /**

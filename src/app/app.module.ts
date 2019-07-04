@@ -37,14 +37,18 @@ import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
-import { MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
-import { HttpErrorHandlingInterceptorService } from './http-error-handling-interceptor.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
     wheelPropagation: false
+};
+
+const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
+    maxWidth: '87vw',
+    hasBackdrop: true,
+    panelClass: 'position-relative'
 };
 
 @NgModule({
@@ -81,6 +85,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        },
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: MAT_DIALOG_GLOBAL_OPTIONS
         },
         { provide: MatPaginatorIntl, useClass: MatPaginatorIntlRus },
         AuthService

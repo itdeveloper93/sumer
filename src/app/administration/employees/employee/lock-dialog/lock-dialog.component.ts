@@ -29,8 +29,6 @@ export class LockDialogComponent implements OnInit {
 
     ngOnInit() {
         this.getLockReasons();
-
-        console.log(this.data.employeeId);
     }
 
     getLockReasons() {

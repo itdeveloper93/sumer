@@ -1,8 +1,13 @@
+<mat-progress-bar
+    mode="indeterminate"
+    *ngIf="isRequesting"
+    class="progress-bar-top rounded-top"
+></mat-progress-bar>
 <div class="postiton-relative">
     <h4 class="mb-4">Заблокировать сотрудника</h4>
     <form
         [formGroup]="form"
-        (ngSubmit)="lock('e5db7b7c-1fec-4c5b-6e95-08d70063ef9e', form.value.lockReason)"
+        (ngSubmit)="lock(data.employeeId, form.value.lockReason)"
         #filterForm="ngForm"
     >
         <mat-form-field appearance="outline" class="w-100">

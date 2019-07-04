@@ -29,7 +29,6 @@ export class EmployeeComponent implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
-        this.isRequesting = this.service.isRequesting;
 
         // Fetch and assign essential data
         this.essentialData = this.getEssentialData(this.id);

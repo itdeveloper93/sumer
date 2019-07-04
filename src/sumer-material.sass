@@ -1,4 +1,5 @@
 @import '~@angular/material/theming'
+@import './sass/_mixins/_media'
 @import './sass/_vars'
 // Plus imports for other components in your app.
 
@@ -281,3 +282,19 @@ span.mat-select-value-text
         &-content
             padding: 0 !important
             width: 100%
+
+
+// MatProgreeBar
+mat-progress-bar.progress-bar-top
+    position: absolute !important
+    top: 0
+    left: 0
+    z-index: 101
+
+
+// MatDialogContainer
+.mat-dialog-container
+    box-shadow: $shadow-xl
+    padding: 35px !important
+    +respond-to(phone-land)
+        padding: 24px !important
