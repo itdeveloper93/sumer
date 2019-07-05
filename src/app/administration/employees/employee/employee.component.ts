@@ -17,7 +17,7 @@ export class EmployeeComponent implements OnInit {
     userData: UserData;
     logData: Log;
     isRequesting: boolean;
-    activeTabLabel: string;
+    activeTabLabel = 'Главное';
     lockDialog: MatDialogRef<LockDialogComponent>;
 
     constructor(
@@ -100,7 +100,7 @@ export class EmployeeComponent implements OnInit {
     openLockDialog() {
         this.lockDialog = this.dialog.open(LockDialogComponent, {
             data: {
-                employeeId: this.id
+                id: this.id
             }
         });
     }

@@ -20,7 +20,8 @@ import {
     MatListModule,
     MatProgressBarModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatExpansionModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TableBadgeComponent } from 'src/app/table-badge/table-badge.component';
@@ -30,6 +31,8 @@ import { FloatingFabComponent } from 'src/app/floating-fab/floating-fab.componen
 import { EmployeeComponent } from './employee/employee.component';
 import { LoadingIndicatorComponent } from 'src/app/loading-indicator/loading-indicator.component';
 import { LockDialogComponent } from './employee/lock-dialog/lock-dialog.component';
+import { UserComponent } from '../users/user/user.component';
+import { LockFormComponent } from '../lock-form/lock-form.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +42,9 @@ import { LockDialogComponent } from './employee/lock-dialog/lock-dialog.componen
         FloatingFabComponent,
         EmployeeComponent,
         LoadingIndicatorComponent,
-        LockDialogComponent
+        LockDialogComponent,
+        UserComponent,
+        LockFormComponent
     ],
     imports: [
         CommonModule,
@@ -64,8 +69,10 @@ import { LockDialogComponent } from './employee/lock-dialog/lock-dialog.componen
         MatListModule,
         MatProgressBarModule,
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatExpansionModule
     ],
+    exports: [UserComponent],
     entryComponents: [LockDialogComponent]
 })
 export class EmployeesModule {}

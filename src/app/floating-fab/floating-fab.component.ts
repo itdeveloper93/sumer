@@ -6,9 +6,9 @@ import { Component, OnInit, Input } from '@angular/core';
     styleUrls: ['./floating-fab.component.sass']
 })
 export class FloatingFabComponent implements OnInit {
-    @Input() link: string = '';
-    @Input() title: string = 'Добавить';
-    @Input() icon: string = 'add';
+    @Input() link = '';
+    @Input() title = 'Добавить';
+    @Input() icon = 'add';
 
     constructor() {}
 

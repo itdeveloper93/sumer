@@ -53,9 +53,6 @@ label.mat-checkbox-layout
     background-color: $white
     color: $grey
 
-    .material-icons
-        font-size: 16px
-
 .mat-button-focus-overlay
     background-color: $grey
 
@@ -71,6 +68,9 @@ label.mat-checkbox-layout
 
         &.has-icon
             padding-left: 10px !important
+    
+    .material-icons
+        font-size: 16px
 
 .mat-flat-button.mat-primary[disabled], 
 .mat-flat-button.mat-accent[disabled], 
@@ -105,6 +105,7 @@ label.mat-checkbox-layout
 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick
     color: $black
+
 .mat-form-field-appearance-outline .mat-form-field-infix
     padding: .8em 0 1.1em 0
 
@@ -298,3 +299,29 @@ mat-progress-bar.progress-bar-top
     padding: 35px !important
     +respond-to(phone-land)
         padding: 24px !important
+
+
+// MatExpantionPanel
+.mat-expansion-panel
+    color: $black
+
+    &:not(last-of-type)
+        border-bottom: 1px solid transparentize($light-grey, .5)
+
+    &:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true])
+        transition: background-color .2s
+
+        &.cdk-keyboard-focused, 
+        &.cdk-program-focused, 
+        &:hover
+            background-color: transparentize($light-grey, .8)
+
+    &:not([class*=mat-elevation-z])
+        box-shadow: $shadow
+
+    &-header-title
+        color: $black
+        font-size: 16px
+
+    &-header-description, .mat-expansion-indicator::after
+        color: $light-grey

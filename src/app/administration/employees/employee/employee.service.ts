@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 export interface EssentialData {
     id: string;
@@ -34,11 +32,6 @@ export interface Log {
     authorName: string;
     createdAt: string;
     lastEdit: string;
-}
-
-export interface LockReason {
-    id: string;
-    name: string;
 }
 
 @Injectable({
@@ -103,22 +96,5 @@ export class EmployeeService {
             createdAt: '22.06.2019',
             lastEdit: '5.07.2019, 12:32'
         };
-    }
-
-    /**
-     * Returns lock reasons with their IDs
-     */
-    getLockReasons(): Observable<any> {
-        return this.http.get<LockReason[]>(environment.API.URL + 'EmployeeLockReason/All');
-    }
-
-    lock(employeeId: string, employeeLockReasonId: string) {
-        return this.http.post(
-            environment.API.URL + 'Employee/LockEmployee',
-            JSON.stringify({
-                employeeId,
-                employeeLockReasonId
-            })
-        );
     }
 }

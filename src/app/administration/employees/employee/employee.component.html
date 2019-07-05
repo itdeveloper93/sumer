@@ -179,7 +179,9 @@
                             </div>
                         </ng-container>
                     </mat-tab>
-                    <mat-tab label="Учетная запись"> Content 3 </mat-tab>
+                    <mat-tab label="Учетная запись">
+                        <user employeeId="{{ id }}"></user>
+                    </mat-tab>
                 </div>
             </mat-tab-group>
         </div>
@@ -188,19 +190,37 @@
                 [routerLink]="['/administration/employees/edit/essential/:id']"
                 mat-button
                 class="mb-3 w-100"
+                *ngIf="activeTabLabel === 'Главное'"
             >
                 <mat-icon>edit</mat-icon> Редактировать
             </button>
+
+            <button
+                [routerLink]="['/administration/employees/edit/passport/:id']"
+                mat-button
+                class="mb-3 w-100"
+                *ngIf="activeTabLabel === 'Паспортные данные'"
+            >
+                <mat-icon>edit</mat-icon> Редактировать
+            </button>
+
             <button
                 mat-flat-button
                 color="primary"
                 (click)="export(id, 'essential')"
                 class="mb-3 w-100"
+                *ngIf="activeTabLabel !== 'Учетная запись'"
             >
-                Выгрузить карточку в PDF
+                <mat-icon>insert_drive_file</mat-icon> Выгрузить карточку в PDF
             </button>
-            <button mat-flat-button color="warn" (click)="openLockDialog()" class="mb-3 w-100">
-                Заблокировать сотрудника
+            <button
+                mat-flat-button
+                color="warn"
+                (click)="openLockDialog()"
+                class="mb-3 w-100"
+                *ngIf="activeTabLabel !== 'Учетная запись'"
+            >
+                <mat-icon>block</mat-icon> Заблокировать сотрудника
             </button>
             <mat-card class="log-data mb-4">
                 <mat-card-header>
