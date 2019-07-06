@@ -1,28 +1,37 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="global"></mat-progress-bar>>
 <mat-card class="introduction-card rounded-0 d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center mr-3">
+    <div class="d-flex flex-column flex-md-row align-items-center m-auto m-md-0">
         <img
             src="{{ essentialData.photoPath }}"
             alt="{{ essentialData.fullName }}"
-            class="introduction-card__avatar rounded-circle mr-4"
+            class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0"
         />
 
-        <div>
-            <h3 class="introduction-card__name">{{ essentialData.fullName }}</h3>
+        <div class="text-center text-md-left">
+            <h1 class="introduction-card__name">{{ essentialData.fullName }}</h1>
             <span class="introduction-card__position">
                 {{ essentialData.department }} › {{ essentialData.position }}
             </span>
         </div>
     </div>
 
-    <button (click)="location.back()" mat-button class="mat-button-sm has-icon">
+    <button
+        (click)="location.back()"
+        mat-button
+        class="mat-button-sm has-icon d-none d-md-block ml-3"
+    >
         <mat-icon>keyboard_arrow_left</mat-icon> Назад к списку
     </button>
 </mat-card>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-lg-8 col-xl-9">
-            <mat-tab-group dynamicHeight (selectedTabChange)="catchTabChange($event)">
+        <div class="col-12 col-md-7 col-lg-8 col-xl-9">
+            <mat-tab-group
+                dynamicHeight
+                animationDuration="0ms"
+                (selectedTabChange)="catchTabChange($event)"
+                mat-stretch-tabs
+            >
                 <div class="container-fluid">
                     <mat-tab label="Главное">
                         <mat-card>
@@ -34,7 +43,7 @@
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата рождения</span>
                                     <span class="value text-right">{{
-                                        essentialData.birthDate
+                                        essentialData.dateOfBirth
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
@@ -65,7 +74,9 @@
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Телефон</span>
-                                    <span class="value text-right">{{ essentialData.phone }}</span>
+                                    <span class="value text-right">{{
+                                        essentialData.phoneNumber
+                                    }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
@@ -98,7 +109,7 @@
                     <mat-tab label="Паспортные данные">
                         <ng-container *ngIf="passportData">
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-12 col-lg-5 col-xl-4 mb-4 mb-lg-0">
                                     <mat-card class="p-0">
                                         <img
                                             src="{{ passportData.scanUrl }}"
@@ -118,7 +129,7 @@
                                         </div>
                                     </mat-card>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-12 col-lg-7 col-xl-8">
                                     <mat-card>
                                         <loading-indicator
                                             *ngIf="isRequesting"
@@ -180,12 +191,18 @@
                         </ng-container>
                     </mat-tab>
                     <mat-tab label="Учетная запись">
-                        <user employeeId="{{ id }}"></user>
+                        <user
+                            id="{{ essentialData.userId }}"
+                            *ngIf="essentialData.userId; else createUser"
+                        ></user>
+                        <ng-template #createUser>
+                            <create-user employeeId="{{ id }}"></create-user>
+                        </ng-template>
                     </mat-tab>
                 </div>
             </mat-tab-group>
         </div>
-        <div class="col-12 col-lg-4 col-xl-3 mat-tab-body-padding">
+        <div class="col-12 col-md-5 col-lg-4 col-xl-3 mat-tab-body-padding">
             <button
                 [routerLink]="['/administration/employees/edit/essential/:id']"
                 mat-button

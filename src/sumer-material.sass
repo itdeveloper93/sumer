@@ -93,15 +93,23 @@ label.mat-checkbox-layout
 
 // MatFormField
 .mat-form-field
+    width: 100%
+
     &-label
         color: $grey
 
     mat-icon
         transition: .1s ease
+    
+    .mat-hint
+        color: $grey
 
 .mat-form-field-appearance-outline .mat-form-field-outline,
-.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon
-    color: $grey
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon, 
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon,
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, 
+.mat-datepicker-content .mat-calendar-previous-button
+    color: lighten($grey, 20%)
 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick
     color: $black
@@ -134,9 +142,10 @@ label.mat-checkbox-layout
     border-width: 2px !important
 
 
-// MatCheckbox
-.mat-checkbox-frame
-    border-color: $grey
+// MatCheckbox, MatRadio
+.mat-checkbox-frame,
+.mat-radio-outer-circle
+    border-color: lighten($grey, 20%)
 
 
 // MatSideNav
@@ -325,3 +334,26 @@ mat-progress-bar.progress-bar-top
 
     &-header-description, .mat-expansion-indicator::after
         color: $light-grey
+
+
+// MatDatePicker
+.mat-datepicker-content
+    box-shadow: $shadow-xl
+
+    .mat-calendar-controls
+        margin-top: 0 !important
+        align-items: center
+
+    .mat-calendar-body-cell-content:not(.mat-calendar-body-selected)
+        color: $black
+
+    .mat-calendar-body-today:not(.mat-calendar-body-selected)
+        border-color: $purple
+
+    .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected), 
+    .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected), 
+    .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected),
+    mat-calendar-body-active mat-calendar-body-selected
+        background-color: $purple
+        color: #fff !important
+        transition: background-color .2s

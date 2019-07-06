@@ -5,7 +5,11 @@
                 Заблокировать пользователя
             </mat-panel-title>
         </mat-expansion-panel-header>
-        Ничего нет
+        <alert
+            message="Внимание! После блокировки пользователь потеряет доступ к системе."
+            type="danger"
+        ></alert>
+        <lock-form horisontal="true" entityType="user" id="{{ id }}"></lock-form>
     </mat-expansion-panel>
 
     <mat-expansion-panel>

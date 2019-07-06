@@ -3,8 +3,16 @@
     *ngIf="isRequesting"
     class="progress-bar-top rounded-top"
 ></mat-progress-bar>
-<form [formGroup]="form" (ngSubmit)="lock(id, form.value.lockReason)" #filterForm="ngForm">
-    <mat-form-field appearance="outline" class="w-100">
+<form
+    class="lock-form"
+    [formGroup]="form"
+    (ngSubmit)="lock(id, form.value.lockReason)"
+    #filterForm="ngForm"
+    [ngClass]="{
+        'd-md-flex align-items-sm-baseline horisontal': horisontal
+    }"
+>
+    <mat-form-field appearance="outline" class="w-100" [class.mr-3]="horisontal">
         <mat-label>Причина</mat-label>
         <mat-select formControlName="lockReason">
             <mat-option *ngFor="let lockReason of lockReasons" [value]="lockReason.id">{{
@@ -18,6 +26,7 @@
         type="submit"
         class="btn-lg btn-block"
         [disabled]="isRequesting"
-        >Заблокировать</button
     >
+        <mat-icon>block</mat-icon> Заблокировать
+    </button>
 </form>

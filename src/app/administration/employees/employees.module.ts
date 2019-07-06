@@ -21,7 +21,9 @@ import {
     MatProgressBarModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatRadioModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TableBadgeComponent } from 'src/app/table-badge/table-badge.component';
@@ -33,6 +35,9 @@ import { LoadingIndicatorComponent } from 'src/app/loading-indicator/loading-ind
 import { LockDialogComponent } from './employee/lock-dialog/lock-dialog.component';
 import { UserComponent } from '../users/user/user.component';
 import { LockFormComponent } from '../lock-form/lock-form.component';
+import { AlertComponent } from 'src/app/alert/alert.component';
+import { CreateUserComponent } from '../users/create-user/create-user.component';
+import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +49,10 @@ import { LockFormComponent } from '../lock-form/lock-form.component';
         LoadingIndicatorComponent,
         LockDialogComponent,
         UserComponent,
-        LockFormComponent
+        LockFormComponent,
+        AlertComponent,
+        CreateUserComponent,
+        CreateEmployeeComponent
     ],
     imports: [
         CommonModule,
@@ -70,7 +78,9 @@ import { LockFormComponent } from '../lock-form/lock-form.component';
         MatProgressBarModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatDatepickerModule,
+        MatRadioModule
     ],
     exports: [UserComponent],
     entryComponents: [LockDialogComponent]

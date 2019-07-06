@@ -4,6 +4,7 @@ import { EmployeeService, EssentialData, PassportData, UserData, Log } from './e
 import { Location } from '@angular/common';
 import { MatTabChangeEvent, MatDialog, MatDialogRef } from '@angular/material';
 import { LockDialogComponent } from './lock-dialog/lock-dialog.component';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     selector: 'employee',
@@ -24,7 +25,8 @@ export class EmployeeComponent implements OnInit {
         private route: ActivatedRoute,
         private service: EmployeeService,
         public location: Location,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private breakpointObserver: BreakpointObserver
     ) {}
 
     ngOnInit() {

@@ -6,11 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
     styleUrls: ['./user.component.sass']
 })
 export class UserComponent implements OnInit {
-    @Input() employeeId: string;
+    @Input() id: string;
 
     constructor() {}
 
     ngOnInit() {
-        console.log(this.employeeId);
+        console.log(this.id);
     }
 }

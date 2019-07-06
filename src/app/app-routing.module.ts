@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
+import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 
 const routes: Routes = [
     {
@@ -44,6 +45,11 @@ const routes: Routes = [
                                 path: 'locked',
                                 data: { title: 'Заблокированные', showLocked: true },
                                 component: EmployeesListComponent
+                            },
+                            {
+                                path: 'create',
+                                data: { title: 'Добавить сотрудника' },
+                                component: CreateEmployeeComponent
                             },
                             {
                                 path: ':id',

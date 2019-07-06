@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { GlobalHttpHeadersInterceptorService } from './global-http-headers-interceptor.service';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 /**
  * Third party modules/components
@@ -37,7 +38,15 @@ import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
-import { MatPaginatorIntl, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material';
+import {
+    MatPaginatorIntl,
+    MAT_DIALOG_DEFAULT_OPTIONS,
+    MatDialogConfig,
+    MatNativeDateModule,
+    DateAdapter,
+    MAT_DATE_LOCALE,
+    MAT_DATE_FORMATS
+} from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -49,6 +58,18 @@ const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
     maxWidth: '87vw',
     hasBackdrop: true,
     panelClass: 'position-relative'
+};
+
+const CUSTOM_DATE_FORMAT = {
+    parse: {
+        dateInput: 'DD.MM.YYYY'
+    },
+    display: {
+        dateInput: 'DD.MM.YYYY',
+        monthYearLabel: 'DD.MM.YYYY',
+        dateA11yLabel: 'DD.MM.YYYY',
+        monthYearA11yLabel: 'DD.MM.YYYY'
+    }
 };
 
 @NgModule({
@@ -74,7 +95,8 @@ const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
         NgMaterialMultilevelMenuModule,
         PerfectScrollbarModule,
         AuthModule,
-        AdministrationModule
+        AdministrationModule,
+        MatNativeDateModule
     ],
     providers: [
         {
@@ -91,6 +113,8 @@ const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
             useValue: MAT_DIALOG_GLOBAL_OPTIONS
         },
         { provide: MatPaginatorIntl, useClass: MatPaginatorIntlRus },
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
         AuthService
     ],
     bootstrap: [AppComponent],

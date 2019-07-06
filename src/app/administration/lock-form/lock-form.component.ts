@@ -14,6 +14,7 @@ export class LockFormComponent implements OnInit {
 
     @Input() entityType: string;
     @Input() id: string;
+    @Input() horisontal: string;
 
     @Output() onError = new EventEmitter<boolean>();
 
@@ -30,6 +31,9 @@ export class LockFormComponent implements OnInit {
         this.getLockReasons();
     }
 
+    /**
+     * Get lock reasons
+     */
     getLockReasons() {
         this.isRequesting = true;
 
@@ -53,6 +57,7 @@ export class LockFormComponent implements OnInit {
 
                 this.onError.emit(true);
                 this.isRequesting = false;
+                this.form.enable();
             },
             () => (this.isRequesting = false)
         );

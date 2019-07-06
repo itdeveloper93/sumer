@@ -161,8 +161,22 @@ button.mat-fab-basic
     right: 0
     bottom: 0
 
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6
+    line-height: 1.4
+
 h1, .h1
     font-size: 2rem
+    +respond-to(laptop)
+        font-size: 1.8rem
+    +respond-to(phone-land)
+        font-size: 1.6rem
+    +respond-to(phone)
+        font-size: 1.4rem
 
 
 // Employee page custom styles. Imported here because need to style
