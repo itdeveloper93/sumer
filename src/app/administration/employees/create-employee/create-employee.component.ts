@@ -25,41 +25,39 @@ export class CreateEmployeeComponent implements OnInit {
      */
     form = new FormGroup({
         photo: new FormControl(''),
-        lastName: new FormControl('Расулов', [
+        lastName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Яa-zA-z]*')]),
+        firstName: new FormControl('', [
             Validators.required,
             Validators.pattern('[а-яА-Яa-zA-z]*')
         ]),
-        firstName: new FormControl('Азамат', [
-            Validators.required,
-            Validators.pattern('[а-яА-Яa-zA-z]*')
-        ]),
-        middleName: new FormControl('Олимович', Validators.pattern('[а-яА-Яa-zA-z]*')),
+        middleName: new FormControl('', Validators.pattern('[а-яА-Яa-zA-z]*')),
         dateOfBirth: new FormControl('15.09.1995'),
+        // TODO: Fetch genders from server
         genderId: new FormControl('C36BC960-5424-4A96-94FA-E2776E0461F6'),
-        hireDate: new FormControl('17.06.2019'),
+        hireDate: new FormControl(''),
         departmentId: new FormControl(''),
         positionId: new FormControl(''),
-        phone: new FormControl('934114400', [
+        phone: new FormControl('', [
             Validators.required,
             Validators.minLength(9),
             Validators.maxLength(9),
             Validators.pattern('^[0-9]*$')
         ]),
         email: new FormControl(
-            'evolution.media.pro@ya.ru',
+            '',
             Validators.pattern(
                 "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             )
         ),
-        factualAddress: new FormControl('г. Душанбе, улица, дом, квартира', Validators.required),
-        description: new FormControl('Дополнительное описание, не превышающее 256 символов')
+        factualAddress: new FormControl('', Validators.required),
+        description: new FormControl('')
     });
 
     constructor(
         private snackbar: MatSnackBar,
         private departmentsAndPositionsService: DepartmentsAndPositionsService,
         private service: CreateUpdateEmployeeService,
-        private location: Location
+        public location: Location
     ) {}
 
     ngOnInit() {
@@ -68,6 +66,10 @@ export class CreateEmployeeComponent implements OnInit {
         this.form.get('positionId').disable();
 
         this.getDepartments();
+    }
+
+    log(event) {
+        console.log(event);
     }
 
     /**
@@ -83,6 +85,7 @@ export class CreateEmployeeComponent implements OnInit {
      * @param event Event object
      */
     inserPhotoPreview(event) {
+        // @ts-ignore
         const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
         canvas.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -159,15 +162,11 @@ export class CreateEmployeeComponent implements OnInit {
             return false;
         }
 
-        console.log(this.form.value);
-
         this.isRequesting = true;
         this.form.disable();
 
         this.service.create(this.form.value).subscribe(
             response => {
-                console.log(response);
-
                 this.snackbar.open('Сотрудник успешно добавлен');
 
                 this.location.back();
@@ -175,8 +174,6 @@ export class CreateEmployeeComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.enable();
-
-                console.log(error);
 
                 switch (error.status) {
                     case 0:

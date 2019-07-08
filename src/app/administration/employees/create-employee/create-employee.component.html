@@ -77,9 +77,9 @@
                                     placeholder="Олимович"
                                     formControlName="middleName"
                                 />
-                                <mat-error *ngIf="form.get('middleName').errors?.pattern"
-                                    >Только буквы</mat-error
-                                >
+                                <mat-error *ngIf="form.get('middleName').errors?.pattern">
+                                    Только буквы
+                                </mat-error>
                             </mat-form-field>
                         </div>
 
@@ -93,7 +93,7 @@
                                     formControlName="dateOfBirth"
                                     required
                                     [min]="minDate"
-                                    (change)="log()"
+                                    (change)="log(form.get('dateOfBirth').value._i)"
                                 />
                                 <mat-datepicker-toggle
                                     matSuffix
@@ -264,6 +264,20 @@
         <div class="col-12 col-lg-3">
             <button mat-flat-button color="primary" class="mb-3 w-100">
                 <mat-icon>save</mat-icon> Сохранить
+            </button>
+
+            <button
+                mat-flat-button
+                class="mb-3 w-100"
+                color="warn"
+                type="button"
+                (click)="this.form.reset()"
+            >
+                <mat-icon>clear</mat-icon> Очистить форму
+            </button>
+
+            <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
+                <mat-icon>keyboard_arrow_left</mat-icon> Назад
             </button>
         </div>
     </form>

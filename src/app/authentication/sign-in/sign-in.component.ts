@@ -70,9 +70,7 @@ export class SignInComponent {
 
         this.authService.signIn(credentials).subscribe(
             response => {
-                const returnUrl = this.route.snapshot.queryParamMap.get(
-                    'returnUrl'
-                );
+                const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
                 this.router.navigate([returnUrl || '/']);
             },
             (error: Response) => {
@@ -85,9 +83,7 @@ export class SignInComponent {
                 }
 
                 if (error.status >= 500) {
-                    this.snackbar.open(
-                        `Ошибка ${error.status}. Обратитесь к администратору`
-                    );
+                    this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                 }
             },
             () => this.authComponent.switchFormState(this.form, 'enable')

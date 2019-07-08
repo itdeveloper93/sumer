@@ -9,11 +9,11 @@ export interface EssentialData {
     position: string;
     dateOfBirth: string;
     hireDate: string;
-    phoneNumber: string;
+    phone: string;
     email: string;
     factualAddress: string;
     gender: string;
-    additionalDescription: string;
+    description: string;
     userId: string;
 }
 
@@ -54,12 +54,12 @@ export class EmployeeService {
             position: 'Старший инспектор',
             dateOfBirth: '15.06.1986',
             hireDate: '22.04.2018',
-            phoneNumber: '934114400',
+            phone: '934114400',
             email: 'aleksey@it-2b.pro',
             factualAddress: 'г. Душанбе, ул. Лохути, д. 5, кв. 8',
             gender: 'Мужской',
             userId: 'wgwe34r',
-            additionalDescription:
+            description:
                 'Lorem Ipsum - это текст-«рыба», часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной «рыбой» для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов.'
         };
     }

@@ -10,7 +10,11 @@
                         <th mat-header-cell *matHeaderCellDef>Фото</th>
                         <td mat-cell *matCellDef="let employee">
                             <img
-                                src="{{ employee.photoPath }}"
+                                src="{{
+                                    employee.photoPath
+                                        ? employee.photoPath
+                                        : '../../../../../../assets/img/noavatar.jpg'
+                                }}"
                                 alt="{{ employee.fullName }}"
                                 class="avatar rounded-circle"
                             />
@@ -82,8 +86,8 @@
                             [routerLink]="['/administration/employees', employee.id]"
                         >
                             <table-badge
-                                state="{{ employee.hasAccount }}"
-                                value="{{ employee.hasAccount ? 'да' : 'нет' }}"
+                                state="{{ employee.userId ? true : false }}"
+                                value="{{ employee.userId ? 'да' : 'нет' }}"
                             ></table-badge>
                         </td>
                     </ng-container>

@@ -30,8 +30,8 @@ export class CreateUpdateEmployeeService {
      * @param payload Employee object
      */
     create(payload: Employee): Observable<any> {
-        payload.dateOfBirth = '2019-07-06T09:35:19.858Z';
-        payload.hireDate = '2019-07-06T09:35:19.858Z';
+        // payload.dateOfBirth = '2019-07-06T09:35:19.858Z';
+        // payload.hireDate = '2019-07-06T09:35:19.858Z';
         return this.http.post(environment.API.URL + 'Employee/Create', JSON.stringify(payload));
     }
 }
