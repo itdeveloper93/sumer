@@ -45,9 +45,13 @@ import {
     MatNativeDateModule,
     DateAdapter,
     MAT_DATE_LOCALE,
-    MAT_DATE_FORMATS
+    MAT_DATE_FORMATS, MatPaginatorModule, MatTableModule, MatTooltipModule, MatOptionModule, MatSelectModule, MatSlideToggleModule
 } from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
+import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
+import {EmployeesModule} from './administration/employees/employees.module';
+import { DictionariesFilterComponent } from './dictionaries/dictionaries-filter/dictionaries-filter.component';
+import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -81,7 +85,10 @@ const CUSTOM_DATE_FORMAT = {
         BreadcrumbsComponent,
         MiniProfileComponent,
         NotificationWidgetComponent,
-        MainNavigationComponent
+        MainNavigationComponent,
+        DictionariesListComponent,
+        DictionariesFilterComponent,
+        DepartmentListComponent
     ],
     imports: [
         BrowserModule,
@@ -96,7 +103,14 @@ const CUSTOM_DATE_FORMAT = {
         PerfectScrollbarModule,
         AuthModule,
         AdministrationModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatPaginatorModule,
+        EmployeesModule,
+        MatTableModule,
+        MatTooltipModule,
+        MatOptionModule,
+        MatSelectModule,
+        MatSlideToggleModule
     ],
     providers: [
         {

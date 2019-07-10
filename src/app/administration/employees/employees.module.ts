@@ -82,7 +82,7 @@ import { CreateEmployeeComponent } from './create-employee/create-employee.compo
         MatDatepickerModule,
         MatRadioModule
     ],
-    exports: [UserComponent],
+    exports: [UserComponent, TableBadgeComponent, EmployeesFilterComponent, FloatingFabComponent, LoadingIndicatorComponent],
     entryComponents: [LockDialogComponent]
 })
 export class EmployeesModule {}

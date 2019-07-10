@@ -1,0 +1,26 @@
+<mat-card class="mb-4">
+    <mat-card-header>
+        <mat-card-title class="m-0">Фильтр</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mb-0">
+        <form [formGroup]="form" (ngSubmit)="filter()" #filterForm="ngForm">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Название</mat-label>
+                <input matInput formControlName="name" placeholder="Пол" type="text" />
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+    <mat-card-actions>
+        <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="btn-lg btn-block mb-3"
+            (click)="filterForm.ngSubmit.emit()"
+        >Найти</button
+        >
+        <button mat-flat-button mat-button type="button" class="btn-lg btn-block m-0" (click)="reset()"
+        >Сбросить</button
+        >
+    </mat-card-actions>
+</mat-card>

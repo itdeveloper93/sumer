@@ -48,7 +48,8 @@ export class CreateEmployeeComponent implements OnInit {
         email: new FormControl(
             'evolution.media.pro@ya.ru',
             Validators.pattern(
-                "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+                // tslint:disable-next-line:max-line-length
+                '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
             )
         ),
         factualAddress: new FormControl('г. Душанбе, улица, дом, квартира', Validators.required),
@@ -74,15 +75,16 @@ export class CreateEmployeeComponent implements OnInit {
      * Trigger photo upload window
      */
     triggerPhotoUpload() {
-        const fileInput: HTMLElement = document.querySelector("[formcontrolname='photo']");
+        const fileInput: HTMLElement = document.querySelector('[formControlName=\'photo\']');
         fileInput.click();
     }
 
     /**
-     * Insert selected photo to pewview canvas
+     * Insert selected photo to preview canvas
      * @param event Event object
      */
     inserPhotoPreview(event) {
+        // @ts-ignore
         const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
         canvas.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -98,16 +100,12 @@ export class CreateEmployeeComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
 
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
+                if (error.status === 0) {
+                    this.snackbar.open(
+                        'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                    );
+                } else {
+                    this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                 }
             },
             () => {
@@ -129,16 +127,12 @@ export class CreateEmployeeComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
 
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
+                if (error.status === 0) {
+                    this.snackbar.open(
+                        'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                    );
+                } else {
+                    this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                 }
             },
             () => {
@@ -178,16 +172,12 @@ export class CreateEmployeeComponent implements OnInit {
 
                 console.log(error);
 
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
+                if (error.status === 0) {
+                    this.snackbar.open(
+                        'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                    );
+                } else {
+                    this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                 }
             },
             () => {

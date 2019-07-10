@@ -106,7 +106,8 @@ export class MainNavigationComponent implements OnInit {
         },
         {
             label: 'Справочники',
-            icon: 'view_list'
+            icon: 'view_list',
+            link: 'dictionaries'
         },
         {
             label: 'Администрирование',

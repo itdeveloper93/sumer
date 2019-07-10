@@ -9,6 +9,8 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
+import {DictionariesListComponent} from './dictionaries/dictionaries-list/dictionaries-list.component';
+import {DepartmentListComponent} from './dictionaries/department-list/department-list.component';
 
 const routes: Routes = [
     {
@@ -75,7 +77,21 @@ const routes: Routes = [
                         ]
                     }
                 ]
-            }
+            },
+            {
+                path: 'dictionaries',
+                component: DictionariesListComponent,
+                data: {
+                    title: 'Справочники'
+                }
+            },
+            {
+                path: 'department-list',
+                component: DepartmentListComponent,
+                data: {
+                    title: 'Подразделение лист'
+                }
+            },
         ]
     },
     {
