@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService, EssentialData, PassportData, UserData, Log } from './employee.service';
+import { EmployeeService, EssentialData, UserData, Log } from './employee.service';
 import { Location } from '@angular/common';
 import { MatTabChangeEvent, MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { LockDialogComponent } from './lock-dialog/lock-dialog.component';
 import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
 import { SidenavStateService } from 'src/app/layout/dashboard-layout/sidenav-state.service';
-import { CreateUpdatePassportDataService } from '../create-update-passport-data/create-update-passport-data.service';
+import {
+    CreateUpdatePassportDataService,
+    PassportData
+} from '../create-update-passport-data/create-update-passport-data.service';
 
 @Component({
     selector: 'employee',

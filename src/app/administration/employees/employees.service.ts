@@ -24,12 +24,12 @@ export interface Employee {
  * The shape of fetch criterias for DB searching
  */
 export interface FetchCriterias {
-    name?: string;
-    department?: string;
-    hasAccount?: boolean;
+    fillName?: string;
+    departmentId?: string;
+    hasUser?: boolean;
+    page?: number;
+    pageSize?: number;
     locked?: boolean;
-    offset?: number;
-    count?: number;
 }
 
 @Injectable({

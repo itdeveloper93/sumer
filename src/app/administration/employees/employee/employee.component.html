@@ -38,7 +38,7 @@
                 mat-stretch-tabs
             >
                 <div class="container-fluid">
-                    <mat-tab label="Главное">
+                    <mat-tab label="Главное" matRipple matRippleColor="#533dfe">
                         <mat-card>
                             <mat-list role="list" class="p-0 no-mt no-mb">
                                 <mat-list-item role="listitem">
@@ -265,7 +265,7 @@
             </button>
 
             <button
-                [routerLink]="['/administration/employees/edit/passport/', id]"
+                [routerLink]="['/administration/employees/edit/passport-data/', id]"
                 mat-button
                 class="mb-3 w-100"
                 *ngIf="activeTabLabel === 'Паспортные данные'"

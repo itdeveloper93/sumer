@@ -57,7 +57,7 @@ export class LockService {
                 break;
 
             case 'user':
-                URL = environment.API.URL + 'Account/LockAccount';
+                URL = environment.API.URL + 'Account/LockUser';
 
                 payload = {
                     userId: id,

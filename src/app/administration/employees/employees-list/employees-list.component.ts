@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 
 @Component({
@@ -15,6 +15,8 @@ export class EmployeesListComponent implements OnInit {
     employees: MatTableDataSource<Employee>;
     isRequesting: boolean;
 
+    fetchCriterias: FetchCriterias;
+
     displayedColumns: any;
     pageSizeOptions = [20, 50, 100];
 
@@ -24,15 +26,36 @@ export class EmployeesListComponent implements OnInit {
     constructor(
         private service: EmployeesService,
         private route: ActivatedRoute,
+        private router: Router,
         private snackbar: MatSnackBar
     ) {}
 
     ngOnInit() {
-        this.isRequesting = true;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                pageSize: 50
+            },
+            queryParamsHandling: 'merge',
+            // preserve the existing query params in the route
+            skipLocationChange: true
+            // do not trigger navigation
+        });
+
+        this.route.paramMap.subscribe(params => {
+            this.fetchCriterias = {
+                fillName: params.get('fillName'),
+                departmentId: params.get('departmentId'),
+                hasUser: params.get('hasUser') == 'true' ? true : false,
+                locked: params.get('locked') == 'true' ? true : false,
+                page: +params.get('page'),
+                pageSize: +params.get('pageSize')
+            };
+        });
 
         if (this.showLocked) {
-            //this.employees = new MatTableDataSource(this.get({ locked: true }));
             this.get({ locked: true });
+
             this.displayedColumns = [
                 'fullName',
                 'departmentAndPosition',
@@ -41,8 +64,8 @@ export class EmployeesListComponent implements OnInit {
                 'lockReason'
             ];
         } else {
-            //this.employees = new MatTableDataSource(this.get());
-            this.get();
+            this.get(this.fetchCriterias);
+
             this.displayedColumns = [
                 'photo',
                 'fullName',
@@ -60,9 +83,13 @@ export class EmployeesListComponent implements OnInit {
      * @param criterias Fetch criterias for DB searching
      */
     get(criterias?: FetchCriterias) {
+        this.isRequesting = true;
+
+        console.log(criterias);
+
         this.service.get(criterias).subscribe(
             response => {
-                this.employees = response.data;
+                this.employees = response.data.items;
             },
             (error: Response) => {
                 this.isRequesting = false;
