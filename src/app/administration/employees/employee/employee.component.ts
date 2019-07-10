@@ -26,6 +26,9 @@ export class EmployeeComponent implements OnInit {
     activeTabLabel = 'Главное';
     lockDialog: MatDialogRef<LockDialogComponent>;
     isSidenavOpened: boolean;
+    selectedTabIndex: number;
+
+    hasPassport = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -39,12 +42,15 @@ export class EmployeeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.selectedTabIndex = +this.route.snapshot.queryParamMap.get('selectedTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
-        this.isRequesting = true;
+        // this.route.paramMap.subscribe(params => {
+        //     this.id = params.get('id');
+        // });
 
-        // Fetch and assign essential data
         this.getEssentialData(this.id);
+        if (this.selectedTabIndex === 1) this.getPassportData(this.id);
 
         // Fetch and assign log data
         this.logData = this.getLogData(this.id);
@@ -59,6 +65,8 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getEssentialData(id: string) {
+        this.isRequesting = true;
+
         this.service.getEssentialData(id).subscribe(
             response => {
                 this.essentialData = response.data;
@@ -94,10 +102,23 @@ export class EmployeeComponent implements OnInit {
         return this.passportDataService.get(id).subscribe(
             response => {
                 this.passportData = response.data;
+
+                if (response.data.passportNumber) this.hasPassport = true;
             },
             (error: Response) => {
                 this.isRequesting = false;
-                console.log(error);
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
             },
             () => (this.isRequesting = false)
         );

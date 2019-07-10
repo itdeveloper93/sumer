@@ -9,6 +9,7 @@ import {
 } from './create-update-passport-data.service';
 import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'app-create-update-passport-data',
@@ -21,6 +22,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
     id: string;
     minDate = momentX('01.01.1900');
     aultDate = moment().subtract(18, 'years');
+    today = moment();
 
     nationalities: Nationality[];
 
@@ -28,7 +30,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * Register form and it's controls
      */
     form = new FormGroup({
-        scanUrl: new FormControl('', Validators.required),
+        passportScan: new FormControl(''),
         passportNumber: new FormControl('', Validators.required),
         passportIssueDate: new FormControl('', Validators.required),
         passportIssuer: new FormControl('', Validators.required),
@@ -42,20 +44,22 @@ export class CreateUpdatePassportDataComponent implements OnInit {
         private router: Router,
         private service: CreateUpdatePassportDataService,
         private nationalitiesService: NationalitiesService,
-        public location: Location
+        public location: Location,
+        private snackbar: MatSnackBar
     ) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
         this.form.get('nationalityId').disable();
         this.getNationalities();
+        this.getPassportData(this.id);
     }
 
     /**
      * Trigger photo upload window
      */
     triggerPhotoUpload() {
-        const fileInput: HTMLElement = document.querySelector("[formcontrolname='scanUrl']");
+        const fileInput: HTMLElement = document.querySelector("[formcontrolname='passportScan']");
         fileInput.click();
     }
 
@@ -75,19 +79,42 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      */
     getPassportData(id: string) {
         this.isRequesting = true;
+        this.form.disable();
 
         return this.service.get(id).subscribe(
             response => {
-                this.form.patchValue({ ...this.form.value });
+                this.form.patchValue({
+                    ...response.data,
+                    dateOfBirth: momentX(response.data.dateOfBirth),
+                    passportIssueDate: momentX(response.data.passportIssueDate)
+                });
             },
             (error: Response) => {
                 this.isRequesting = false;
-                console.log(error);
+                this.form.enable();
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
             },
-            () => (this.isRequesting = false)
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
         );
     }
 
+    /**
+     * Get nationalities
+     */
     getNationalities() {
         this.isRequesting = true;
 
@@ -98,21 +125,67 @@ export class CreateUpdatePassportDataComponent implements OnInit {
             },
             (error: Response) => {
                 this.isRequesting = false;
-                console.log(error);
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
             },
             () => (this.isRequesting = false)
         );
     }
 
+    /**
+     * Submit passport data to server
+     * @param payload Form data
+     */
     submit(payload: PassportData) {
-        // this.service.submit(payload).subscribe(response => {
-        //     console.log(response.data);
-        // }, (error: Response) => {
-        //     console.log(error);
-        // })
+        if (this.form.invalid) {
+            this.snackbar.open('В форме содержатся ошибки.');
 
-        console.log(this.service.submit(payload));
+            console.log(this.form);
 
-        this.router.navigate(['administration/employees/', this.id]);
+            return false;
+        }
+
+        this.isRequesting = true;
+        this.form.disable();
+
+        this.service.submit({ ...payload, employeeId: this.id }).subscribe(
+            response => {
+                if (this.form.touched) this.snackbar.open('Изменения сохранены');
+
+                this.router.navigate(['administration/employees/', this.id], {
+                    queryParams: { selectedTabIndex: 1 }
+                });
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+                this.form.enable();
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
+        );
     }
 }

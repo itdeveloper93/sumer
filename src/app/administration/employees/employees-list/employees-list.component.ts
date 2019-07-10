@@ -53,7 +53,7 @@ export class EmployeesListComponent implements OnInit {
             pageSize: this.route.snapshot.queryParams.pageSize
                 ? +this.route.snapshot.queryParams.pageSize
                 : null,
-            fillName: this.route.snapshot.queryParams.fillName
+            fullName: this.route.snapshot.queryParams.fillName
                 ? this.route.snapshot.queryParams.fillName
                 : null,
             departmentId: this.route.snapshot.queryParams.departmentId
@@ -96,10 +96,11 @@ export class EmployeesListComponent implements OnInit {
     }
 
     // TODO: Clear this shit
+    // @ts-ignore
     setQueryParams(event: PageEvent) {
         const params = {
             page: null,
-            pageSize: null,
+            pageSize: 50,
             fullName: null,
             departmentId: null,
             hasUser: null,
