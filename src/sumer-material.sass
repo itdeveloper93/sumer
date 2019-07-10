@@ -62,15 +62,24 @@ label.mat-checkbox-layout
     line-height: 50px !important
     padding: 0 27px !important
 
+    .mat-button-wrapper
+        display: flex
+        align-items: center
+        justify-content: center
+
+        .mat-icon
+            margin-right: 5px
+    
+    .material-icons
+        font-size: 16px
+        margin-top: 1px
+
     &-sm
         line-height: 36px !important
         padding: 0 18px !important
 
         &.has-icon
             padding-left: 10px !important
-    
-    .material-icons
-        font-size: 16px
 
 .mat-flat-button.mat-primary[disabled], 
 .mat-flat-button.mat-accent[disabled], 
@@ -89,6 +98,10 @@ label.mat-checkbox-layout
 .mat-mini-fab.mat-warn[disabled], 
 .mat-mini-fab[disabled][disabled]
     background-color: $light-grey
+
+.mat-fab:not([class*=mat-elevation-z]), 
+.mat-mini-fab:not([class*=mat-elevation-z])
+    box-shadow: 2px 3px 5px -1px rgba(50, 39, 155, .2), 0px 6px 10px 0px rgba(50, 39, 155, .2), 0px 1px 18px 0px rgba(50, 39, 155, .2)
 
 
 // MatFormField
@@ -110,6 +123,9 @@ label.mat-checkbox-layout
 .mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, 
 .mat-datepicker-content .mat-calendar-previous-button
     color: lighten($grey, 20%)
+
+.mat-calendar-body-disabled
+    opacity: .3
 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick
     color: $black
@@ -140,6 +156,9 @@ label.mat-checkbox-layout
 .mat-form-field-appearance-outline .mat-form-field-outline-start,
 .mat-form-field-appearance-outline .mat-form-field-outline-gap
     border-width: 2px !important
+
+textarea.mat-input-element
+    line-height: 1.4
 
 
 // MatCheckbox, MatRadio

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService, EssentialData, PassportData, UserData, Log } from './employee.service';
 import { Location } from '@angular/common';
-import { MatTabChangeEvent, MatDialog, MatDialogRef } from '@angular/material';
+import { MatTabChangeEvent, MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { LockDialogComponent } from './lock-dialog/lock-dialog.component';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
+import { SidenavStateService } from 'src/app/layout/dashboard-layout/sidenav-state.service';
+import { CreateUpdatePassportDataService } from '../create-update-passport-data/create-update-passport-data.service';
 
 @Component({
     selector: 'employee',
@@ -20,39 +22,82 @@ export class EmployeeComponent implements OnInit {
     isRequesting: boolean;
     activeTabLabel = 'Главное';
     lockDialog: MatDialogRef<LockDialogComponent>;
+    isSidenavOpened: boolean;
 
     constructor(
         private route: ActivatedRoute,
         private service: EmployeeService,
         public location: Location,
         public dialog: MatDialog,
-        private breakpointObserver: BreakpointObserver
+        private snackbar: MatSnackBar,
+        private dashboardLayout: DashboardLayoutComponent,
+        private sidenavStateService: SidenavStateService,
+        private passportDataService: CreateUpdatePassportDataService
     ) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
+        this.isRequesting = true;
+
         // Fetch and assign essential data
-        this.essentialData = this.getEssentialData(this.id);
+        this.getEssentialData(this.id);
 
         // Fetch and assign log data
         this.logData = this.getLogData(this.id);
+
+        this.sidenavStateService.onSideNavToggle.subscribe(
+            () => (this.isSidenavOpened = this.dashboardLayout.isSidebarOpened)
+        );
     }
 
     /**
      * Get essential data
      * @param id Employee ID
      */
-    getEssentialData(id: string): EssentialData {
-        return this.service.getEssentialData(id);
+    getEssentialData(id: string) {
+        this.service.getEssentialData(id).subscribe(
+            response => {
+                this.essentialData = response.data;
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+
+                this.location.back();
+            },
+            () => (this.isRequesting = false)
+        );
     }
 
     /**
      * Get passport data
      * @param id Employee ID
      */
-    getPassportData(id: string): PassportData {
-        return this.service.getPassportData(id);
+    getPassportData(id: string) {
+        this.isRequesting = true;
+
+        return this.passportDataService.get(id).subscribe(
+            response => {
+                this.passportData = response.data;
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+                console.log(error);
+            },
+            () => (this.isRequesting = false)
+        );
     }
 
     /**
@@ -88,7 +133,7 @@ export class EmployeeComponent implements OnInit {
         // Load nessesary data on first tab activation
         switch (event.tab.textLabel) {
             case 'Паспортные данные':
-                if (!this.passportData) this.passportData = this.getPassportData(this.id);
+                if (!this.passportData) this.getPassportData(this.id);
                 break;
 
             case 'Учетная запись':
@@ -99,11 +144,38 @@ export class EmployeeComponent implements OnInit {
         this.activeTabLabel = event.tab.textLabel;
     }
 
+    /**
+     * Opens lock employee popup
+     */
     openLockDialog() {
         this.lockDialog = this.dialog.open(LockDialogComponent, {
-            data: {
-                id: this.id
-            }
+            data: { id: this.id }
         });
+    }
+
+    unlock() {
+        this.isRequesting = true;
+        this.service.unlock(this.id).subscribe(
+            response => this.ngOnInit(),
+            (error: Response) => {
+                this.isRequesting = false;
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => {
+                this.isRequesting = false;
+                this.snackbar.open('Сотрудник разблокирован');
+            }
+        );
     }
 }

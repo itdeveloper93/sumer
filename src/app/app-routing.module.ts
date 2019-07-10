@@ -9,14 +9,19 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
+<<<<<<< HEAD
 import {DictionariesListComponent} from './dictionaries/dictionaries-list/dictionaries-list.component';
 import {DepartmentListComponent} from './dictionaries/department-list/department-list.component';
+=======
+import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
+>>>>>>> employees
 
 const routes: Routes = [
     {
         path: '',
         component: DashboardLayoutComponent,
         canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always',
         children: [
             {
                 path: '',
@@ -52,6 +57,22 @@ const routes: Routes = [
                                 path: 'create',
                                 data: { title: 'Добавить сотрудника' },
                                 component: CreateEmployeeComponent
+                            },
+                            {
+                                path: 'edit',
+                                data: { title: 'Редактирование сотрудника' },
+                                children: [
+                                    {
+                                        path: 'essentials/:id',
+                                        data: 'Главное',
+                                        component: CreateEmployeeComponent
+                                    },
+                                    {
+                                        path: 'passport-data/:id',
+                                        data: 'Паспортные данные',
+                                        component: CreateUpdatePassportDataComponent
+                                    }
+                                ]
                             },
                             {
                                 path: ':id',
@@ -102,7 +123,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes, { useHash: true, onSameUrlNavigation: 'reload' })],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}

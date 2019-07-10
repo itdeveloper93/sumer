@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
 import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'employees-list',
@@ -21,13 +21,18 @@ export class EmployeesListComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private service: EmployeesService, private route: ActivatedRoute) {}
+    constructor(
+        private service: EmployeesService,
+        private route: ActivatedRoute,
+        private snackbar: MatSnackBar
+    ) {}
 
     ngOnInit() {
-        this.isRequesting = this.service.isRequesting;
+        this.isRequesting = true;
 
         if (this.showLocked) {
-            this.employees = new MatTableDataSource(this.get({ locked: true }));
+            //this.employees = new MatTableDataSource(this.get({ locked: true }));
+            this.get({ locked: true });
             this.displayedColumns = [
                 'fullName',
                 'departmentAndPosition',
@@ -36,7 +41,8 @@ export class EmployeesListComponent implements OnInit {
                 'lockReason'
             ];
         } else {
-            this.employees = new MatTableDataSource(this.get());
+            //this.employees = new MatTableDataSource(this.get());
+            this.get();
             this.displayedColumns = [
                 'photo',
                 'fullName',
@@ -46,9 +52,6 @@ export class EmployeesListComponent implements OnInit {
                 'actions'
             ];
         }
-
-        this.employees.paginator = this.paginator;
-        this.employees.sort = this.sort;
     }
 
     /**
@@ -57,9 +60,31 @@ export class EmployeesListComponent implements OnInit {
      * @param criterias Fetch criterias for DB searching
      */
     get(criterias?: FetchCriterias) {
-        console.log('EmployeesList.get()', this.service.get(criterias));
+        this.service.get(criterias).subscribe(
+            response => {
+                this.employees = response.data;
+            },
+            (error: Response) => {
+                this.isRequesting = false;
 
-        return this.service.get(criterias);
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => {
+                this.isRequesting = false;
+                this.employees.paginator = this.paginator;
+                this.employees.sort = this.sort;
+            }
+        );
     }
 
     /**

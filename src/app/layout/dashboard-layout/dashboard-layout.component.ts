@@ -1,6 +1,7 @@
 import { AuthService } from './../../authentication/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { SidenavStateService } from './sidenav-state.service';
 
 @Component({
     selector: 'app-dashboard-layout',
@@ -10,7 +11,11 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 export class DashboardLayoutComponent implements OnInit {
     isSidebarOpened = true;
 
-    constructor(private breakpointObserver: BreakpointObserver, public authService: AuthService) {}
+    constructor(
+        private breakpointObserver: BreakpointObserver,
+        public authService: AuthService,
+        private sidenavStateService: SidenavStateService
+    ) {}
 
     ngOnInit() {
         this.breakpointObserver
@@ -19,5 +24,9 @@ export class DashboardLayoutComponent implements OnInit {
                 if (state.matches) this.isSidebarOpened = false;
                 else this.isSidebarOpened = true;
             });
+
+        this.sidenavStateService.onSideNavToggle.subscribe(() => {
+            this.isSidebarOpened = !this.isSidebarOpened;
+        });
     }
 }

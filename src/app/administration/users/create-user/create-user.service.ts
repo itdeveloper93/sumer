@@ -14,6 +14,9 @@ export class CreateUserService {
      * @param employeeId Employee ID
      */
     createUser(employeeId: string): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/CreateUser', employeeId);
+        return this.http.post(
+            environment.API.URL + 'Employee/CreateUser',
+            JSON.stringify(employeeId)
+        );
     }
 }

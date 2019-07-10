@@ -1,5 +1,7 @@
 <div class="container-fluid">
-    <form class="row" [formGroup]="form" (ngSubmit)="create()">
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <form class="row" [formGroup]="form" #formDirective="ngForm">
         <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
             <mat-card class="p-0">
                 <img
@@ -41,6 +43,7 @@
                                     placeholder="Расулов"
                                     formControlName="lastName"
                                     required
+                                    (change)="log($event)"
                                 />
                                 <mat-error *ngIf="form.get('lastName').errors?.required"
                                     >Фамилия обязательна</mat-error
@@ -77,9 +80,9 @@
                                     placeholder="Олимович"
                                     formControlName="middleName"
                                 />
-                                <mat-error *ngIf="form.get('middleName').errors?.pattern"
-                                    >Только буквы</mat-error
-                                >
+                                <mat-error *ngIf="form.get('middleName').errors?.pattern">
+                                    Только буквы
+                                </mat-error>
                             </mat-form-field>
                         </div>
 
@@ -93,7 +96,7 @@
                                     formControlName="dateOfBirth"
                                     required
                                     [min]="minDate"
-                                    (change)="log()"
+                                    [max]="aultDate"
                                 />
                                 <mat-datepicker-toggle
                                     matSuffix
@@ -117,13 +120,10 @@
                         <div class="col-12 col-md-6 d-flex align-items-center">
                             <mat-radio-group color="primary" formControlName="genderId">
                                 <mat-radio-button
-                                    value="C36BC960-5424-4A96-94FA-E2776E0461F6"
+                                    value="{{ gender.id }}"
                                     class="mr-3"
-                                >
-                                    Мужской
-                                </mat-radio-button>
-                                <mat-radio-button value="21EC4F27-740D-40F5-8C8F-3EE8F839D6B3"
-                                    >Женский</mat-radio-button
+                                    *ngFor="let gender of genders"
+                                    >{{ gender.name }}</mat-radio-button
                                 >
                             </mat-radio-group>
                         </div>
@@ -136,6 +136,7 @@
                                     placeholder="12.08.2019"
                                     [matDatepicker]="hireDate"
                                     formControlName="hireDate"
+                                    [max]="today"
                                     required
                                 />
                                 <mat-datepicker-toggle
@@ -159,7 +160,7 @@
                                 <mat-select
                                     formControlName="departmentId"
                                     required
-                                    (selectionChange)="getPositions()"
+                                    (selectionChange)="getPositions(form.get('departmentId').value)"
                                 >
                                     <mat-option
                                         *ngFor="let department of departments"
@@ -262,8 +263,38 @@
             </mat-card>
         </div>
         <div class="col-12 col-lg-3">
-            <button mat-flat-button color="primary" class="mb-3 w-100">
+            <button
+                mat-flat-button
+                color="primary"
+                class="mb-3 w-100"
+                (click)="submit('profile', formDirective)"
+            >
                 <mat-icon>save</mat-icon> Сохранить
+            </button>
+
+            <button
+                mat-flat-button
+                color="accent"
+                class="mb-3 w-100"
+                (click)="submit('create', formDirective)"
+                *ngIf="!id"
+            >
+                <mat-icon>save</mat-icon> Сохранить и добавить еще
+            </button>
+
+            <!-- <button
+                mat-flat-button
+                class="mb-3 w-100"
+                color="warn"
+                type="button"
+                (click)="this.form.reset()"
+                *ngIf="!id"
+            >
+                <mat-icon>clear</mat-icon> Очистить форму
+            </button> -->
+
+            <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
+                <mat-icon>keyboard_arrow_left</mat-icon> Назад
             </button>
         </div>
     </form>

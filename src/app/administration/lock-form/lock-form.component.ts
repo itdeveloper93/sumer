@@ -17,6 +17,7 @@ export class LockFormComponent implements OnInit {
     @Input() horisontal: string;
 
     @Output() onError = new EventEmitter<boolean>();
+    @Output() onSuccess = new EventEmitter<boolean>();
 
     /**
      * Register form and it's controls
@@ -69,6 +70,30 @@ export class LockFormComponent implements OnInit {
      * @param lockReasonId Lock reason ID
      */
     lock(id: string, lockReasonId: string) {
-        this.service.lock(this.entityType, id, lockReasonId);
+        if (!this.form.get('lockReason').value) {
+            this.snackbar.open('Вы не выбрали причину блокировки');
+
+            return false;
+        }
+
+        this.isRequesting = true;
+        this.service.lock(this.entityType, id, lockReasonId).subscribe(
+            response => {
+                this.onSuccess.emit(true);
+            },
+            (error: Response) => {
+                this.onSuccess.emit(false);
+                this.isRequesting = false;
+            },
+            () => {
+                this.isRequesting = false;
+
+                if (this.entityType === 'employee') {
+                    this.snackbar.open('Сотрудник заблокирован');
+                } else {
+                    this.snackbar.open('Пользователь заблокирован');
+                }
+            }
+        );
     }
 }

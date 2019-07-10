@@ -1,18 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { DashboardLayoutComponent } from '../dashboard-layout/dashboard-layout.component';
+import { Component } from '@angular/core';
+import { SidenavStateService } from '../dashboard-layout/sidenav-state.service';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.sass']
 })
-export class HeaderComponent implements OnInit {
-    constructor(public dashboardLayout: DashboardLayoutComponent) {}
-
-    ngOnInit() {}
+export class HeaderComponent {
+    constructor(private sidenavState: SidenavStateService) {}
 
     toggleSidebar() {
-        this.dashboardLayout.isSidebarOpened = !this.dashboardLayout
-            .isSidebarOpened;
+        this.sidenavState.onSideNavToggle.emit();
     }
 }
