@@ -142,7 +142,7 @@
                     [length]="employeesLength"
                     class="rounded"
                     [disabled]="isRequesting"
-                    (page)="pageEvent = setQueryParams($event)"
+                    (page)="pageEvent = setPaginationQueryParams($event)"
                 ></mat-paginator>
             </mat-card>
         </div>

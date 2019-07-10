@@ -37,38 +37,15 @@ export class EmployeesListComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar
-    ) {
-        // this.router.navigate([], {
-        //     relativeTo: this.route,
-        //     queryParams: { pageSize: 10 },
-        //     queryParamsHandling: 'merge'
-        // });
-    }
+    ) {}
 
     ngOnInit() {
-        this.fetchCriterias = {
-            page: this.route.snapshot.queryParams.page
-                ? +this.route.snapshot.queryParams.page
-                : null,
-            pageSize: this.route.snapshot.queryParams.pageSize
-                ? +this.route.snapshot.queryParams.pageSize
-                : null,
-            fullName: this.route.snapshot.queryParams.fillName
-                ? this.route.snapshot.queryParams.fillName
-                : null,
-            departmentId: this.route.snapshot.queryParams.departmentId
-                ? this.route.snapshot.queryParams.departmentId
-                : null,
-            hasUser: this.route.snapshot.queryParams.hasUser
-                ? this.route.snapshot.queryParams.hasUser
-                : null,
-            locked: this.route.snapshot.queryParams.locked
-                ? this.route.snapshot.queryParams.locked
-                : null
-        };
+        this.fetchCriterias = this.route.snapshot.queryParams;
 
-        this.route.paramMap.subscribe(params => {
-            console.log(params.get('pageSize'));
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) {
+                this.get(params);
+            }
         });
 
         if (this.showLocked) {
@@ -95,40 +72,20 @@ export class EmployeesListComponent implements OnInit {
         }
     }
 
-    // TODO: Clear this shit
-    // @ts-ignore
-    setQueryParams(event: PageEvent) {
-        const params = {
-            page: null,
-            pageSize: 50,
-            fullName: null,
-            departmentId: null,
-            hasUser: null,
-            locked: null
-        };
-
-        if (event.pageSize) {
-            if (event.pageIndex === 0) event.pageIndex = 1;
-
-            params.page = event.pageIndex;
-            params.pageSize = event.pageSize;
-        }
-
-        // Clean null values
-        for (var propName in params) {
-            if (params[propName] === null || params[propName] === undefined) {
-                delete params[propName];
-            }
-        }
+    /**
+     * Set selected paginator options as query params
+     * @param event Event triggered by changing pagination options
+     */
+    setPaginationQueryParams(event: PageEvent) {
+        const { pageIndex, pageSize } = event;
 
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: params
+            queryParams: {
+                page: pageIndex + 1, // TODO: Configure MatPaginator pageIndex to start from 1
+                pageSize
+            }
         });
-
-        // TODO: This should run upon queryParamMap subscription,
-        // not here
-        this.get(params);
     }
 
     /**
@@ -138,8 +95,6 @@ export class EmployeesListComponent implements OnInit {
      */
     get(criterias?: FetchCriterias) {
         this.isRequesting = true;
-
-        console.log(criterias);
 
         this.service.get(criterias).subscribe(
             response => {
