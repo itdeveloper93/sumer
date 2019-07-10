@@ -1,7 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import {
+    MatTableDataSource,
+    MatPaginator,
+    MatSort,
+    MatSnackBar,
+    PageEvent
+} from '@angular/material';
+import { skip } from 'rxjs/operators';
 
 @Component({
     selector: 'employees-list',
@@ -19,6 +26,8 @@ export class EmployeesListComponent implements OnInit {
 
     displayedColumns: any;
     pageSizeOptions = [20, 50, 100];
+    employeesLength: number;
+    pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -28,29 +37,38 @@ export class EmployeesListComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar
-    ) {}
+    ) {
+        // this.router.navigate([], {
+        //     relativeTo: this.route,
+        //     queryParams: { pageSize: 10 },
+        //     queryParamsHandling: 'merge'
+        // });
+    }
 
     ngOnInit() {
-        this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: {
-                pageSize: 50
-            },
-            queryParamsHandling: 'merge',
-            // preserve the existing query params in the route
-            skipLocationChange: true
-            // do not trigger navigation
-        });
+        this.fetchCriterias = {
+            page: this.route.snapshot.queryParams.page
+                ? +this.route.snapshot.queryParams.page
+                : null,
+            pageSize: this.route.snapshot.queryParams.pageSize
+                ? +this.route.snapshot.queryParams.pageSize
+                : null,
+            fillName: this.route.snapshot.queryParams.fillName
+                ? this.route.snapshot.queryParams.fillName
+                : null,
+            departmentId: this.route.snapshot.queryParams.departmentId
+                ? this.route.snapshot.queryParams.departmentId
+                : null,
+            hasUser: this.route.snapshot.queryParams.hasUser
+                ? this.route.snapshot.queryParams.hasUser
+                : null,
+            locked: this.route.snapshot.queryParams.locked
+                ? this.route.snapshot.queryParams.locked
+                : null
+        };
 
         this.route.paramMap.subscribe(params => {
-            this.fetchCriterias = {
-                fillName: params.get('fillName'),
-                departmentId: params.get('departmentId'),
-                hasUser: params.get('hasUser') == 'true' ? true : false,
-                locked: params.get('locked') == 'true' ? true : false,
-                page: +params.get('page'),
-                pageSize: +params.get('pageSize')
-            };
+            console.log(params.get('pageSize'));
         });
 
         if (this.showLocked) {
@@ -77,6 +95,41 @@ export class EmployeesListComponent implements OnInit {
         }
     }
 
+    // TODO: Clear this shit
+    setQueryParams(event: PageEvent) {
+        const params = {
+            page: null,
+            pageSize: null,
+            fullName: null,
+            departmentId: null,
+            hasUser: null,
+            locked: null
+        };
+
+        if (event.pageSize) {
+            if (event.pageIndex === 0) event.pageIndex = 1;
+
+            params.page = event.pageIndex;
+            params.pageSize = event.pageSize;
+        }
+
+        // Clean null values
+        for (var propName in params) {
+            if (params[propName] === null || params[propName] === undefined) {
+                delete params[propName];
+            }
+        }
+
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: params
+        });
+
+        // TODO: This should run upon queryParamMap subscription,
+        // not here
+        this.get(params);
+    }
+
     /**
      * Send search criterias to employeesService and get employees
      * list in return
@@ -90,6 +143,7 @@ export class EmployeesListComponent implements OnInit {
         this.service.get(criterias).subscribe(
             response => {
                 this.employees = response.data.items;
+                this.employeesLength = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;

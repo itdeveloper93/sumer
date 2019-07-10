@@ -24,7 +24,7 @@ export interface Employee {
  * The shape of fetch criterias for DB searching
  */
 export interface FetchCriterias {
-    fillName?: string;
+    fullName?: string;
     departmentId?: string;
     hasUser?: boolean;
     page?: number;
@@ -45,6 +45,15 @@ export class EmployeesService {
     constructor(private http: HttpClient) {}
 
     get(criterias?: FetchCriterias): Observable<any> {
-        return this.http.get(environment.API.URL + 'Employee/All');
+        return this.http.get(
+            environment.API.URL +
+                'Employee/All?' +
+                Object.keys(criterias)
+                    .reduce(function(a, k) {
+                        a.push(k + '=' + encodeURIComponent(criterias[k]));
+                        return a;
+                    }, [])
+                    .join('&')
+        );
     }
 }
