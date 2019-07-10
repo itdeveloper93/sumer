@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
+import { Observable } from 'rxjs';
+import { PassportData } from '../create-update-passport-data/create-update-passport-data.service';
 
 export interface EssentialData {
     id: string;
     photoPath: string;
     fullName: string;
     department: string;
+    departmentId: string;
     position: string;
+    positionId: string;
     dateOfBirth: string;
     hireDate: string;
     phone: string;
     email: string;
     factualAddress: string;
-    gender: string;
+    genderName: string;
     description: string;
     userId: string;
-}
-
-export interface PassportData {
-    scanUrl: string;
-    seriesAndNumber: string;
-    issuer: string;
-    issueDate: string;
-    nationality: string;
-    birthDate: string;
-    registration: string;
+    isLocked: boolean;
+    lockReasonName: string;
+    lockDate: string;
 }
 
 export interface UserData {}
@@ -45,39 +43,18 @@ export class EmployeeService {
      * Returns Employee essential data
      * @param id Employee ID
      */
-    getEssentialData(id: string): EssentialData {
-        return {
-            id: id,
-            photoPath: 'https://i.pravatar.cc/600',
-            fullName: 'Раджабов Алексей Махмадназарович',
-            department: 'Управление учета',
-            position: 'Старший инспектор',
-            dateOfBirth: '15.06.1986',
-            hireDate: '22.04.2018',
-            phone: '934114400',
-            email: 'aleksey@it-2b.pro',
-            factualAddress: 'г. Душанбе, ул. Лохути, д. 5, кв. 8',
-            gender: 'Мужской',
-            userId: 'wgwe34r',
-            description:
-                'Lorem Ipsum - это текст-«рыба», часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной «рыбой» для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов.'
-        };
+    getEssentialData(id: string): Observable<any> {
+        return this.http.get<EssentialData[]>(environment.API.URL + 'Employee/Get/' + id);
     }
 
     /**
      * Returns Employee passport data
      * @param id Employee ID
      */
-    getPassportData(id: string): PassportData {
-        return {
-            scanUrl: 'https://www.seller.black/wp-content/uploads/2018/02/2e155157b756.jpg',
-            seriesAndNumber: 'А150619',
-            issuer: 'ОВД г. р-на Шохмансур, г. Душанбе',
-            issueDate: '12.10.2002',
-            nationality: 'таджик',
-            birthDate: '15.06.1986',
-            registration: 'г. Душанбе, ул. Лохути, д. 5, кв. 8'
-        };
+    getPassportData(id: string): Observable<any> {
+        return this.http.get<PassportData[]>(
+            environment.API.URL + 'Employee/GetPassportData/' + id
+        );
     }
 
     /**
@@ -98,5 +75,9 @@ export class EmployeeService {
             createdAt: '22.06.2019',
             lastEdit: '5.07.2019, 12:32'
         };
+    }
+
+    unlock(id: string): Observable<any> {
+        return this.http.post(environment.API.URL + 'Employee/UnlockEmployee/' + id, {});
     }
 }

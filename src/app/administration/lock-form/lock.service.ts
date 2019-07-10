@@ -27,7 +27,7 @@ export class LockService {
                 break;
 
             case 'user':
-                URL = environment.API.URL + 'AccountLockReason/All';
+                URL = environment.API.URL + 'UserLockReason/All';
                 break;
         }
 

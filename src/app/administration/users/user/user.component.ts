@@ -10,7 +10,5 @@ export class UserComponent implements OnInit {
 
     constructor() {}
 
-    ngOnInit() {
-        console.log(this.id);
-    }
+    ngOnInit() {}
 }

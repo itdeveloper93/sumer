@@ -9,7 +9,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { GlobalHttpHeadersInterceptorService } from './global-http-headers-interceptor.service';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import {
+    MomentDateAdapter,
+    MAT_MOMENT_DATE_ADAPTER_OPTIONS
+} from '@angular/material-moment-adapter';
 
 /**
  * Third party modules/components
@@ -44,10 +47,11 @@ import {
     MatDialogConfig,
     MatNativeDateModule,
     DateAdapter,
-    MAT_DATE_LOCALE,
     MAT_DATE_FORMATS
 } from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
+import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
+import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -62,13 +66,13 @@ const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
 
 const CUSTOM_DATE_FORMAT = {
     parse: {
-        dateInput: 'DD.MM.YYYY'
+        dateInput: 'DD/MM/YYYY'
     },
     display: {
         dateInput: 'DD.MM.YYYY',
-        monthYearLabel: 'DD.MM.YYYY',
-        dateA11yLabel: 'DD.MM.YYYY',
-        monthYearA11yLabel: 'DD.MM.YYYY'
+        monthYearLabel: 'MMMM YYYY',
+        dateA11yLabel: 'DD',
+        monthYearA11yLabel: 'MMMM YYYY'
     }
 };
 
@@ -113,9 +117,11 @@ const CUSTOM_DATE_FORMAT = {
             useValue: MAT_DIALOG_GLOBAL_OPTIONS
         },
         { provide: MatPaginatorIntl, useClass: MatPaginatorIntlRus },
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: DateAdapter, useClass: MomentUtcDateAdapter },
         { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
-        AuthService
+        AuthService,
+        SidenavStateService
     ],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA]

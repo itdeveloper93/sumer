@@ -30,6 +30,7 @@ export class DepartmentsAndPositionsService {
 
     /**
      * Get positions by department ID
+     * @param departmentId Department ID
      */
     getPositions(departmentId: string): Observable<any> {
         return this.http.get<Position[]>(

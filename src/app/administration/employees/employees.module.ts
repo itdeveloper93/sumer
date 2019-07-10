@@ -38,6 +38,7 @@ import { LockFormComponent } from '../lock-form/lock-form.component';
 import { AlertComponent } from 'src/app/alert/alert.component';
 import { CreateUserComponent } from '../users/create-user/create-user.component';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { CreateUpdatePassportDataComponent } from './create-update-passport-data/create-update-passport-data.component';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import { CreateEmployeeComponent } from './create-employee/create-employee.compo
         LockFormComponent,
         AlertComponent,
         CreateUserComponent,
-        CreateEmployeeComponent
+        CreateEmployeeComponent,
+        CreateUpdatePassportDataComponent
     ],
     imports: [
         CommonModule,

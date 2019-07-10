@@ -1,16 +1,21 @@
-<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="global"></mat-progress-bar>>
+<loading-indicator *ngIf="isRequesting" class="global"></loading-indicator>
+
 <mat-card class="introduction-card rounded-0 d-flex align-items-center justify-content-between">
     <div class="d-flex flex-column flex-md-row align-items-center m-auto m-md-0">
         <img
-            src="{{ essentialData.photoPath }}"
-            alt="{{ essentialData.fullName }}"
+            src="{{
+                essentialData?.photoPath
+                    ? essentialData.photoPath
+                    : '../../../../../../assets/img/noavatar.jpg'
+            }}"
+            alt="{{ essentialData?.fullName }}"
             class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0"
         />
 
-        <div class="text-center text-md-left">
-            <h1 class="introduction-card__name">{{ essentialData.fullName }}</h1>
+        <div class="text-center text-md-left" *ngIf="essentialData">
+            <h1 class="introduction-card__name">{{ essentialData?.fullName }}</h1>
             <span class="introduction-card__position">
-                {{ essentialData.department }} › {{ essentialData.position }}
+                {{ essentialData?.department }} › {{ essentialData?.position }}
             </span>
         </div>
     </div>
@@ -20,12 +25,12 @@
         mat-button
         class="mat-button-sm has-icon d-none d-md-block ml-3"
     >
-        <mat-icon>keyboard_arrow_left</mat-icon> Назад к списку
+        <mat-icon>keyboard_arrow_left</mat-icon> Назад
     </button>
 </mat-card>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-md-7 col-lg-8 col-xl-9">
+        <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidenavOpened">
             <mat-tab-group
                 dynamicHeight
                 animationDuration="0ms"
@@ -35,15 +40,11 @@
                 <div class="container-fluid">
                     <mat-tab label="Главное">
                         <mat-card>
-                            <loading-indicator
-                                *ngIf="isRequesting"
-                                class="position-absolute w-100 h-100"
-                            ></loading-indicator>
                             <mat-list role="list" class="p-0 no-mt no-mb">
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата рождения</span>
                                     <span class="value text-right">{{
-                                        essentialData.dateOfBirth
+                                        essentialData?.dateOfBirth
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
@@ -51,7 +52,7 @@
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Подразделение</span>
                                     <span class="value text-right">{{
-                                        essentialData.department
+                                        essentialData?.department
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
@@ -59,7 +60,7 @@
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Позиция</span>
                                     <span class="value text-right">{{
-                                        essentialData.position
+                                        essentialData?.position
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
@@ -67,59 +68,84 @@
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата приема на работу</span>
                                     <span class="value text-right">{{
-                                        essentialData.hireDate
+                                        essentialData?.hireDate
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Телефон</span>
-                                    <span class="value text-right">{{ essentialData.phone }}</span>
+                                    <span class="value text-right">{{ essentialData?.phone }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Email</span>
-                                    <span class="value text-right">{{ essentialData.email }}</span>
+                                    <span class="value text-right">{{ essentialData?.email }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Фактический адрес</span>
                                     <span class="value text-right">{{
-                                        essentialData.factualAddress
+                                        essentialData?.factualAddress
                                     }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Пол</span>
-                                    <span class="value text-right">{{ essentialData.gender }}</span>
+                                    <span class="value text-right">{{
+                                        essentialData?.genderName
+                                    }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </mat-list>
                             <div class="d-flex flex-column mt-5">
                                 <span class="key mr-auto mb-2">Дополнительное описание</span>
-                                <span class="value">{{ essentialData.description }}</span>
+                                <span class="value">{{ essentialData?.description }}</span>
                             </div>
                         </mat-card>
                     </mat-tab>
                     <mat-tab label="Паспортные данные">
-                        <ng-container *ngIf="passportData">
+                        <mat-card
+                            class="d-flex flex-column justify-content-center"
+                            *ngIf="!passportData?.passportNaumber; else passportDataCard"
+                        >
+                            <alert
+                                message="У этого сотрудника не заполнены паспортные данные"
+                                type="info"
+                                class="text-center mb-3"
+                            ></alert>
+
+                            <a
+                                mat-flat-button
+                                color="primary"
+                                class="mx-auto"
+                                [routerLink]="['/administration/employees/edit/passport-data', id]"
+                            >
+                                Добавить паспортные данные
+                            </a>
+                        </mat-card>
+                        <ng-template #passportDataCard>
                             <div class="row">
                                 <div class="col-12 col-lg-5 col-xl-4 mb-4 mb-lg-0">
                                     <mat-card class="p-0">
                                         <img
-                                            src="{{ passportData.scanUrl }}"
-                                            alt="{{ essentialData.fullName }}"
+                                            src="{{
+                                                passportData?.scanUrl
+                                                    ? passportData.scanUrl
+                                                    : '../../../../../../assets/img/noavatar.jpg'
+                                            }}"
+                                            alt="{{ essentialData?.fullName }}"
                                             class="passport-scan w-100 rounded-top"
                                         />
                                         <div class="p-4">
                                             <a
-                                                href="{{ passportData.scanUrl }}"
+                                                href="{{ passportData?.scanUrl }}"
                                                 mat-button
                                                 class="w-100"
-                                                download="{{ passportData.scanUrl }}"
+                                                download="{{ passportData?.scanUrl }}"
                                                 target="_blank"
                                             >
                                                 Скачать скан документа
@@ -129,80 +155,108 @@
                                 </div>
                                 <div class="col-12 col-lg-7 col-xl-8">
                                     <mat-card>
-                                        <loading-indicator
-                                            *ngIf="isRequesting"
-                                            class="position-absolute w-100 h-100"
-                                        ></loading-indicator>
                                         <mat-list role="list" class="p-0 no-mt no-mb">
                                             <mat-list-item role="listitem">
                                                 <span class="key mr-auto">Серия и номер</span>
-                                                <span class="value text-right">{{
-                                                    passportData.seriesAndNumber
-                                                }}</span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.passportNumber
+                                                            ? passportData.passportNumber
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                             <mat-divider></mat-divider>
 
                                             <mat-list-item role="listitem">
-                                                <span class="key mr-auto"
-                                                    >Орган, выдавший паспорт</span
-                                                >
-                                                <span class="value text-right">{{
-                                                    passportData.issuer
-                                                }}</span>
+                                                <span class="key mr-auto">
+                                                    Орган, выдавший паспорт
+                                                </span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.passportIssuer
+                                                            ? passportData.passportIssuer
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                             <mat-divider></mat-divider>
 
                                             <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Дата выдачииция</span>
-                                                <span class="value text-right">{{
-                                                    passportData.issueDate
-                                                }}</span>
+                                                <span class="key mr-auto">Дата выдачи</span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.passportIssueDate
+                                                            ? passportData.passportIssueDate
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                             <mat-divider></mat-divider>
 
                                             <mat-list-item role="listitem">
                                                 <span class="key mr-auto">Национальность</span>
-                                                <span class="value text-right">{{
-                                                    passportData.nationality
-                                                }}</span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.nationality
+                                                            ? passportData.nationality
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                             <mat-divider></mat-divider>
 
                                             <mat-list-item role="listitem">
                                                 <span class="key mr-auto">Дата рождения</span>
-                                                <span class="value text-right">{{
-                                                    passportData.birthDate
-                                                }}</span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.dateOfBirth
+                                                            ? passportData.dateOfBirth
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                             <mat-divider></mat-divider>
 
                                             <mat-list-item role="listitem">
                                                 <span class="key mr-auto">Прописка</span>
-                                                <span class="value text-right">{{
-                                                    passportData.registration
-                                                }}</span>
+                                                <span class="value text-right">
+                                                    {{
+                                                        passportData?.passportAddress
+                                                            ? passportData.passportAddress
+                                                            : 'Не заполнено'
+                                                    }}
+                                                </span>
                                             </mat-list-item>
                                         </mat-list>
                                     </mat-card>
                                 </div>
                             </div>
-                        </ng-container>
+                        </ng-template>
                     </mat-tab>
                     <mat-tab label="Учетная запись">
-                        <user
-                            id="{{ essentialData.userId }}"
-                            *ngIf="essentialData.userId; else createUser"
-                        ></user>
-                        <ng-template #createUser>
-                            <create-user employeeId="{{ id }}"></create-user>
-                        </ng-template>
+                        <ng-container *ngIf="activeTabLabel === 'Учетная запись'">
+                            <user
+                                id="{{ essentialData?.userId ? essentialData?.userId : null }}"
+                                *ngIf="essentialData?.userId; else createUser"
+                            ></user>
+                            <ng-template #createUser>
+                                <create-user
+                                    employeeId="{{ id }}"
+                                    (onAddEnd)="ngOnInit()"
+                                ></create-user>
+                            </ng-template>
+                        </ng-container>
                     </mat-tab>
                 </div>
             </mat-tab-group>
         </div>
-        <div class="col-12 col-md-5 col-lg-4 col-xl-3 mat-tab-body-padding">
+        <div
+            class="col-12 col-md-5 col-lg-4 mat-tab-body-padding"
+            [class.col-xl-3]="!isSidenavOpened"
+        >
             <button
-                [routerLink]="['/administration/employees/edit/essential/:id']"
+                [routerLink]="['/administration/employees/edit/essentials/', id]"
                 mat-button
                 class="mb-3 w-100"
                 *ngIf="activeTabLabel === 'Главное'"
@@ -211,7 +265,7 @@
             </button>
 
             <button
-                [routerLink]="['/administration/employees/edit/passport/:id']"
+                [routerLink]="['/administration/employees/edit/passport/', id]"
                 mat-button
                 class="mb-3 w-100"
                 *ngIf="activeTabLabel === 'Паспортные данные'"
@@ -228,15 +282,63 @@
             >
                 <mat-icon>insert_drive_file</mat-icon> Выгрузить карточку в PDF
             </button>
-            <button
-                mat-flat-button
-                color="warn"
-                (click)="openLockDialog()"
-                class="mb-3 w-100"
-                *ngIf="activeTabLabel !== 'Учетная запись'"
+
+            <mat-card
+                class="mb-4"
+                [class.d-none]="essentialData?.isLocked || activeTabLabel === 'Учетная запись'"
             >
-                <mat-icon>block</mat-icon> Заблокировать сотрудника
-            </button>
+                <mat-card-header>
+                    <mat-card-title class="m-0">Заблокировать</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <lock-form
+                        entityType="employee"
+                        id="{{ id }}"
+                        (onSuccess)="ngOnInit()"
+                    ></lock-form>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card
+                class="mb-4"
+                [class.d-none]="!essentialData?.isLocked || activeTabLabel === 'Учетная запись'"
+            >
+                <mat-card-header>
+                    <mat-card-title class="m-0">Сотрудник заблокирован</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-progress-bar
+                        mode="indeterminate"
+                        *ngIf="isRequesting"
+                        class="progress-bar-top rounded-top"
+                    ></mat-progress-bar>
+                    <mat-list role="list" class="p-0 no-mt">
+                        <mat-list-item role="listitem">
+                            <span class="key mr-auto">Причина</span>
+                            <span class="value text-right">{{
+                                essentialData?.lockReasonName
+                            }}</span>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+
+                        <mat-list-item role="listitem">
+                            <span class="key mr-auto">Дата </span>
+                            <span class="value text-right">{{ essentialData?.lockDate }}</span>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button
+                        (click)="unlock()"
+                        mat-flat-button
+                        color="accent"
+                        class="btn-lg btn-block"
+                    >
+                        Разблокировать
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
             <mat-card class="log-data mb-4">
                 <mat-card-header>
                     <mat-card-title class="m-0">Дополнительная информация</mat-card-title>
@@ -264,7 +366,7 @@
                 <mat-card-actions>
                     <a
                         [routerLink]="['/log/emloyee', id]"
-                        mat-flat-button
+                        mat-button
                         color="primary"
                         class="btn-lg btn-block"
                     >
