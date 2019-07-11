@@ -1,13 +1,17 @@
 <div class="container-fluid">
     <h1 class="mb-4">{{ title }}</h1>
 
-    <form class="row" [formGroup]="form" (ngSubmit)="submit(form.value)">
+    <form class="row" [formGroup]="form" (ngSubmit)="submit()">
         <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
             <mat-card class="p-0">
                 <img
-                    src="../../../../assets/img/noavatar.jpg"
+                    src="{{
+                        passportData?.passportScanPath
+                            ? passportData.passportScanPath
+                            : '../../../../assets/img/noavatar.jpg'
+                    }}"
                     alt="Фото сотрудника"
-                    class="photo-preview w-100 rounded-top"
+                    class="photo-preview w-100 rounded-top object-cover"
                 />
                 <div class="p-4">
                     <input
@@ -15,7 +19,7 @@
                         accept="image/jpg"
                         formControlName="passportScan"
                         class="d-none"
-                        (change)="inserPhotoPreview($event)"
+                        (change)="onPhotoChange($event)"
                     />
                     <button mat-button class="w-100" type="button" (click)="triggerPhotoUpload()">
                         Загрузить фото

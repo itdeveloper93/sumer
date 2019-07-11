@@ -26,6 +26,9 @@ export class CreateUpdatePassportDataComponent implements OnInit {
 
     nationalities: Nationality[];
 
+    passportData: PassportData;
+    fileToUpload: File = null;
+
     /**
      * Register form and it's controls
      */
@@ -74,6 +77,23 @@ export class CreateUpdatePassportDataComponent implements OnInit {
     }
 
     /**
+     * Insert selected photo to pewview canvas
+     * @param event Event object
+     */
+    onPhotoChange(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+
+            // @ts-ignore
+            const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
+            canvas.src = URL.createObjectURL(file);
+
+            //this.form.get('photo').setValue(file);
+            this.fileToUpload = event.target.files.item(0);
+        }
+    }
+
+    /**
      * Get passport data
      * @param id Employee ID
      */
@@ -88,6 +108,8 @@ export class CreateUpdatePassportDataComponent implements OnInit {
                     dateOfBirth: momentX(response.data.dateOfBirth),
                     passportIssueDate: momentX(response.data.passportIssueDate)
                 });
+
+                this.passportData = response.data;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -146,7 +168,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * Submit passport data to server
      * @param payload Form data
      */
-    submit(payload: PassportData) {
+    submit() {
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
 
@@ -158,7 +180,17 @@ export class CreateUpdatePassportDataComponent implements OnInit {
         this.isRequesting = true;
         this.form.disable();
 
-        this.service.submit({ ...payload, employeeId: this.id }).subscribe(
+        const payload = new FormData();
+
+        payload.append('employeeId', this.id);
+        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
+            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
+        );
+
+        payload.delete('passportScan');
+        payload.append('passportScan', this.fileToUpload, this.fileToUpload.name);
+
+        this.service.submit(payload).subscribe(
             response => {
                 if (this.form.touched) this.snackbar.open('Изменения сохранены');
 

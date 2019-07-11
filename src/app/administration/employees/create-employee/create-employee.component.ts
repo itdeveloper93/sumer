@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../employee/employee.service';
 import { momentX } from 'src/app/app.component';
 import * as moment from 'moment-timezone';
+import { Employee } from '../employees.service';
 
 @Component({
     selector: 'app-create-employee',
@@ -34,34 +35,34 @@ export class CreateEmployeeComponent implements OnInit {
     // For editing
     id: string;
 
+    fileToUpload: File = null;
+    essentialData: Employee;
+
     /**
      * Register form and it's controls
      */
     form = new FormGroup({
-        photo: new FormControl(''),
-        lastName: new FormControl('wefwef', [
+        photo: new FormControl(null),
+        lastName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Яa-zA-z]*')]),
+        firstName: new FormControl('', [
             Validators.required,
             Validators.pattern('[а-яА-Яa-zA-z]*')
         ]),
-        firstName: new FormControl('wefwefwe', [
-            Validators.required,
-            Validators.pattern('[а-яА-Яa-zA-z]*')
-        ]),
-        middleName: new FormControl('wefwefwef', Validators.pattern('[а-яА-Яa-zA-z]*')),
-        dateOfBirth: new FormControl('15.09.1995'),
+        middleName: new FormControl('', Validators.pattern('[а-яА-Яa-zA-z]*')),
+        dateOfBirth: new FormControl(''),
         // TODO: Fetch genders from server
-        genderId: new FormControl('800ebb18-f2a7-4869-bac7-c9a716'),
-        hireDate: new FormControl('27.06.1995'),
+        genderId: new FormControl(''),
+        hireDate: new FormControl(''),
         departmentId: new FormControl(''),
         positionId: new FormControl(''),
-        phone: new FormControl('342323545', [
+        phone: new FormControl('', [
             Validators.required,
             Validators.minLength(9),
             Validators.maxLength(9),
             Validators.pattern('^[0-9]*$')
         ]),
         email: new FormControl(
-            'wefwe@wef.ef',
+            '',
             Validators.pattern(
                 "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             )
@@ -121,10 +122,17 @@ export class CreateEmployeeComponent implements OnInit {
      * Insert selected photo to pewview canvas
      * @param event Event object
      */
-    inserPhotoPreview(event) {
-        // @ts-ignore
-        const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
-        canvas.src = URL.createObjectURL(event.target.files[0]);
+    onPhotoChange(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+
+            // @ts-ignore
+            const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
+            canvas.src = URL.createObjectURL(file);
+
+            //this.form.get('photo').setValue(file);
+            this.fileToUpload = event.target.files.item(0);
+        }
     }
 
     getGenders() {
@@ -222,6 +230,9 @@ export class CreateEmployeeComponent implements OnInit {
      * Create employee
      */
     create(redirectTo: string, formDirective: FormGroupDirective) {
+        this.isRequesting = true;
+        this.form.disable();
+
         // Don't submit if form has errors
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
@@ -229,10 +240,17 @@ export class CreateEmployeeComponent implements OnInit {
             return false;
         }
 
-        this.isRequesting = true;
-        this.form.disable();
+        const payload = new FormData();
 
-        this.service.create(this.form.value).subscribe(
+        //payload.append('id', this.id);
+        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
+            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
+        );
+
+        payload.delete('photo');
+        payload.append('photo', this.fileToUpload, this.fileToUpload.name);
+
+        this.service.create(payload).subscribe(
             response => {
                 this.snackbar.open('Сотрудник успешно добавлен');
 
@@ -251,8 +269,6 @@ export class CreateEmployeeComponent implements OnInit {
                 this.isRequesting = false;
                 this.form.enable();
 
-                console.log(error);
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open(
@@ -264,10 +280,6 @@ export class CreateEmployeeComponent implements OnInit {
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                         break;
                 }
-            },
-            () => {
-                this.isRequesting = false;
-                this.form.enable();
             }
         );
     }
@@ -286,6 +298,8 @@ export class CreateEmployeeComponent implements OnInit {
                     dateOfBirth: momentX(response.data.dateOfBirth),
                     hireDate: momentX(response.data.hireDate)
                 });
+
+                this.essentialData = response.data;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -314,7 +328,21 @@ export class CreateEmployeeComponent implements OnInit {
     edit(id: string) {
         this.isRequesting = true;
 
-        this.service.edit({ ...this.form.value, id }).subscribe(
+        const payload = new FormData();
+
+        payload.append('id', this.id);
+        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
+            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
+        );
+
+        payload.delete('photo');
+
+        if (this.fileToUpload) {
+            payload.append('photo', this.fileToUpload, this.fileToUpload.name);
+        }
+
+        //this.service.edit({ ...this.form.value, id }).subscribe(
+        this.service.edit(payload).subscribe(
             response => {
                 this.router.navigate(['/administration/employees', this.id]);
 
@@ -322,6 +350,8 @@ export class CreateEmployeeComponent implements OnInit {
             },
             (error: Response) => {
                 this.isRequesting = false;
+
+                console.log(error);
 
                 switch (error.status) {
                     case 0:
@@ -334,8 +364,7 @@ export class CreateEmployeeComponent implements OnInit {
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору.`);
                         break;
                 }
-            },
-            () => (this.isRequesting = false)
+            }
         );
     }
 

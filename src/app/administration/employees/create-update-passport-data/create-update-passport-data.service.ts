@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface PassportData {
-    //scanUrl: string;
+    passportScanPath: string;
     passportNumber: string;
     passportIssuer: string;
     passportIssueDate: string;
@@ -33,7 +33,7 @@ export class CreateUpdatePassportDataService {
      * Submits Employee passport data
      * @param id Employee ID
      */
-    submit(payload): Observable<any> {
+    submit(payload: FormData): Observable<any> {
         return this.http.post(environment.API.URL + 'Employee/EditPassportData', payload);
     }
 }

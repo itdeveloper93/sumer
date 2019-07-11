@@ -13,7 +13,7 @@
                     : '../../../../../../assets/img/noavatar.jpg'
             }}"
             alt="{{ essentialData?.fullName }}"
-            class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0"
+            class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0 object-cover"
         />
 
         <div class="text-center text-md-left" *ngIf="essentialData">
@@ -137,19 +137,19 @@
                                 <mat-card class="p-0">
                                     <img
                                         src="{{
-                                            passportData?.scanUrl
-                                                ? passportData.scanUrl
+                                            passportData?.passportScanPath
+                                                ? passportData.passportScanPath
                                                 : '../../../../../../assets/img/noavatar.jpg'
                                         }}"
                                         alt="{{ essentialData?.fullName }}"
-                                        class="passport-scan w-100 rounded-top"
+                                        class="passport-scan w-100 rounded-top object-cover"
                                     />
                                     <div class="p-4">
                                         <a
-                                            href="{{ passportData?.scanUrl }}"
+                                            href="{{ passportData?.passportScanPath }}"
                                             mat-button
                                             class="w-100"
-                                            download="{{ passportData?.scanUrl }}"
+                                            download="{{ passportData?.passportScanPath }}"
                                             target="_blank"
                                         >
                                             Скачать скан документа
@@ -313,7 +313,7 @@
                     <mat-progress-bar
                         mode="indeterminate"
                         *ngIf="isRequesting"
-                        class="rounded-top"
+                        class="mat-progress-bar_top rounded-top"
                     ></mat-progress-bar>
                     <mat-list role="list" class="p-0 no-mt">
                         <mat-list-item role="listitem">
