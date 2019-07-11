@@ -45,15 +45,19 @@ export class EmployeesService {
     constructor(private http: HttpClient) {}
 
     get(criterias?: FetchCriterias): Observable<any> {
-        return this.http.get(
-            environment.API.URL +
-                'Employee/All?' +
-                Object.keys(criterias)
-                    .reduce(function(a, k) {
-                        a.push(k + '=' + encodeURIComponent(criterias[k]));
-                        return a;
-                    }, [])
-                    .join('&')
-        );
+        console.log(criterias);
+
+        if (criterias) {
+            return this.http.get(
+                environment.API.URL +
+                    'Employee/All?' +
+                    Object.keys(criterias)
+                        .reduce(function(a, k) {
+                            a.push(k + '=' + encodeURIComponent(criterias[k]));
+                            return a;
+                        }, [])
+                        .join('&')
+            );
+        } else return this.http.get(environment.API.URL + 'Employee/All');
     }
 }

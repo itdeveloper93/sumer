@@ -72,6 +72,16 @@ export class EmployeesListComponent implements OnInit {
         }
     }
 
+    setFilterQueryParams(event: FetchCriterias) {
+        if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
+        else {
+            this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: event
+            });
+        }
+    }
+
     /**
      * Set selected paginator options as query params
      * @param event Event triggered by changing pagination options
@@ -84,8 +94,23 @@ export class EmployeesListComponent implements OnInit {
             queryParams: {
                 page: pageIndex + 1, // TODO: Configure MatPaginator pageIndex to start from 1
                 pageSize
-            }
+            },
+            queryParamsHandling: 'merge'
         });
+    }
+
+    resetFilter() {
+        const params = { ...this.route.snapshot.queryParams };
+        delete params.fullName;
+        delete params.departmentId;
+        delete params.hasUser;
+
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: params
+        });
+
+        this.get();
     }
 
     /**
