@@ -47,22 +47,24 @@ import {
     MatDialogConfig,
     MatNativeDateModule,
     DateAdapter,
-<<<<<<< HEAD
     MAT_DATE_LOCALE,
-    MAT_DATE_FORMATS, MatPaginatorModule, MatTableModule, MatTooltipModule, MatOptionModule, MatSelectModule, MatSlideToggleModule
+    MAT_DATE_FORMATS,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatDialogModule, MatProgressBarModule
 } from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
 import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
 import {EmployeesModule} from './administration/employees/employees.module';
 import { DictionariesFilterComponent } from './dictionaries/dictionaries-filter/dictionaries-filter.component';
 import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
-=======
-    MAT_DATE_FORMATS
-} from '@angular/material';
-import { MatPaginatorIntlRus } from './paginator';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
->>>>>>> employees
+import { CreateUpdateDepartmentComponent } from './dictionaries/create-update-department/create-update-department.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -99,7 +101,8 @@ const CUSTOM_DATE_FORMAT = {
         MainNavigationComponent,
         DictionariesListComponent,
         DictionariesFilterComponent,
-        DepartmentListComponent
+        DepartmentListComponent,
+        CreateUpdateDepartmentComponent
     ],
     imports: [
         BrowserModule,
@@ -121,7 +124,12 @@ const CUSTOM_DATE_FORMAT = {
         MatTooltipModule,
         MatOptionModule,
         MatSelectModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatDialogModule,
+        MatProgressBarModule
+    ],
+    entryComponents: [
+        CreateUpdateDepartmentComponent
     ],
     providers: [
         {

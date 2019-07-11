@@ -9,13 +9,10 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
-<<<<<<< HEAD
 import {DictionariesListComponent} from './dictionaries/dictionaries-list/dictionaries-list.component';
 import {DepartmentListComponent} from './dictionaries/department-list/department-list.component';
-=======
+// tslint:disable-next-line:max-line-length
 import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
->>>>>>> employees
-
 const routes: Routes = [
     {
         path: '',

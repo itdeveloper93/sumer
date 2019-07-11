@@ -27,7 +27,17 @@ export class DepartmentsAndPositionsService {
     getDepartments(): Observable<any> {
         return this.http.get<Department[]>(environment.API.URL + 'Department/All');
     }
-
+    getDepartmentsById(departmentId: string): Observable<any> {
+        return this.http.get<Department[]>(
+            environment.API.URL + 'Department/Get/' + departmentId
+        );
+    }
+    createDepartment(name: string, isActive: boolean) {
+        return this.http.post(environment.API.URL + 'Department/Create', {name, isActive});
+    }
+    updateDepartment(value) {
+        return this.http.post(environment.API.URL + 'Department/Edit', value);
+    }
     /**
      * Get positions by department ID
      * @param departmentId Department ID
