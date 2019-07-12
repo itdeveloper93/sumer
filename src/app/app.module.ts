@@ -52,6 +52,7 @@ import {
 import { MatPaginatorIntlRus } from './paginator';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -85,7 +86,8 @@ const CUSTOM_DATE_FORMAT = {
         BreadcrumbsComponent,
         MiniProfileComponent,
         NotificationWidgetComponent,
-        MainNavigationComponent
+        MainNavigationComponent,
+        ImageUploaderComponent
     ],
     imports: [
         BrowserModule,

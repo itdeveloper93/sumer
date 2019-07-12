@@ -20,14 +20,12 @@
                     class="photo-preview w-100 rounded-top object-cover"
                 />
                 <div class="p-4">
-                    <input
-                        type="file"
-                        accept="image/jpg"
-                        formControlName="photo"
-                        class="d-none"
-                        (change)="onPhotoChange($event)"
-                    />
-                    <button mat-button class="w-100" type="button" (click)="triggerPhotoUpload()">
+                    <button mat-button class="file-input-button w-100" type="button">
+                        <input
+                            type="file"
+                            accept="image/jpg,image/jpeg"
+                            (change)="renderAndAssignPhoto($event.target.files)"
+                        />
                         Загрузить фото
                     </button>
                 </div>

@@ -13,6 +13,7 @@ import { EmployeeService } from '../employee/employee.service';
 import { momentX } from 'src/app/app.component';
 import * as moment from 'moment-timezone';
 import { Employee } from '../employees.service';
+import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.component';
 
 @Component({
     selector: 'app-create-employee',
@@ -20,29 +21,28 @@ import { Employee } from '../employees.service';
     styleUrls: ['./create-employee.component.sass']
 })
 export class CreateEmployeeComponent implements OnInit {
+    imageUploader = ImageUploaderComponent;
+
     title: string;
 
     isRequesting: boolean;
+
     minDate = momentX('01.01.1900');
     today = moment();
     aultDate = moment().subtract(18, 'years');
 
-    // For creating
+    id: string;
+    essentialData: Employee;
+
     departments: Department[];
     positions: Position[];
     genders: Gender[];
-
-    // For editing
-    id: string;
-
-    fileToUpload: File = null;
-    essentialData: Employee;
 
     /**
      * Register form and it's controls
      */
     form = new FormGroup({
-        photo: new FormControl(null),
+        photo: new FormControl(''),
         lastName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Яa-zA-z]*')]),
         firstName: new FormControl('', [
             Validators.required,
@@ -106,37 +106,65 @@ export class CreateEmployeeComponent implements OnInit {
         }
     }
 
-    log(event) {
-        console.log(event);
-    }
-
     /**
-     * Trigger photo upload window
+     * Renders selected image to given canvas and assigns it to respective
+     * form input
+     * @param files Files object
      */
-    triggerPhotoUpload() {
-        const fileInput: HTMLElement = document.querySelector("[formcontrolname='photo']");
-        fileInput.click();
-    }
-
-    /**
-     * Insert selected photo to pewview canvas
-     * @param event Event object
-     */
-    onPhotoChange(event) {
-        if (event.target.files.length > 0) {
-            const file = event.target.files[0];
-
-            // @ts-ignore
-            const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
-            canvas.src = URL.createObjectURL(file);
-
-            //this.form.get('photo').setValue(file);
-            this.fileToUpload = event.target.files.item(0);
+    renderAndAssignPhoto(files: FileList) {
+        if (files.length) {
+            this.imageUploader.renderImagePreview(files);
+            this.form.patchValue({ photo: files[0] });
         }
     }
 
+    /**
+     * Get essential data and populate to form
+     * @param id Employee ID
+     */
+    getEssentialData(id: string) {
+        this.isRequesting = true;
+
+        this.employeeService.getEssentialData(id).subscribe(
+            response => {
+                this.form.patchValue({
+                    ...response.data,
+                    dateOfBirth: momentX(response.data.dateOfBirth),
+                    hireDate: momentX(response.data.hireDate)
+                });
+
+                this.essentialData = response.data;
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open(
+                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
+                        );
+                        break;
+
+                    case 400:
+                        this.snackbar.open('Ошибка. Проверьте введенные данные.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        this.location.back();
+                        break;
+                }
+            },
+            () => (this.isRequesting = false)
+        );
+    }
+
+    /**
+     * Get genders
+     */
     getGenders() {
-        this.isRequesting = false;
+        this.isRequesting = true;
+        this.form.get('genderId').disable();
 
         this.gendersService.get().subscribe(
             response => (this.genders = response.data),
@@ -222,12 +250,15 @@ export class CreateEmployeeComponent implements OnInit {
         );
     }
 
+    // TODO: Don't know what does this do. Fix.
     getPositionsStrategy() {
         if (!this.id) this.getPositions(this.form.get('departmentId').value);
     }
 
     /**
      * Create employee
+     * @param redirectTo String determining where to redirect after creation (profile || create)
+     * @param formDirective Form directive for form resetting if user choosed to redirect to create
      */
     create(redirectTo: string, formDirective: FormGroupDirective) {
         // Don't submit if form has errors
@@ -248,10 +279,7 @@ export class CreateEmployeeComponent implements OnInit {
         );
 
         payload.delete('photo');
-
-        if (this.fileToUpload) {
-            payload.append('photo', this.fileToUpload, this.fileToUpload.name);
-        }
+        payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
 
         this.service.create(payload).subscribe(
             response => {
@@ -288,46 +316,9 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     /**
-     * Get essential data and populate to form
+     * Edit employee
      * @param id Employee ID
      */
-    getEssentialData(id: string) {
-        this.isRequesting = true;
-
-        this.employeeService.getEssentialData(id).subscribe(
-            response => {
-                this.form.patchValue({
-                    ...response.data,
-                    dateOfBirth: momentX(response.data.dateOfBirth),
-                    hireDate: momentX(response.data.hireDate)
-                });
-
-                this.essentialData = response.data;
-            },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    case 400:
-                        this.snackbar.open('Ошибка. Проверьте введенные данные.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        this.location.back();
-                        break;
-                }
-            },
-            () => (this.isRequesting = false)
-        );
-    }
-
     edit(id: string) {
         // Don't submit if form has errors
         if (this.form.invalid) {
@@ -340,16 +331,13 @@ export class CreateEmployeeComponent implements OnInit {
 
         const payload = new FormData();
 
-        payload.append('id', this.id);
+        payload.append('id', id);
         Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
             payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
         );
 
         payload.delete('photo');
-
-        if (this.fileToUpload) {
-            payload.append('photo', this.fileToUpload, this.fileToUpload.name);
-        }
+        payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
 
         //this.service.edit({ ...this.form.value, id }).subscribe(
         this.service.edit(payload).subscribe(

@@ -10,6 +10,7 @@ import {
 import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
+import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
 
 @Component({
     selector: 'app-create-update-passport-data',
@@ -17,17 +18,20 @@ import { MatSnackBar } from '@angular/material';
     styleUrls: ['./create-update-passport-data.component.sass']
 })
 export class CreateUpdatePassportDataComponent implements OnInit {
+    imageUploader = ImageUploaderComponent;
+
     title = 'Редактирование паспортных данных';
+
     isRequesting: boolean;
-    id: string;
+
     minDate = momentX('01.01.1900');
     aultDate = moment().subtract(18, 'years');
     today = moment();
 
-    nationalities: Nationality[];
-
+    id: string;
     passportData: PassportData;
-    fileToUpload: File = null;
+
+    nationalities: Nationality[];
 
     /**
      * Register form and it's controls
@@ -59,37 +63,14 @@ export class CreateUpdatePassportDataComponent implements OnInit {
     }
 
     /**
-     * Trigger photo upload window
+     * Renders selected image to given canvas and assigns it to respective
+     * form input
+     * @param files Files object
      */
-    triggerPhotoUpload() {
-        const fileInput: HTMLElement = document.querySelector("[formcontrolname='passportScan']");
-        fileInput.click();
-    }
-
-    /**
-     * Insert selected photo to pewview canvas
-     * @param event Event object
-     */
-    inserPhotoPreview(event) {
-        // @ts-ignore
-        const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
-        canvas.src = URL.createObjectURL(event.target.files[0]);
-    }
-
-    /**
-     * Insert selected photo to pewview canvas
-     * @param event Event object
-     */
-    onPhotoChange(event) {
-        if (event.target.files.length > 0) {
-            const file = event.target.files[0];
-
-            // @ts-ignore
-            const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
-            canvas.src = URL.createObjectURL(file);
-
-            //this.form.get('photo').setValue(file);
-            this.fileToUpload = event.target.files.item(0);
+    renderAndAssignPassportScan(files: FileList) {
+        if (files.length) {
+            this.imageUploader.renderImagePreview(files);
+            this.form.patchValue({ passportScan: files[0] });
         }
     }
 
@@ -172,8 +153,6 @@ export class CreateUpdatePassportDataComponent implements OnInit {
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
 
-            console.log(this.form);
-
             return false;
         }
 
@@ -188,11 +167,15 @@ export class CreateUpdatePassportDataComponent implements OnInit {
         );
 
         payload.delete('passportScan');
-        payload.append('passportScan', this.fileToUpload, this.fileToUpload.name);
+        payload.append(
+            'passportScan',
+            this.form.get('passportScan').value,
+            this.form.get('passportScan').value.name
+        );
 
         this.service.submit(payload).subscribe(
             response => {
-                if (this.form.touched) this.snackbar.open('Изменения сохранены');
+                if (this.form.touched) this.snackbar.open('Изменения сохранены.');
 
                 this.router.navigate(['administration/employees/', this.id], {
                     queryParams: { selectedTabIndex: 1 }
