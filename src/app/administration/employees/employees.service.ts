@@ -26,7 +26,7 @@ export interface Employee {
 export interface FetchCriterias {
     fullName?: string;
     departmentId?: string;
-    hasUser?: boolean;
+    onlyUsers?: boolean;
     page?: number;
     pageSize?: number;
     locked?: boolean;
@@ -45,12 +45,15 @@ export class EmployeesService {
     constructor(private http: HttpClient) {}
 
     get(criterias?: FetchCriterias): Observable<any> {
-        console.log(criterias);
+        let ENDPOINT = 'Employee/All';
 
         if (criterias) {
+            if (criterias.locked) ENDPOINT = 'Employee/AllLockedEmployees';
+
             return this.http.get(
                 environment.API.URL +
-                    'Employee/All?' +
+                    ENDPOINT +
+                    '?' +
                     Object.keys(criterias)
                         .reduce(function(a, k) {
                             a.push(k + '=' + encodeURIComponent(criterias[k]));
@@ -58,6 +61,6 @@ export class EmployeesService {
                         }, [])
                         .join('&')
             );
-        } else return this.http.get(environment.API.URL + 'Employee/All');
+        } else return this.http.get(environment.API.URL + ENDPOINT);
     }
 }

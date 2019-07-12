@@ -103,7 +103,7 @@ export class EmployeesListComponent implements OnInit {
         const params = { ...this.route.snapshot.queryParams };
         delete params.fullName;
         delete params.departmentId;
-        delete params.hasUser;
+        delete params.onlyUsers;
 
         this.router.navigate([], {
             relativeTo: this.route,
@@ -120,6 +120,8 @@ export class EmployeesListComponent implements OnInit {
      */
     get(criterias?: FetchCriterias) {
         this.isRequesting = true;
+
+        if (this.showLocked) criterias = { ...criterias, locked: true };
 
         this.service.get(criterias).subscribe(
             response => {

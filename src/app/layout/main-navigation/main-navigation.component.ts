@@ -125,19 +125,19 @@ export class MainNavigationComponent implements OnInit {
                         }
                     ]
                 },
-                {
-                    label: 'Пользователи',
-                    items: [
-                        {
-                            label: 'Активные',
-                            link: '/administration/users/active'
-                        },
-                        {
-                            label: 'Заблокированные',
-                            link: '/administration/users/locked'
-                        }
-                    ]
-                },
+                // {
+                //     label: 'Пользователи',
+                //     items: [
+                //         {
+                //             label: 'Активные',
+                //             link: '/administration/users/active'
+                //         },
+                //         {
+                //             label: 'Заблокированные',
+                //             link: '/administration/users/locked'
+                //         }
+                //     ]
+                // },
                 {
                     label: 'Административно-территориальное деление',
                     link: '/administration/administrative-divisions'

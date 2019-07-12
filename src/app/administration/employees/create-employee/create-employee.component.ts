@@ -230,15 +230,15 @@ export class CreateEmployeeComponent implements OnInit {
      * Create employee
      */
     create(redirectTo: string, formDirective: FormGroupDirective) {
-        this.isRequesting = true;
-        this.form.disable();
-
         // Don't submit if form has errors
         if (this.form.invalid) {
-            this.snackbar.open('В форме содержатся ошибки.');
+            this.snackbar.open('Проверьте правильность заполнения формы.');
 
             return false;
         }
+
+        this.isRequesting = true;
+        this.form.disable();
 
         const payload = new FormData();
 
@@ -248,7 +248,10 @@ export class CreateEmployeeComponent implements OnInit {
         );
 
         payload.delete('photo');
-        payload.append('photo', this.fileToUpload, this.fileToUpload.name);
+
+        if (this.fileToUpload) {
+            payload.append('photo', this.fileToUpload, this.fileToUpload.name);
+        }
 
         this.service.create(payload).subscribe(
             response => {
@@ -326,6 +329,13 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     edit(id: string) {
+        // Don't submit if form has errors
+        if (this.form.invalid) {
+            this.snackbar.open('В форме содержатся ошибки');
+
+            return false;
+        }
+
         this.isRequesting = true;
 
         const payload = new FormData();

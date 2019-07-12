@@ -10,7 +10,7 @@ import { FetchCriterias } from '../employees.service';
 export interface FilterData {
     fullName?: string;
     departmentId?: string;
-    hasUser?: boolean;
+    onlyUsers?: boolean;
 }
 
 @Component({
@@ -29,7 +29,7 @@ export class EmployeesFilterComponent implements OnInit {
     form = new FormGroup({
         fullName: new FormControl(''),
         departmentId: new FormControl(''),
-        hasUser: new FormControl(false)
+        onlyUsers: new FormControl(false)
     });
 
     constructor(
@@ -93,12 +93,12 @@ export class EmployeesFilterComponent implements OnInit {
 
         const departmentId = this.form.get('departmentId');
         const fullName = this.form.get('fullName');
-        const hasUser = this.form.get('hasUser');
+        const onlyUsers = this.form.get('onlyUsers');
 
         if (fullName.pristine || fullName.value == '') delete criterias.fullName;
         if (departmentId.pristine || departmentId.value == '' || departmentId.value === 'all')
             delete criterias.departmentId;
-        if (hasUser.pristine) delete criterias.hasUser;
+        if (onlyUsers.pristine) delete criterias.onlyUsers;
 
         this.onFilter.emit(criterias);
     }

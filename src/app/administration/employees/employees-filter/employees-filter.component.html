@@ -36,9 +36,9 @@
                 class="mb-3"
                 color="primary"
                 checked
-                formControlName="hasUser"
+                formControlName="onlyUsers"
             >
-                Пользователь системы
+                Только пользователи
             </mat-slide-toggle>
         </form>
     </mat-card-content>
@@ -49,8 +49,9 @@
             type="submit"
             class="btn-lg btn-block mb-3"
             (click)="filterForm.ngSubmit.emit()"
-            >Найти</button
         >
+            Найти
+        </button>
         <button
             mat-flat-button
             mat-button
