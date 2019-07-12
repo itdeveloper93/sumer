@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-image-uploader',
@@ -24,5 +23,13 @@ export class ImageUploaderComponent implements OnInit {
         };
 
         reader.readAsDataURL(files[0]);
+    }
+
+    /**
+     * Clears preview canvas
+     * @param canvas CSS selector of the element where the image should be rendered
+     */
+    static clearImagePreview(canvas = '.photo-preview') {
+        document.querySelector(canvas).setAttribute('src', '../assets/img/noavatar.jpg');
     }
 }

@@ -46,7 +46,6 @@
                                     placeholder="Расулов"
                                     formControlName="lastName"
                                     required
-                                    (change)="log($event)"
                                 />
                                 <mat-error *ngIf="form.get('lastName').errors?.required"
                                     >Фамилия обязательна</mat-error
@@ -282,20 +281,10 @@
                 class="mb-3 w-100"
                 (click)="submit('create', formDirective)"
                 *ngIf="!id"
+                [disabled]="isRequesting"
             >
                 <mat-icon>save</mat-icon> Сохранить и добавить еще
             </button>
-
-            <!-- <button
-                mat-flat-button
-                class="mb-3 w-100"
-                color="warn"
-                type="button"
-                (click)="this.form.reset()"
-                *ngIf="!id"
-            >
-                <mat-icon>clear</mat-icon> Очистить форму
-            </button> -->
 
             <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
                 <mat-icon>keyboard_arrow_left</mat-icon> Назад

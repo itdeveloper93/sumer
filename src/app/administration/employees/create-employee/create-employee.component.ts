@@ -86,11 +86,6 @@ export class CreateEmployeeComponent implements OnInit {
         // Get and assign employee ID if we want to edit his data
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
-        // Disable form fields that are depended on fetching their values
-        this.form.get('departmentId').disable();
-        this.form.get('positionId').disable();
-        this.form.get('genderId').disable();
-
         // Fetch nesessary initial data
         this.getDepartments();
         this.getGenders();
@@ -195,6 +190,7 @@ export class CreateEmployeeComponent implements OnInit {
      */
     getDepartments() {
         this.isRequesting = true;
+        this.form.get('departmentId').disable();
 
         this.departmentsAndPositionsService.getDepartments().subscribe(
             response => (this.departments = response.data),
@@ -222,9 +218,11 @@ export class CreateEmployeeComponent implements OnInit {
 
     /**
      * Get positions
+     * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
         this.isRequesting = true;
+        this.form.get('positionId').disable();
 
         this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
             response => (this.positions = response.data),
@@ -256,14 +254,14 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     /**
-     * Create employee
-     * @param redirectTo String determining where to redirect after creation (profile || create)
-     * @param formDirective Form directive for form resetting if user choosed to redirect to create
+     *
+     * @param redirectTo
+     * @param formDirective
      */
-    create(redirectTo: string, formDirective: FormGroupDirective) {
+    submit(redirectTo: string, formDirective: FormGroupDirective) {
         // Don't submit if form has errors
         if (this.form.invalid) {
-            this.snackbar.open('Проверьте правильность заполнения формы.');
+            this.snackbar.open('В форме содержатся ошибки');
 
             return false;
         }
@@ -271,9 +269,15 @@ export class CreateEmployeeComponent implements OnInit {
         this.isRequesting = true;
         this.form.disable();
 
+        let action = 'create';
         const payload = new FormData();
 
-        //payload.append('id', this.id);
+        // If we're editing an employee, set acrion to edit add employee ID to payload
+        if (this.id) {
+            action = 'edit';
+            payload.append('id', this.id);
+        }
+
         Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
             payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
         );
@@ -281,19 +285,26 @@ export class CreateEmployeeComponent implements OnInit {
         payload.delete('photo');
         payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
 
-        this.service.create(payload).subscribe(
+        this.service.submit(action, payload).subscribe(
             response => {
-                this.snackbar.open('Сотрудник успешно добавлен');
+                if (action === 'create') {
+                    this.snackbar.open('Сотрудник успешно добавлен');
 
-                switch (redirectTo) {
-                    case 'profile':
-                        this.router.navigate(['/administration/employees', response.data.id]);
-                        break;
+                    switch (redirectTo) {
+                        case 'profile':
+                            this.router.navigate(['/administration/employees', response.data.id]);
+                            break;
 
-                    case 'create':
-                        formDirective.resetForm();
-                        this.form.reset();
-                        break;
+                        case 'create':
+                            formDirective.resetForm();
+                            this.form.reset();
+                            this.imageUploader.clearImagePreview();
+                            break;
+                    }
+                } else if (action === 'edit') {
+                    this.router.navigate(['/administration/employees', this.id]);
+
+                    if (this.form.touched) this.snackbar.open('Изменения сохранены.');
                 }
             },
             (error: Response) => {
@@ -308,66 +319,14 @@ export class CreateEmployeeComponent implements OnInit {
                         break;
 
                     default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
-    }
-
-    /**
-     * Edit employee
-     * @param id Employee ID
-     */
-    edit(id: string) {
-        // Don't submit if form has errors
-        if (this.form.invalid) {
-            this.snackbar.open('В форме содержатся ошибки');
-
-            return false;
-        }
-
-        this.isRequesting = true;
-
-        const payload = new FormData();
-
-        payload.append('id', id);
-        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
-            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
-        );
-
-        payload.delete('photo');
-        payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
-
-        //this.service.edit({ ...this.form.value, id }).subscribe(
-        this.service.edit(payload).subscribe(
-            response => {
-                this.router.navigate(['/administration/employees', this.id]);
-
-                if (this.form.touched) this.snackbar.open('Изменения сохранены.');
-            },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                console.log(error);
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    default:
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору.`);
                         break;
                 }
+            },
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
             }
         );
-    }
-
-    submit(redirectTo: string, formDirective: FormGroupDirective) {
-        if (this.id) this.edit(this.id);
-        else this.create(redirectTo, formDirective);
     }
 }

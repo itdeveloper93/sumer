@@ -40,9 +40,18 @@ export class CreateUpdateEmployeeService {
      * @param payload Form value
      */
     edit(payload: FormData): Observable<any> {
-        let headers = new HttpHeaders();
-        headers.append('Content-Type', 'multipart/form-data');
+        return this.http.post(environment.API.URL + 'Employee/Edit', payload);
+    }
 
-        return this.http.post(environment.API.URL + 'Employee/Edit', payload, { headers: headers });
+    /**
+     * Create or edit employee
+     * @param action A string determining action type (create || edit)
+     * @param payload Request payload
+     */
+    submit(action: string, payload: FormData): Observable<any> {
+        if (action === 'create')
+            return this.http.post(environment.API.URL + 'Employee/Create', payload);
+        else if (action === 'edit')
+            return this.http.post(environment.API.URL + 'Employee/Edit', payload);
     }
 }
