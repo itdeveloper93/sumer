@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { routerTransition } from './router-transitions';
 import * as moment from 'moment-timezone';
-moment.locale('ru');
+import { DateAdapter } from '@angular/material';
+
+moment.fn.toDateString = function() {
+    return this.format('DD.MM.YYYY');
+};
 
 /**
  * Parses date from string with given format and Timezone
@@ -17,7 +21,14 @@ export function momentX(date: string) {
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+    constructor(private dateAdapter: DateAdapter<any>) {}
+
+    ngOnInit() {
+        // Set MatDatePicker locale
+        this.dateAdapter.setLocale('ru');
+    }
+
     getState(outlet) {
         return outlet.activatedRouteData.state;
     }

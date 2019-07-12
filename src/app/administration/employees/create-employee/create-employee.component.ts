@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDatepickerInputEvent } from '@angular/material';
 import {
     DepartmentsAndPositionsService,
     Department
@@ -118,6 +118,7 @@ export class CreateEmployeeComponent implements OnInit {
 
         this.employeeService.getEssentialData(id).subscribe(
             response => {
+                console.log(response.data.dateOfBirth);
                 this.form.patchValue({
                     ...response.data,
                     dateOfBirth: momentX(response.data.dateOfBirth),
@@ -127,7 +128,7 @@ export class CreateEmployeeComponent implements OnInit {
                 this.essentialData = response.data;
             },
             (error: Response) => {
-                this.isRequesting = false;
+                //this.isRequesting = false;
 
                 switch (error.status) {
                     case 0:
@@ -217,14 +218,11 @@ export class CreateEmployeeComponent implements OnInit {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.isRequesting = true;
         this.form.get('positionId').disable();
 
         this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
             response => (this.positions = response.data),
             (error: Response) => {
-                this.isRequesting = false;
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open(
@@ -238,7 +236,6 @@ export class CreateEmployeeComponent implements OnInit {
                 }
             },
             () => {
-                this.isRequesting = false;
                 this.form.get('positionId').enable();
             }
         );
@@ -247,6 +244,38 @@ export class CreateEmployeeComponent implements OnInit {
     // TODO: Don't know what does this do. Fix.
     getPositionsStrategy() {
         if (!this.id) this.getPositions(this.form.get('departmentId').value);
+    }
+
+    /**
+     * Constructs payload for request
+     * @return payload FormData
+     */
+    constructRequestPayload(): FormData {
+        const payload = new FormData();
+
+        if (this.id) payload.append('id', this.id);
+
+        // Add form fields to FormData
+        Object.keys(this.form.value).forEach(key => {
+            // Exclude fields with wrong format
+            const excludedFields = ['dateOfBirth', 'hireDate', 'photo'];
+
+            if (!excludedFields.includes(key)) payload.append(key, this.form.value[key]);
+        });
+
+        // Re-add fields with right format
+        payload.append('dateOfBirth', this.form.get('dateOfBirth').value.toDateString());
+        payload.append('hireDate', this.form.get('hireDate').value.toDateString());
+
+        if (this.form.get('photo').value) {
+            payload.append(
+                'photo',
+                this.form.get('photo').value,
+                this.form.get('photo').value.name
+            );
+        }
+
+        return payload;
     }
 
     /**
@@ -263,27 +292,9 @@ export class CreateEmployeeComponent implements OnInit {
         }
 
         let action = 'Create';
-        const payload = new FormData();
+        if (this.id) action = 'Edit';
 
-        // If we're editing an employee, set acrion to edit add employee ID to payload
-        if (this.id) {
-            action = 'Edit';
-            payload.append('id', this.id);
-        }
-
-        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
-            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
-        );
-
-        payload.delete('photo');
-
-        if (this.form.get('photo').value) {
-            payload.append(
-                'photo',
-                this.form.get('photo').value,
-                this.form.get('photo').value.name
-            );
-        }
+        const payload = this.constructRequestPayload();
 
         this.isRequesting = true;
         this.form.disable();
@@ -314,8 +325,6 @@ export class CreateEmployeeComponent implements OnInit {
                 this.isRequesting = false;
                 this.form.enable();
 
-                console.log(error);
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open(
@@ -329,8 +338,11 @@ export class CreateEmployeeComponent implements OnInit {
                 }
             },
             () => {
-                this.isRequesting = false;
                 this.form.enable();
+
+                setTimeout(() => {
+                    this.isRequesting = false;
+                }, 10000);
             }
         );
     }

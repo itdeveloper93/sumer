@@ -51,7 +51,7 @@
                                     >Фамилия обязательна</mat-error
                                 >
                                 <mat-error *ngIf="form.get('lastName').errors?.pattern"
-                                    >Только буквы</mat-error
+                                    >Только буквы кириллического алфавита</mat-error
                                 >
                             </mat-form-field>
                         </div>
@@ -69,7 +69,7 @@
                                     >Имя обязательно</mat-error
                                 >
                                 <mat-error *ngIf="form.get('firstName').errors?.pattern"
-                                    >Только буквы</mat-error
+                                    >Только буквы кириллического алфавита</mat-error
                                 >
                             </mat-form-field>
                         </div>
@@ -83,7 +83,7 @@
                                     formControlName="middleName"
                                 />
                                 <mat-error *ngIf="form.get('middleName').errors?.pattern">
-                                    Только буквы
+                                    Только буквы кириллического алфавита
                                 </mat-error>
                             </mat-form-field>
                         </div>

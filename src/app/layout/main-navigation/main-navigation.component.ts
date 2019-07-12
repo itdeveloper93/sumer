@@ -22,6 +22,7 @@ export class MainNavigationComponent implements OnInit {
             link: '/'
         },
         {
+            hidden: true,
             label: 'Новости и информация',
             icon: 'library_books',
             items: [
@@ -31,6 +32,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Товары',
             icon: 'local_offer',
             items: [
@@ -40,6 +42,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Склады',
             icon: 'storage',
             items: [
@@ -55,6 +58,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Магазины',
             icon: 'shopping_cart',
             items: [
@@ -78,6 +82,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Ярмарки',
             icon: 'store',
             items: [
@@ -93,18 +98,22 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Бухгалтерия',
             icon: 'keyboard'
         },
         {
+            hidden: true,
             label: 'Контрагенты',
             icon: 'work'
         },
         {
+            hidden: true,
             label: 'Транспорт',
             icon: 'directions_car'
         },
         {
+            hidden: true,
             label: 'Справочники',
             icon: 'view_list'
         },

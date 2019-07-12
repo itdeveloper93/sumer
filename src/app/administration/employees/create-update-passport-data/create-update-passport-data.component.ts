@@ -3,10 +3,7 @@ import { momentX } from 'src/app/app.component';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    CreateUpdatePassportDataService,
-    PassportData
-} from './create-update-passport-data.service';
+import { CreateUpdatePassportDataService, PassportData } from './create-update-passport-data.service';
 import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
@@ -98,9 +95,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -131,9 +126,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -143,6 +136,38 @@ export class CreateUpdatePassportDataComponent implements OnInit {
             },
             () => (this.isRequesting = false)
         );
+    }
+
+    /**
+     * Constructs payload for request
+     * @return payload FormData
+     */
+    constructRequestPayload(): FormData {
+        const payload = new FormData();
+
+        payload.append('employeeId', this.id);
+
+        // Add form fields to FormData
+        Object.keys(this.form.value).forEach(key => {
+            // Exclude fields with wrong format
+            const excludedFields = ['dateOfBirth', 'passportIssueDate', 'passportScan'];
+
+            if (!excludedFields.includes(key)) payload.append(key, this.form.value[key]);
+        });
+
+        // Re-add fields with right format
+        payload.append('dateOfBirth', this.form.get('dateOfBirth').value.toDateString());
+        payload.append('passportIssueDate', this.form.get('passportIssueDate').value.toDateString());
+
+        if (this.form.get('passportScan').value) {
+            payload.append(
+                'passportScan',
+                this.form.get('passportScan').value,
+                this.form.get('passportScan').value.name
+            );
+        }
+
+        return payload;
     }
 
     /**
@@ -162,19 +187,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
             return false;
         }
 
-        const payload = new FormData();
-
-        payload.append('employeeId', this.id);
-        Object.keys(JSON.parse(JSON.stringify(this.form.value))).forEach(key =>
-            payload.append(key, JSON.parse(JSON.stringify(this.form.value))[key])
-        );
-
-        payload.delete('passportScan');
-        payload.append(
-            'passportScan',
-            this.form.get('passportScan').value,
-            this.form.get('passportScan').value.name
-        );
+        const payload = this.constructRequestPayload();
 
         this.isRequesting = true;
         this.form.disable();
@@ -193,9 +206,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:

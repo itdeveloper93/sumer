@@ -9,10 +9,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { GlobalHttpHeadersInterceptorService } from './global-http-headers-interceptor.service';
 import { LayoutModule } from '@angular/cdk/layout';
-import {
-    MomentDateAdapter,
-    MAT_MOMENT_DATE_ADAPTER_OPTIONS
-} from '@angular/material-moment-adapter';
 
 /**
  * Third party modules/components
