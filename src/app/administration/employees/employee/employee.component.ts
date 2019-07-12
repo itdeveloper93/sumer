@@ -45,12 +45,12 @@ export class EmployeeComponent implements OnInit {
         this.selectedTabIndex = +this.route.snapshot.queryParamMap.get('selectedTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
-        // this.route.paramMap.subscribe(params => {
-        //     this.id = params.get('id');
-        // });
-
         this.getEssentialData(this.id);
-        if (this.selectedTabIndex === 1) this.getPassportData(this.id);
+
+        if (this.selectedTabIndex === 1) {
+            this.getPassportData(this.id);
+            this.activeTabLabel = 'Паспортные данные';
+        }
 
         // Fetch and assign log data
         this.logData = this.getLogData(this.id);

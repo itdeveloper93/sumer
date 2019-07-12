@@ -43,12 +43,9 @@ export class CreateEmployeeComponent implements OnInit {
      */
     form = new FormGroup({
         photo: new FormControl(''),
-        lastName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Яa-zA-z]*')]),
-        firstName: new FormControl('', [
-            Validators.required,
-            Validators.pattern('[а-яА-Яa-zA-z]*')
-        ]),
-        middleName: new FormControl('', Validators.pattern('[а-яА-Яa-zA-z]*')),
+        lastName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Я]*')]),
+        firstName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Я]*')]),
+        middleName: new FormControl('', Validators.pattern('[а-яА-Я]*')),
         dateOfBirth: new FormControl(''),
         // TODO: Fetch genders from server
         genderId: new FormControl(''),
@@ -93,12 +90,11 @@ export class CreateEmployeeComponent implements OnInit {
         if (this.id) {
             this.title = 'Редактирование сотрудника';
             this.getEssentialData(this.id);
+
             this.form.get('departmentId').valueChanges.subscribe(value => {
                 if (value) this.getPositions(value);
             });
-        } else {
-            this.title = 'Добавление сотрудника';
-        }
+        } else this.title = 'Добавление сотрудника';
     }
 
     /**
@@ -266,15 +262,12 @@ export class CreateEmployeeComponent implements OnInit {
             return false;
         }
 
-        this.isRequesting = true;
-        this.form.disable();
-
-        let action = 'create';
+        let action = 'Create';
         const payload = new FormData();
 
         // If we're editing an employee, set acrion to edit add employee ID to payload
         if (this.id) {
-            action = 'edit';
+            action = 'Edit';
             payload.append('id', this.id);
         }
 
@@ -283,11 +276,21 @@ export class CreateEmployeeComponent implements OnInit {
         );
 
         payload.delete('photo');
-        payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
+
+        if (this.form.get('photo').value) {
+            payload.append(
+                'photo',
+                this.form.get('photo').value,
+                this.form.get('photo').value.name
+            );
+        }
+
+        this.isRequesting = true;
+        this.form.disable();
 
         this.service.submit(action, payload).subscribe(
             response => {
-                if (action === 'create') {
+                if (action === 'Create') {
                     this.snackbar.open('Сотрудник успешно добавлен');
 
                     switch (redirectTo) {
@@ -301,7 +304,7 @@ export class CreateEmployeeComponent implements OnInit {
                             this.imageUploader.clearImagePreview();
                             break;
                     }
-                } else if (action === 'edit') {
+                } else if (action === 'Edit') {
                     this.router.navigate(['/administration/employees', this.id]);
 
                     if (this.form.touched) this.snackbar.open('Изменения сохранены.');
@@ -310,6 +313,8 @@ export class CreateEmployeeComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.enable();
+
+                console.log(error);
 
                 switch (error.status) {
                     case 0:

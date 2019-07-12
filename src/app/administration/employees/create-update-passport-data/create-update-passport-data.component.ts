@@ -37,7 +37,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * Register form and it's controls
      */
     form = new FormGroup({
-        passportScan: new FormControl(''),
+        passportScan: new FormControl('', Validators.required),
         passportNumber: new FormControl('', Validators.required),
         passportIssueDate: new FormControl('', Validators.required),
         passportIssuer: new FormControl('', Validators.required),
@@ -150,14 +150,17 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * @param payload Form data
      */
     submit() {
+        if (this.form.get('passportScan').invalid) {
+            this.snackbar.open('Скан паспорта обязателен.');
+
+            return false;
+        }
+
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
 
             return false;
         }
-
-        this.isRequesting = true;
-        this.form.disable();
 
         const payload = new FormData();
 
@@ -172,6 +175,9 @@ export class CreateUpdatePassportDataComponent implements OnInit {
             this.form.get('passportScan').value,
             this.form.get('passportScan').value.name
         );
+
+        this.isRequesting = true;
+        this.form.disable();
 
         this.service.submit(payload).subscribe(
             response => {
