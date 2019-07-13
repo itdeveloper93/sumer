@@ -1,11 +1,9 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import {
-    DepartmentsAndPositionsService,
-    Department
-} from 'src/app/common-services/departments-and-positions.service';
+import { DepartmentsAndPositionsService, Department } from 'src/app/common-services/departments-and-positions.service';
 import { MatSnackBar } from '@angular/material';
 import { FetchCriterias } from '../employees.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface FilterData {
     fullName?: string;
@@ -34,11 +32,18 @@ export class EmployeesFilterComponent implements OnInit {
 
     constructor(
         private departmentsAndPositionsService: DepartmentsAndPositionsService,
-        private snackbar: MatSnackBar
+        private snackbar: MatSnackBar,
+        private route: ActivatedRoute
     ) {}
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.getDepartments();
+
+        this.form.patchValue({
+            fullName: this.route.snapshot.queryParams.fullName,
+            departmentId: this.route.snapshot.queryParams.departmentId,
+            onlyUsers: this.route.snapshot.queryParams.onlyUsers
+        });
     }
 
     /**
@@ -54,7 +59,7 @@ export class EmployeesFilterComponent implements OnInit {
         this.isRequesting = true;
         this.form.get('departmentId').disable();
 
-        this.departmentsAndPositionsService.getDepartments().subscribe(
+        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
             response => (this.departments = response.data),
             (error: Response) => {
                 this.isRequesting = false;
@@ -62,9 +67,7 @@ export class EmployeesFilterComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:

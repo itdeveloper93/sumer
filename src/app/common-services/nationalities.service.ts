@@ -23,4 +23,11 @@ export class NationalitiesService {
     get(): Observable<any> {
         return this.http.get(environment.API.URL + 'Nationality/All');
     }
+
+    /**
+     * Get all nationalities for selects
+     */
+    getListItems(): Observable<any> {
+        return this.http.get(environment.API.URL + 'Nationality/GetAllListItems');
+    }
 }

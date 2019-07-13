@@ -25,6 +25,13 @@ export class DepartmentsAndPositionsService {
      * Get all departments
      */
     getDepartments(): Observable<any> {
+        return this.http.get<Department[]>(environment.API.URL + 'Department/All');
+    }
+
+    /**
+     * Get all departments for selects
+     */
+    getDepartmentsListItems(): Observable<any> {
         return this.http.get<Department[]>(environment.API.URL + 'Department/SelectListItem');
     }
 
@@ -46,8 +53,6 @@ export class DepartmentsAndPositionsService {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string): Observable<any> {
-        return this.http.get<Position[]>(
-            environment.API.URL + 'Position/AllByDepartmentId/' + departmentId
-        );
+        return this.http.get<Position[]>(environment.API.URL + 'Position/AllByDepartmentId/' + departmentId);
     }
 }
