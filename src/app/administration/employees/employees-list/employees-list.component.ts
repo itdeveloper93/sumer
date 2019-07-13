@@ -10,16 +10,19 @@ import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort
 })
 export class EmployeesListComponent implements OnInit {
     title = this.route.snapshot.data['title'];
-    showLocked = this.route.snapshot.data['showLocked'];
 
+    showLocked = this.route.snapshot.data['showLocked'];
     employees: MatTableDataSource<Employee>;
+    displayedColumns: any;
+
     isRequesting: boolean;
 
     fetchCriterias: FetchCriterias;
 
-    displayedColumns: any;
+    pageSize: number;
     pageSizeOptions = [20, 50, 100];
-    employeesLength: number;
+    pageIndex: number;
+    employeesCount: number;
     pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -33,13 +36,16 @@ export class EmployeesListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        // Get initial fetch criterias from URL query params if user navigated from filtered link
         this.fetchCriterias = this.route.snapshot.queryParams;
+
+        // Set paginator values if user navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) {
-                this.get(params);
-            }
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.get(params);
         });
 
         if (this.showLocked) {

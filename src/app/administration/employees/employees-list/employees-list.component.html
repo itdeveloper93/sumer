@@ -153,10 +153,12 @@
                 <mat-card class="p-0 mb-5 mb-lg-0" *ngIf="employees?.length">
                     <mat-paginator
                         [pageSizeOptions]="pageSizeOptions"
-                        [length]="employeesLength"
+                        [length]="employeesCount"
                         class="rounded"
                         [disabled]="isRequesting"
                         (page)="pageEvent = setPaginationQueryParams($event)"
+                        [pageIndex]="pageIndex"
+                        [pageSize]="pageSize"
                     ></mat-paginator>
                 </mat-card>
             </ng-container>
