@@ -1,3 +1,9 @@
+<mat-progress-bar
+    mode="indeterminate"
+    *ngIf="isRequesting"
+    class="mat-progress-bar_top global"
+></mat-progress-bar>
+
 <div class="container-fluid">
     <h1 class="mb-4">{{ title }}</h1>
 
@@ -5,19 +11,21 @@
         <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
             <mat-card class="p-0">
                 <img
-                    src="../../../../assets/img/noavatar.jpg"
+                    src="{{
+                        essentialData?.photoPath
+                            ? essentialData.photoPath
+                            : '../../../../../../assets/img/noavatar.jpg'
+                    }}"
                     alt="Фото сотрудника"
-                    class="photo-preview w-100 rounded-top"
+                    class="photo-preview w-100 rounded-top object-cover"
                 />
                 <div class="p-4">
-                    <input
-                        type="file"
-                        accept="image/jpg"
-                        formControlName="photo"
-                        class="d-none"
-                        (change)="inserPhotoPreview($event)"
-                    />
-                    <button mat-button class="w-100" type="button" (click)="triggerPhotoUpload()">
+                    <button mat-button class="file-input-button w-100" type="button">
+                        <input
+                            type="file"
+                            accept="image/jpg,image/jpeg"
+                            (change)="renderAndAssignPhoto($event.target.files)"
+                        />
                         Загрузить фото
                     </button>
                 </div>
@@ -29,11 +37,6 @@
                     <mat-card-title>Главное</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-progress-bar
-                        mode="indeterminate"
-                        *ngIf="isRequesting"
-                        class="progress-bar-top rounded-top"
-                    ></mat-progress-bar>
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
@@ -43,13 +46,12 @@
                                     placeholder="Расулов"
                                     formControlName="lastName"
                                     required
-                                    (change)="log($event)"
                                 />
                                 <mat-error *ngIf="form.get('lastName').errors?.required"
                                     >Фамилия обязательна</mat-error
                                 >
                                 <mat-error *ngIf="form.get('lastName').errors?.pattern"
-                                    >Только буквы</mat-error
+                                    >Только буквы кириллического алфавита</mat-error
                                 >
                             </mat-form-field>
                         </div>
@@ -67,7 +69,7 @@
                                     >Имя обязательно</mat-error
                                 >
                                 <mat-error *ngIf="form.get('firstName').errors?.pattern"
-                                    >Только буквы</mat-error
+                                    >Только буквы кириллического алфавита</mat-error
                                 >
                             </mat-form-field>
                         </div>
@@ -81,7 +83,7 @@
                                     formControlName="middleName"
                                 />
                                 <mat-error *ngIf="form.get('middleName').errors?.pattern">
-                                    Только буквы
+                                    Только буквы кириллического алфавита
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -268,6 +270,7 @@
                 color="primary"
                 class="mb-3 w-100"
                 (click)="submit('profile', formDirective)"
+                [disabled]="isRequesting"
             >
                 <mat-icon>save</mat-icon> Сохранить
             </button>
@@ -278,20 +281,10 @@
                 class="mb-3 w-100"
                 (click)="submit('create', formDirective)"
                 *ngIf="!id"
+                [disabled]="isRequesting"
             >
                 <mat-icon>save</mat-icon> Сохранить и добавить еще
             </button>
-
-            <!-- <button
-                mat-flat-button
-                class="mb-3 w-100"
-                color="warn"
-                type="button"
-                (click)="this.form.reset()"
-                *ngIf="!id"
-            >
-                <mat-icon>clear</mat-icon> Очистить форму
-            </button> -->
 
             <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
                 <mat-icon>keyboard_arrow_left</mat-icon> Назад

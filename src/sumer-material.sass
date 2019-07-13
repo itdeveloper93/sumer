@@ -18,6 +18,10 @@ $warn: mat-palette($mat-red)
 // Create the theme object (a Sass map containing all of the palettes).
 $theme: mat-light-theme($primary, $accent, $warn)
 
+@mixin mat-ripple-theme($theme)
+    .mat-ripple-element
+        background-color: transparentize($light-grey, .8)
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
@@ -173,6 +177,7 @@ mat-sidenav-container
 
 .mat-drawer-container
     background-color: transparent
+    color: $black !important
 
     .mat-drawer-inner-container
         display: flex
@@ -274,6 +279,16 @@ mat-select
 span.mat-select-value-text
     color: $black
 
+.mat-option.mat-active,
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple)
+    background: transparentize($light-grey, .8)
+    color: $black
+
+.mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled)
+    background: transparentize($light-grey, .7)
+
+.mat-select-panel:not([class*=mat-elevation-z])
+    box-shadow: $shadow-xl
 
 // MatTab
 .mat-tab-label, 
@@ -311,14 +326,6 @@ span.mat-select-value-text
         &-content
             padding: 0 !important
             width: 100%
-
-
-// MatProgreeBar
-mat-progress-bar.progress-bar-top
-    position: absolute !important
-    top: 0
-    left: 0
-    z-index: 101
 
 
 // MatDialogContainer

@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface PassportData {
-    scanUrl: string;
+    passportScanPath: string;
     passportNumber: string;
     passportIssuer: string;
     passportIssueDate: string;
-    nationality: string;
+    nationalityId: string;
     dateOfBirth: string;
     passportAddress: string;
 }
@@ -33,8 +33,7 @@ export class CreateUpdatePassportDataService {
      * Submits Employee passport data
      * @param id Employee ID
      */
-    submit(payload: PassportData): PassportData {
-        //return this.http.post(environment.API.URL + 'Employee/UpdatePassportData/' + id, payload);
-        return payload;
+    submit(payload: FormData): Observable<any> {
+        return this.http.post(environment.API.URL + 'Employee/EditPassportData', payload);
     }
 }

@@ -1,4 +1,9 @@
 <mat-card class="mb-4">
+    <mat-progress-bar
+        mode="indeterminate"
+        *ngIf="isRequesting"
+        class="mat-progress-bar_top rounded-top"
+    ></mat-progress-bar>
     <mat-card-header>
         <mat-card-title class="m-0">Фильтр</mat-card-title>
     </mat-card-header>
@@ -6,20 +11,34 @@
         <form [formGroup]="form" (ngSubmit)="filter()" #filterForm="ngForm">
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>ФИО</mat-label>
-                <input matInput formControlName="name" placeholder="Мирзоев Кодир Шавкатович" type="text" />
+                <input
+                    matInput
+                    formControlName="fullName"
+                    placeholder="Мирзоев Кодир Шавкатович"
+                    type="text"
+                />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Подразделение</mat-label>
-                <mat-select formControlName="department">
-                    <mat-option value="Подразделение 1">Подразделение 1</mat-option>
-                    <mat-option value="Подразделение 2">Подразделение 2</mat-option>
-                    <mat-option value="Подразделение 3">Подразделение 3</mat-option>
+                <mat-select formControlName="departmentId">
+                    <mat-option value="all">Все</mat-option>
+                    <mat-option
+                        *ngFor="let department of departments"
+                        value="{{ department.id }}"
+                        >{{ department.name }}</mat-option
+                    >
                 </mat-select>
             </mat-form-field>
 
-            <mat-slide-toggle labelPosition="before" class="mb-3" color="primary" checked formControlName="hasAccount">
-                Пользователь системы
+            <mat-slide-toggle
+                labelPosition="before"
+                class="mb-3"
+                color="primary"
+                checked
+                formControlName="onlyUsers"
+            >
+                Только пользователи
             </mat-slide-toggle>
         </form>
     </mat-card-content>
@@ -30,9 +49,15 @@
             type="submit"
             class="btn-lg btn-block mb-3"
             (click)="filterForm.ngSubmit.emit()"
-            >Найти</button
         >
-        <button mat-flat-button mat-button type="button" class="btn-lg btn-block m-0" (click)="reset()"
+            Найти
+        </button>
+        <button
+            mat-flat-button
+            mat-button
+            type="button"
+            class="btn-lg btn-block m-0"
+            (click)="reset()"
             >Сбросить</button
         >
     </mat-card-actions>

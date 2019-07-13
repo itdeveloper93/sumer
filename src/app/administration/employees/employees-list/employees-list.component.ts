@@ -1,7 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
-import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+    MatTableDataSource,
+    MatPaginator,
+    MatSort,
+    MatSnackBar,
+    PageEvent
+} from '@angular/material';
+import { skip } from 'rxjs/operators';
 
 @Component({
     selector: 'employees-list',
@@ -15,8 +22,12 @@ export class EmployeesListComponent implements OnInit {
     employees: MatTableDataSource<Employee>;
     isRequesting: boolean;
 
+    fetchCriterias: FetchCriterias;
+
     displayedColumns: any;
     pageSizeOptions = [20, 50, 100];
+    employeesLength: number;
+    pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -24,15 +35,22 @@ export class EmployeesListComponent implements OnInit {
     constructor(
         private service: EmployeesService,
         private route: ActivatedRoute,
+        private router: Router,
         private snackbar: MatSnackBar
     ) {}
 
     ngOnInit() {
-        this.isRequesting = true;
+        this.fetchCriterias = this.route.snapshot.queryParams;
+
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) {
+                this.get(params);
+            }
+        });
 
         if (this.showLocked) {
-            //this.employees = new MatTableDataSource(this.get({ locked: true }));
             this.get({ locked: true });
+
             this.displayedColumns = [
                 'fullName',
                 'departmentAndPosition',
@@ -41,8 +59,8 @@ export class EmployeesListComponent implements OnInit {
                 'lockReason'
             ];
         } else {
-            //this.employees = new MatTableDataSource(this.get());
-            this.get();
+            this.get(this.fetchCriterias);
+
             this.displayedColumns = [
                 'photo',
                 'fullName',
@@ -54,15 +72,61 @@ export class EmployeesListComponent implements OnInit {
         }
     }
 
+    setFilterQueryParams(event: FetchCriterias) {
+        if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
+        else {
+            this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: event
+            });
+        }
+    }
+
+    /**
+     * Set selected paginator options as query params
+     * @param event Event triggered by changing pagination options
+     */
+    setPaginationQueryParams(event: PageEvent) {
+        const { pageIndex, pageSize } = event;
+
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                page: pageIndex + 1, // TODO: Configure MatPaginator pageIndex to start from 1
+                pageSize
+            },
+            queryParamsHandling: 'merge'
+        });
+    }
+
+    resetFilter() {
+        const params = { ...this.route.snapshot.queryParams };
+        delete params.fullName;
+        delete params.departmentId;
+        delete params.onlyUsers;
+
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: params
+        });
+
+        this.get();
+    }
+
     /**
      * Send search criterias to employeesService and get employees
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
     get(criterias?: FetchCriterias) {
+        this.isRequesting = true;
+
+        if (this.showLocked) criterias = { ...criterias, locked: true };
+
         this.service.get(criterias).subscribe(
             response => {
-                this.employees = response.data;
+                this.employees = response.data.items;
+                this.employeesLength = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;

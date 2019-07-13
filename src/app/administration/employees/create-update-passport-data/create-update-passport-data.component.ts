@@ -3,12 +3,11 @@ import { momentX } from 'src/app/app.component';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    CreateUpdatePassportDataService,
-    PassportData
-} from './create-update-passport-data.service';
+import { CreateUpdatePassportDataService, PassportData } from './create-update-passport-data.service';
 import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material';
+import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
 
 @Component({
     selector: 'app-create-update-passport-data',
@@ -16,11 +15,18 @@ import { Location } from '@angular/common';
     styleUrls: ['./create-update-passport-data.component.sass']
 })
 export class CreateUpdatePassportDataComponent implements OnInit {
+    imageUploader = ImageUploaderComponent;
+
     title = 'Редактирование паспортных данных';
+
     isRequesting: boolean;
-    id: string;
+
     minDate = momentX('01.01.1900');
     aultDate = moment().subtract(18, 'years');
+    today = moment();
+
+    id: string;
+    passportData: PassportData;
 
     nationalities: Nationality[];
 
@@ -28,7 +34,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * Register form and it's controls
      */
     form = new FormGroup({
-        scanUrl: new FormControl('', Validators.required),
+        passportScan: new FormControl('', Validators.required),
         passportNumber: new FormControl('', Validators.required),
         passportIssueDate: new FormControl('', Validators.required),
         passportIssuer: new FormControl('', Validators.required),
@@ -42,31 +48,27 @@ export class CreateUpdatePassportDataComponent implements OnInit {
         private router: Router,
         private service: CreateUpdatePassportDataService,
         private nationalitiesService: NationalitiesService,
-        public location: Location
+        public location: Location,
+        private snackbar: MatSnackBar
     ) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
         this.form.get('nationalityId').disable();
         this.getNationalities();
+        this.getPassportData(this.id);
     }
 
     /**
-     * Trigger photo upload window
+     * Renders selected image to given canvas and assigns it to respective
+     * form input
+     * @param files Files object
      */
-    triggerPhotoUpload() {
-        const fileInput: HTMLElement = document.querySelector("[formcontrolname='scanUrl']");
-        fileInput.click();
-    }
-
-    /**
-     * Insert selected photo to pewview canvas
-     * @param event Event object
-     */
-    inserPhotoPreview(event) {
-        // @ts-ignore
-        const canvas: HTMLImageElement = document.getElementsByClassName('photo-preview')[0];
-        canvas.src = URL.createObjectURL(event.target.files[0]);
+    renderAndAssignPassportScan(files: FileList) {
+        if (files.length) {
+            this.imageUploader.renderImagePreview(files);
+            this.form.patchValue({ passportScan: files[0] });
+        }
     }
 
     /**
@@ -75,19 +77,42 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      */
     getPassportData(id: string) {
         this.isRequesting = true;
+        this.form.disable();
 
         return this.service.get(id).subscribe(
             response => {
-                this.form.patchValue({ ...this.form.value });
+                this.form.patchValue({
+                    ...response.data,
+                    dateOfBirth: momentX(response.data.dateOfBirth),
+                    passportIssueDate: momentX(response.data.passportIssueDate)
+                });
+
+                this.passportData = response.data;
             },
             (error: Response) => {
                 this.isRequesting = false;
-                console.log(error);
+                this.form.enable();
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
             },
-            () => (this.isRequesting = false)
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
         );
     }
 
+    /**
+     * Get nationalities
+     */
     getNationalities() {
         this.isRequesting = true;
 
@@ -98,21 +123,101 @@ export class CreateUpdatePassportDataComponent implements OnInit {
             },
             (error: Response) => {
                 this.isRequesting = false;
-                console.log(error);
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
             },
             () => (this.isRequesting = false)
         );
     }
 
-    submit(payload: PassportData) {
-        // this.service.submit(payload).subscribe(response => {
-        //     console.log(response.data);
-        // }, (error: Response) => {
-        //     console.log(error);
-        // })
+    /**
+     * Constructs payload for request
+     * @return payload FormData
+     */
+    constructRequestPayload(): FormData {
+        const payload = new FormData();
 
-        console.log(this.service.submit(payload));
+        payload.append('employeeId', this.id);
 
-        this.router.navigate(['administration/employees/', this.id]);
+        // Add form fields to FormData
+        Object.keys(this.form.value).forEach(key => {
+            // Exclude fields with wrong format
+            const excludedFields = ['dateOfBirth', 'passportIssueDate', 'passportScan'];
+
+            if (!excludedFields.includes(key)) payload.append(key, this.form.value[key]);
+        });
+
+        // Re-add fields with right format
+        payload.append('dateOfBirth', this.form.get('dateOfBirth').value.toDateString());
+        payload.append('passportIssueDate', this.form.get('passportIssueDate').value.toDateString());
+
+        if (this.form.get('passportScan').value) {
+            payload.append(
+                'passportScan',
+                this.form.get('passportScan').value,
+                this.form.get('passportScan').value.name
+            );
+        }
+
+        return payload;
+    }
+
+    /**
+     * Submit passport data to server
+     * @param payload Form data
+     */
+    submit() {
+        if (this.form.get('passportScan').invalid) {
+            this.snackbar.open('Скан паспорта обязателен.');
+
+            return false;
+        }
+
+        if (this.form.invalid) {
+            this.snackbar.open('В форме содержатся ошибки.');
+
+            return false;
+        }
+
+        const payload = this.constructRequestPayload();
+
+        this.isRequesting = true;
+        this.form.disable();
+
+        this.service.submit(payload).subscribe(
+            response => {
+                if (this.form.touched) this.snackbar.open('Изменения сохранены.');
+
+                this.router.navigate(['administration/employees/', this.id], {
+                    queryParams: { selectedTabIndex: 1 }
+                });
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+                this.form.enable();
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
+        );
     }
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import * as moment from 'moment';
 
 export interface Employee {
     photo: any;
@@ -27,21 +26,11 @@ export class CreateUpdateEmployeeService {
     constructor(private http: HttpClient) {}
 
     /**
-     * Create employee
-     * @param payload Employee object
+     * Create or edit employee
+     * @param action A string determining action type (Create || Edit)
+     * @param payload Request payload
      */
-    create(payload: Employee): Observable<any> {
-        // payload.dateOfBirth = '2019-07-06T09:35:19.858Z';
-        // payload.hireDate = '2019-07-06T09:35:19.858Z';
-        return this.http.post(environment.API.URL + 'Employee/Create', JSON.stringify(payload));
-    }
-
-    /**
-     * Edit employee essential info
-     * @param id Employee ID
-     * @param payload Form value
-     */
-    edit(payload): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/Edit', JSON.stringify(payload));
+    submit(action: string, payload: FormData): Observable<any> {
+        return this.http.post(environment.API.URL + 'Employee/' + action, payload);
     }
 }

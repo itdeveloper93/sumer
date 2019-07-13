@@ -13,17 +13,22 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
-    intercept(
-        request: HttpRequest<any>,
-        next: HttpHandler
-    ): Observable<HttpEvent<any>> {
-        request = request.clone({
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                Authorization: 'Bearer ' + localStorage.getItem('auth_token')
-            })
-        });
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (request.body instanceof FormData) {
+            request = request.clone({
+                headers: new HttpHeaders({
+                    Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+                })
+            });
+        } else {
+            request = request.clone({
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+                })
+            });
+        }
 
         return next.handle(request);
     }

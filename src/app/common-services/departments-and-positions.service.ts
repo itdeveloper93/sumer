@@ -25,7 +25,7 @@ export class DepartmentsAndPositionsService {
      * Get all departments
      */
     getDepartments(): Observable<any> {
-        return this.http.get<Department[]>(environment.API.URL + 'Department/All');
+        return this.http.get<Department[]>(environment.API.URL + 'Department/SelectListItem');
     }
     getDepartmentsById(departmentId: string): Observable<any> {
         return this.http.get<Department[]>(

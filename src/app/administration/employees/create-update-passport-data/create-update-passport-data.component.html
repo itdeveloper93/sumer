@@ -5,19 +5,21 @@
         <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
             <mat-card class="p-0">
                 <img
-                    src="../../../../assets/img/noavatar.jpg"
+                    src="{{
+                        passportData?.passportScanPath
+                            ? passportData.passportScanPath
+                            : '../../../../assets/img/noavatar.jpg'
+                    }}"
                     alt="Фото сотрудника"
-                    class="photo-preview w-100 rounded-top"
+                    class="photo-preview w-100 rounded-top object-cover"
                 />
                 <div class="p-4">
-                    <input
-                        type="file"
-                        accept="image/jpg"
-                        formControlName="scanUrl"
-                        class="d-none"
-                        (change)="inserPhotoPreview($event)"
-                    />
-                    <button mat-button class="w-100" type="button" (click)="triggerPhotoUpload()">
+                    <button mat-button class="file-input-button w-100" type="button">
+                        <input
+                            type="file"
+                            accept="image/jpg,image/jpeg"
+                            (change)="renderAndAssignPassportScan($event.target.files)"
+                        />
                         Загрузить фото
                     </button>
                 </div>
@@ -32,8 +34,9 @@
                     <mat-progress-bar
                         mode="indeterminate"
                         *ngIf="isRequesting"
-                        class="progress-bar-top rounded-top"
+                        class="mat-progress-bar_top rounded-top"
                     ></mat-progress-bar>
+
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
@@ -58,6 +61,7 @@
                                     placeholder="12.10.2002"
                                     [matDatepicker]="passportIssueDate"
                                     formControlName="passportIssueDate"
+                                    [max]="today"
                                     required
                                 />
                                 <mat-datepicker-toggle

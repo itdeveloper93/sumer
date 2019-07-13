@@ -1,4 +1,8 @@
-<loading-indicator *ngIf="isRequesting" class="global"></loading-indicator>
+<mat-progress-bar
+    mode="indeterminate"
+    *ngIf="isRequesting"
+    class="mat-progress-bar_top global"
+></mat-progress-bar>
 
 <mat-card class="introduction-card rounded-0 d-flex align-items-center justify-content-between">
     <div class="d-flex flex-column flex-md-row align-items-center m-auto m-md-0">
@@ -9,7 +13,7 @@
                     : '../../../../../../assets/img/noavatar.jpg'
             }}"
             alt="{{ essentialData?.fullName }}"
-            class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0"
+            class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0 object-cover"
         />
 
         <div class="text-center text-md-left" *ngIf="essentialData">
@@ -21,11 +25,11 @@
     </div>
 
     <button
-        (click)="location.back()"
+        routerLink="/administration/employees/active"
         mat-button
         class="mat-button-sm has-icon d-none d-md-block ml-3"
     >
-        <mat-icon>keyboard_arrow_left</mat-icon> Назад
+        <mat-icon>keyboard_arrow_left</mat-icon> Назад к списку
     </button>
 </mat-card>
 <div class="container-fluid">
@@ -36,9 +40,10 @@
                 animationDuration="0ms"
                 (selectedTabChange)="catchTabChange($event)"
                 mat-stretch-tabs
+                [selectedIndex]="selectedTabIndex"
             >
                 <div class="container-fluid">
-                    <mat-tab label="Главное">
+                    <mat-tab label="Главное" matRipple matRippleColor="#533dfe">
                         <mat-card>
                             <mat-list role="list" class="p-0 no-mt no-mb">
                                 <mat-list-item role="listitem">
@@ -110,7 +115,7 @@
                     <mat-tab label="Паспортные данные">
                         <mat-card
                             class="d-flex flex-column justify-content-center"
-                            *ngIf="!passportData?.passportNaumber; else passportDataCard"
+                            *ngIf="passportData && !passportData?.passportNumber"
                         >
                             <alert
                                 message="У этого сотрудника не заполнены паспортные данные"
@@ -127,112 +132,110 @@
                                 Добавить паспортные данные
                             </a>
                         </mat-card>
-                        <ng-template #passportDataCard>
-                            <div class="row">
-                                <div class="col-12 col-lg-5 col-xl-4 mb-4 mb-lg-0">
-                                    <mat-card class="p-0">
-                                        <img
-                                            src="{{
-                                                passportData?.scanUrl
-                                                    ? passportData.scanUrl
-                                                    : '../../../../../../assets/img/noavatar.jpg'
-                                            }}"
-                                            alt="{{ essentialData?.fullName }}"
-                                            class="passport-scan w-100 rounded-top"
-                                        />
-                                        <div class="p-4">
-                                            <a
-                                                href="{{ passportData?.scanUrl }}"
-                                                mat-button
-                                                class="w-100"
-                                                download="{{ passportData?.scanUrl }}"
-                                                target="_blank"
-                                            >
-                                                Скачать скан документа
-                                            </a>
-                                        </div>
-                                    </mat-card>
-                                </div>
-                                <div class="col-12 col-lg-7 col-xl-8">
-                                    <mat-card>
-                                        <mat-list role="list" class="p-0 no-mt no-mb">
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Серия и номер</span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.passportNumber
-                                                            ? passportData.passportNumber
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                            <mat-divider></mat-divider>
-
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">
-                                                    Орган, выдавший паспорт
-                                                </span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.passportIssuer
-                                                            ? passportData.passportIssuer
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                            <mat-divider></mat-divider>
-
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Дата выдачи</span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.passportIssueDate
-                                                            ? passportData.passportIssueDate
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                            <mat-divider></mat-divider>
-
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Национальность</span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.nationality
-                                                            ? passportData.nationality
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                            <mat-divider></mat-divider>
-
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Дата рождения</span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.dateOfBirth
-                                                            ? passportData.dateOfBirth
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                            <mat-divider></mat-divider>
-
-                                            <mat-list-item role="listitem">
-                                                <span class="key mr-auto">Прописка</span>
-                                                <span class="value text-right">
-                                                    {{
-                                                        passportData?.passportAddress
-                                                            ? passportData.passportAddress
-                                                            : 'Не заполнено'
-                                                    }}
-                                                </span>
-                                            </mat-list-item>
-                                        </mat-list>
-                                    </mat-card>
-                                </div>
+                        <div class="row" *ngIf="passportData && passportData?.passportNumber">
+                            <div class="col-12 col-lg-5 col-xl-4 mb-4 mb-lg-0">
+                                <mat-card class="p-0">
+                                    <img
+                                        src="{{
+                                            passportData?.passportScanPath
+                                                ? passportData.passportScanPath
+                                                : '../../../../../../assets/img/noavatar.jpg'
+                                        }}"
+                                        alt="{{ essentialData?.fullName }}"
+                                        class="passport-scan w-100 rounded-top object-cover"
+                                    />
+                                    <div class="p-4">
+                                        <a
+                                            href="{{ passportData?.passportScanPath }}"
+                                            mat-button
+                                            class="w-100"
+                                            download="{{ passportData?.passportScanPath }}"
+                                            target="_blank"
+                                        >
+                                            Скачать скан документа
+                                        </a>
+                                    </div>
+                                </mat-card>
                             </div>
-                        </ng-template>
+                            <div class="col-12 col-lg-7 col-xl-8">
+                                <mat-card>
+                                    <mat-list role="list" class="p-0 no-mt no-mb">
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">Серия и номер</span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.passportNumber
+                                                        ? passportData.passportNumber
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">
+                                                Орган, выдавший паспорт
+                                            </span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.passportIssuer
+                                                        ? passportData.passportIssuer
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">Дата выдачи</span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.passportIssueDate
+                                                        ? passportData.passportIssueDate
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">Национальность</span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.nationality
+                                                        ? passportData.nationality
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">Дата рождения</span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.dateOfBirth
+                                                        ? passportData.dateOfBirth
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                        <mat-divider></mat-divider>
+
+                                        <mat-list-item role="listitem">
+                                            <span class="key mr-auto">Прописка</span>
+                                            <span class="value text-right">
+                                                {{
+                                                    passportData?.passportAddress
+                                                        ? passportData.passportAddress
+                                                        : 'Не заполнено'
+                                                }}
+                                            </span>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </mat-card>
+                            </div>
+                        </div>
                     </mat-tab>
                     <mat-tab label="Учетная запись">
                         <ng-container *ngIf="activeTabLabel === 'Учетная запись'">
@@ -265,7 +268,7 @@
             </button>
 
             <button
-                [routerLink]="['/administration/employees/edit/passport/', id]"
+                [routerLink]="['/administration/employees/edit/passport-data/', id]"
                 mat-button
                 class="mb-3 w-100"
                 *ngIf="activeTabLabel === 'Паспортные данные'"
@@ -310,7 +313,7 @@
                     <mat-progress-bar
                         mode="indeterminate"
                         *ngIf="isRequesting"
-                        class="progress-bar-top rounded-top"
+                        class="mat-progress-bar_top rounded-top"
                     ></mat-progress-bar>
                     <mat-list role="list" class="p-0 no-mt">
                         <mat-list-item role="listitem">

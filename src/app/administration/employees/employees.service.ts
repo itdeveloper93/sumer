@@ -24,12 +24,12 @@ export interface Employee {
  * The shape of fetch criterias for DB searching
  */
 export interface FetchCriterias {
-    name?: string;
-    department?: string;
-    hasAccount?: boolean;
+    fullName?: string;
+    departmentId?: string;
+    onlyUsers?: boolean;
+    page?: number;
+    pageSize?: number;
     locked?: boolean;
-    offset?: number;
-    count?: number;
 }
 
 @Injectable({
@@ -45,6 +45,22 @@ export class EmployeesService {
     constructor(private http: HttpClient) {}
 
     get(criterias?: FetchCriterias): Observable<any> {
-        return this.http.get(environment.API.URL + 'Employee/All');
+        let ENDPOINT = 'Employee/All';
+
+        if (criterias) {
+            if (criterias.locked) ENDPOINT = 'Employee/AllLockedEmployees';
+
+            return this.http.get(
+                environment.API.URL +
+                    ENDPOINT +
+                    '?' +
+                    Object.keys(criterias)
+                        .reduce(function(a, k) {
+                            a.push(k + '=' + encodeURIComponent(criterias[k]));
+                            return a;
+                        }, [])
+                        .join('&')
+            );
+        } else return this.http.get(environment.API.URL + ENDPOINT);
     }
 }

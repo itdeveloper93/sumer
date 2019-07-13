@@ -39,6 +39,7 @@ import { AlertComponent } from 'src/app/alert/alert.component';
 import { CreateUserComponent } from '../users/create-user/create-user.component';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 import { CreateUpdatePassportDataComponent } from './create-update-passport-data/create-update-passport-data.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
     declarations: [
@@ -82,7 +83,8 @@ import { CreateUpdatePassportDataComponent } from './create-update-passport-data
         MatSnackBarModule,
         MatExpansionModule,
         MatDatepickerModule,
-        MatRadioModule
+        MatRadioModule,
+        PerfectScrollbarModule
     ],
     exports: [UserComponent, TableBadgeComponent, EmployeesFilterComponent, FloatingFabComponent, LoadingIndicatorComponent],
     entryComponents: [LockDialogComponent]

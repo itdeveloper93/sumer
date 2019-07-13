@@ -29,6 +29,8 @@ export class CreateUserComponent {
                 );
             },
             (error: Response) => {
+                console.log(error);
+
                 switch (error.status) {
                     case 0:
                         this.snackbar.open(

@@ -23,11 +23,11 @@ export class LockService {
 
         switch (entityType) {
             case 'employee':
-                URL = environment.API.URL + 'EmployeeLockReason/All';
+                URL = environment.API.URL + 'EmployeeLockReason/GetAllListItems';
                 break;
 
             case 'user':
-                URL = environment.API.URL + 'UserLockReason/All';
+                URL = environment.API.URL + 'UserLockReason/GetAllListItems';
                 break;
         }
 
@@ -57,7 +57,7 @@ export class LockService {
                 break;
 
             case 'user':
-                URL = environment.API.URL + 'Account/LockAccount';
+                URL = environment.API.URL + 'Account/LockUser';
 
                 payload = {
                     userId: id,
