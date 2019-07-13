@@ -116,7 +116,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
     getNationalities() {
         this.isRequesting = true;
 
-        this.nationalitiesService.get().subscribe(
+        this.nationalitiesService.getListItems().subscribe(
             response => {
                 this.nationalities = response.data;
                 this.form.get('nationalityId').enable();

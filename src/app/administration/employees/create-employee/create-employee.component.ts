@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { MatSnackBar, MatDatepickerInputEvent } from '@angular/material';
-import {
-    DepartmentsAndPositionsService,
-    Department
-} from 'src/app/common-services/departments-and-positions.service';
+import { DepartmentsAndPositionsService, Department } from 'src/app/common-services/departments-and-positions.service';
 import { CreateUpdateEmployeeService } from './create-update-employee.service';
 import { Location } from '@angular/common';
 import { Gender, GendersService } from 'src/app/common-services/genders.service';
@@ -118,7 +115,6 @@ export class CreateEmployeeComponent implements OnInit {
 
         this.employeeService.getEssentialData(id).subscribe(
             response => {
-                console.log(response.data.dateOfBirth);
                 this.form.patchValue({
                     ...response.data,
                     dateOfBirth: momentX(response.data.dateOfBirth),
@@ -132,9 +128,7 @@ export class CreateEmployeeComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     case 400:
@@ -165,9 +159,7 @@ export class CreateEmployeeComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -189,16 +181,14 @@ export class CreateEmployeeComponent implements OnInit {
         this.isRequesting = true;
         this.form.get('departmentId').disable();
 
-        this.departmentsAndPositionsService.getDepartments().subscribe(
+        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
             response => (this.departments = response.data),
             (error: Response) => {
                 this.isRequesting = false;
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -225,9 +215,7 @@ export class CreateEmployeeComponent implements OnInit {
             (error: Response) => {
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -268,11 +256,7 @@ export class CreateEmployeeComponent implements OnInit {
         payload.append('hireDate', this.form.get('hireDate').value.toDateString());
 
         if (this.form.get('photo').value) {
-            payload.append(
-                'photo',
-                this.form.get('photo').value,
-                this.form.get('photo').value.name
-            );
+            payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
         }
 
         return payload;
@@ -327,9 +311,7 @@ export class CreateEmployeeComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:

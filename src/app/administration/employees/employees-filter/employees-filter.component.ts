@@ -1,9 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import {
-    DepartmentsAndPositionsService,
-    Department
-} from 'src/app/common-services/departments-and-positions.service';
+import { DepartmentsAndPositionsService, Department } from 'src/app/common-services/departments-and-positions.service';
 import { MatSnackBar } from '@angular/material';
 import { FetchCriterias } from '../employees.service';
 
@@ -54,7 +51,7 @@ export class EmployeesFilterComponent implements OnInit {
         this.isRequesting = true;
         this.form.get('departmentId').disable();
 
-        this.departmentsAndPositionsService.getDepartments().subscribe(
+        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
             response => (this.departments = response.data),
             (error: Response) => {
                 this.isRequesting = false;
@@ -62,9 +59,7 @@ export class EmployeesFilterComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
