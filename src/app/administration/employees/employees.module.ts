@@ -23,7 +23,8 @@ import {
     MatSnackBarModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSortModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TableBadgeComponent } from 'src/app/table-badge/table-badge.component';
@@ -84,7 +85,8 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
         MatExpansionModule,
         MatDatepickerModule,
         MatRadioModule,
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        MatSortModule
     ],
     exports: [UserComponent],
     entryComponents: [LockDialogComponent]

@@ -3,6 +3,7 @@ import { routerTransition } from './router-transitions';
 import * as moment from 'moment-timezone';
 import { DateAdapter } from '@angular/material';
 
+// @ts-ignore
 moment.fn.toDateString = function() {
     return this.format('DD.MM.YYYY');
 };
