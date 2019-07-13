@@ -137,7 +137,7 @@ export class EmployeesListComponent implements OnInit {
         this.service.get(criterias).subscribe(
             response => {
                 this.employees = response.data.items;
-                this.employeesLength = response.data.totalCount;
+                this.employeesCount = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;
