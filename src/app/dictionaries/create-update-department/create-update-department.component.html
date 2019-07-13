@@ -10,10 +10,8 @@
         <mat-label>Название</mat-label>
         <input matInput placeholder="Название" formControlName="name">
     </mat-form-field>
-    <mat-slide-toggle formControlName="isActive">Активен</mat-slide-toggle>
-    <div class="button-container">
-        <button mat-flat-button color="primary" type="submit">
+    <mat-slide-toggle labelPosition="before" formControlName="isActive">Активен</mat-slide-toggle>
+        <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block">
             <mat-icon class="mat-18 mr-1">save</mat-icon>Сохранит</button>
-    </div>
 </form>
 
