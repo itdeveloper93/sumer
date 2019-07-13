@@ -113,7 +113,7 @@ export class MainNavigationComponent implements OnInit {
             icon: 'directions_car'
         },
         {
-            hidden: true,
+            // hidden: true,
             label: 'Справочники',
             icon: 'view_list',
             link: 'dictionaries'

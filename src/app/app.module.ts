@@ -61,6 +61,7 @@ import { DepartmentListComponent } from './dictionaries/department-list/departme
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import {CreateUpdateDepartmentComponent} from './dictionaries/create-update-department/create-update-department.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -94,11 +95,11 @@ const CUSTOM_DATE_FORMAT = {
         BreadcrumbsComponent,
         MiniProfileComponent,
         NotificationWidgetComponent,
-        ImageUploaderComponent
+        ImageUploaderComponent,
         DictionariesListComponent,
         DictionariesFilterComponent,
         DepartmentListComponent,
-        CreateUpdateDepartmentComponent
+        CreateUpdateDepartmentComponent,
         MainNavigationComponent,
     ],
     imports: [

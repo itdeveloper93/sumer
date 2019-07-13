@@ -4,9 +4,9 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/ma
 import {CreateUpdateDepartmentComponent} from '../create-update-department/create-update-department.component';
 
 @Component({
-  selector: 'app-department-list',
-  templateUrl: './department-list.component.html',
-  styleUrls: ['./department-list.component.sass']
+    selector: 'app-department-list',
+    templateUrl: './department-list.component.html',
+    styleUrls: ['./department-list.component.sass']
 })
 export class DepartmentListComponent implements OnInit {
     isRequesting: boolean;
@@ -39,17 +39,15 @@ export class DepartmentListComponent implements OnInit {
         this.isRequesting = true;
         this.departmentService.getDepartments()
             .subscribe(response => {
-                this.department = response.data.items;
-                this.id = response.data.items.id;
-            },
+                    this.department = response.data.items;
+                    this.id = response.data.items.id;
+                },
                 (error: Response) => {
                     this.isRequesting = false;
                 },
                 () => {
                     this.isRequesting = false;
                 }
-                );
+            );
     }
-
-
 }
