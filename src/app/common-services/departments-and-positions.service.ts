@@ -9,6 +9,14 @@ export interface Department {
     rootId: string;
 }
 
+export interface FetchDepartmentCriterias {
+    id?: string;
+    name?: string;
+    rootId?: string;
+    page?: number;
+    pageSize?: number;
+}
+
 export interface Position {
     id: string;
     name: string;
@@ -24,8 +32,21 @@ export class DepartmentsAndPositionsService {
     /**
      * Get all departments
      */
-    getDepartments(): Observable<any> {
-        return this.http.get<Department[]>(environment.API.URL + 'Department/All');
+    getDepartments(criterias?: FetchDepartmentCriterias): Observable<any> {
+        let ENDPOINT = 'Department/All';
+        if (criterias) {
+            return this.http.get(
+                environment.API.URL +
+                    ENDPOINT +
+                    '?' +
+                    Object.keys(criterias)
+                        .reduce(function(a, k) {
+                            a.push(k + '=' + encodeURIComponent(criterias[k]));
+                            return a;
+                        }, [])
+                        .join('&')
+            );
+        } else return this.http.get(environment.API.URL + ENDPOINT);
     }
 
     /**
@@ -36,13 +57,11 @@ export class DepartmentsAndPositionsService {
     }
 
     getDepartmentsById(departmentId: string): Observable<any> {
-        return this.http.get<Department[]>(
-            environment.API.URL + 'Department/Get/' + departmentId
-        );
+        return this.http.get<Department[]>(environment.API.URL + 'Department/Get/' + departmentId);
     }
 
     createDepartment(name: string, isActive: boolean) {
-        return this.http.post(environment.API.URL + 'Department/Create', {name, isActive});
+        return this.http.post(environment.API.URL + 'Department/Create', { name, isActive });
     }
 
     updateDepartment(value: string) {
