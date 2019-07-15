@@ -31,15 +31,14 @@ export class LockService {
                 break;
         }
 
-        if (entityType === 'employee' || entityType === 'user')
-            return this.http.get<LockReason[]>(URL);
+        if (entityType === 'employee' || entityType === 'user') return this.http.get<LockReason[]>(URL);
         else return new Observable();
     }
 
     /**
-     * Lock user
-     * @param entityType Type of entities for fetching respective lock reasons (employee | user)
-     * @param id User ID
+     * Lock employee / user
+     * @param entityType Type of entity (employee | user)
+     * @param id Entity ID
      * @param lockReasonId Lock reason ID
      */
     lock(entityType: string, id: string, lockReasonId: string): Observable<any> {
@@ -66,8 +65,7 @@ export class LockService {
                 break;
         }
 
-        if (entityType === 'employee' || entityType === 'user')
-            return this.http.post(URL, JSON.stringify(payload));
+        if (entityType === 'employee' || entityType === 'user') return this.http.post(URL, JSON.stringify(payload));
         else new Observable();
     }
 }

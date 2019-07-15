@@ -26,13 +26,13 @@
 </mat-card>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidenavOpened">
+        <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidebarOpened">
             <mat-tab-group
                 dynamicHeight
                 animationDuration="0ms"
                 (selectedTabChange)="catchTabChange($event)"
                 mat-stretch-tabs
-                [selectedIndex]="selectedTabIndex"
+                [selectedIndex]="activeTabIndex"
                 class="mb-2 mb-md-0"
             >
                 <div class="container-fluid">
@@ -232,7 +232,7 @@
                 </div>
             </mat-tab-group>
         </div>
-        <div class="col-12 col-md-5 col-lg-4 mat-tab-body-padding" [class.col-xl-3]="!isSidenavOpened">
+        <div class="col-12 col-md-5 col-lg-4 mat-tab-body-padding" [class.col-xl-3]="!isSidebarOpened">
             <button
                 [routerLink]="['/administration/employees/edit/essentials/', id]"
                 mat-button

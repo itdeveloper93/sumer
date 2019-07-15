@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { AppConfig } from 'src/app/app.config';
 
 @Component({
     selector: 'employees-list',
@@ -10,20 +10,61 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     styleUrls: ['./employees-list.component.sass']
 })
 export class EmployeesListComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
 
+    /**
+     * Determines whether to show locked employees or active.
+     */
     showLocked = this.route.snapshot.data['showLocked'];
-    employees: MatTableDataSource<Employee>;
-    displayedColumns: any;
 
+    /**
+     * Employees in the shape of MatTableDataSource.
+     */
+    employees: MatTableDataSource<Employee[]>;
+
+    /**
+     * An array of columns to display in the table.
+     */
+    displayedColumns: string[];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
 
+    /**
+     * Object of criterias collected from paginator and filter
+     * to be sent to API.
+     */
     fetchCriterias: FetchCriterias;
 
+    /**
+     * Number of employees to show on one page.
+     */
     pageSize: number;
-    pageSizeOptions = [20, 50, 100];
+
+    /**
+     * An array of numbers to show on one page.
+     */
+    pageSizeOptions = AppConfig.constants.PAGE_SIZE_OPTIONS;
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of employees in DB.
+     */
     employeesCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -61,7 +102,7 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
-     * Set filter query params
+     * Set query params based on filter form values
      * @param event Object with fetch criterias
      */
     setFilterQueryParams(event: FetchCriterias) {
@@ -75,7 +116,7 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
-     * Reset filter
+     * Reset query params that came from filter form
      */
     resetFilter() {
         const params = { ...this.route.snapshot.queryParams };
@@ -94,7 +135,7 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
-     * Set sorting query params
+     * Set query params based on sorting values
      * @param event Standard MatSort event
      */
     setSortingQueryParams(event: Sort) {
@@ -109,8 +150,8 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
-     * Set selected paginator options as query params
-     * @param event Event triggered by changing pagination options
+     * Set query params based on paginator values
+     * @param event Event triggered by changing pagination controls
      */
     setPaginationQueryParams(event: PageEvent) {
         const { pageIndex, pageSize } = event;
@@ -126,9 +167,8 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to employeesService and get employees
-     * list in return
-     * @param criterias Fetch criterias for DB searching
+     * Get employees
+     * @param criterias Optional fetch criterias for DB filtering
      */
     get(criterias?: FetchCriterias) {
         this.isRequesting = true;

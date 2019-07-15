@@ -17,8 +17,14 @@ export interface FilterData {
     styleUrls: ['./employees-filter.component.sass']
 })
 export class EmployeesFilterComponent implements OnInit {
+    /**
+     * Determines whether any fetch operation is in progress
+     */
     isRequesting: boolean;
 
+    /**
+     * List of departments for selectbox
+     */
     departments: Department[];
 
     /**
@@ -47,7 +53,7 @@ export class EmployeesFilterComponent implements OnInit {
     }
 
     /**
-     * Set up EventEmmiter to pass filter data up
+     * Set up EventEmmiter to pass filter events and data up
      */
     @Output() onFilter = new EventEmitter<FilterData>();
     @Output() onResetFilter = new EventEmitter<boolean>();
@@ -107,7 +113,7 @@ export class EmployeesFilterComponent implements OnInit {
     }
 
     /**
-     * Clear form and Emit filter criterias up
+     * Clear form and Emit empty criterias up
      */
     reset() {
         this.form.reset();

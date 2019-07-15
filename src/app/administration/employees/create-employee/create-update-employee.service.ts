@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import BaseResponseInterface from 'src/app/base-response.interface';
 
+/**
+ * Fetched Employee shape for editing
+ */
 export interface Employee {
+    id: string;
     photo: any;
     lastName: string;
     firstName: string;
@@ -30,7 +35,7 @@ export class CreateUpdateEmployeeService {
      * @param action A string determining action type (Create || Edit)
      * @param payload Request payload
      */
-    submit(action: string, payload: FormData): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/' + action, payload);
+    submit(action: string, payload: FormData): Observable<BaseResponseInterface<Employee>> {
+        return this.http.post<BaseResponseInterface<Employee>>(environment.API.URL + 'Employee/' + action, payload);
     }
 }

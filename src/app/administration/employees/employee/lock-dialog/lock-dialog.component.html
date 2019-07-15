@@ -1,9 +1,0 @@
-<div class="postiton-relative">
-    <h4 class="mb-4">Заблокировать сотрудника</h4>
-    <lock-form
-        entityType="employee"
-        id="{{ data.id }}"
-        (onError)="dialogRef.close()"
-        (onSuccess)="dialogRef.close(); onSuccess.emit(true)"
-    ></lock-form>
-</div>

@@ -9,7 +9,7 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
-import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
+import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
 
 const routes: Routes = [
     {
@@ -65,7 +65,7 @@ const routes: Routes = [
                                     {
                                         path: 'passport-data/:id',
                                         data: 'Паспортные данные',
-                                        component: CreateUpdatePassportDataComponent
+                                        component: UpdatePassportDataComponent
                                     }
                                 ]
                             },

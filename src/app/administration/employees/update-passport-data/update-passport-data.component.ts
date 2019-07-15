@@ -1,40 +1,70 @@
 import { Component, OnInit } from '@angular/core';
-import { momentX } from 'src/app/app.component';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CreateUpdatePassportDataService, PassportData } from './create-update-passport-data.service';
+import { UpdatePassportDataService, PassportData } from './update-passport-data.service';
 import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
+import { AppConfig, momentX } from 'src/app/app.config';
 
 @Component({
-    selector: 'app-create-update-passport-data',
-    templateUrl: './create-update-passport-data.component.html',
-    styleUrls: ['./create-update-passport-data.component.sass']
+    selector: 'update-passport-data',
+    templateUrl: './update-passport-data.component.html',
+    styleUrls: ['./update-passport-data.component.sass']
 })
-export class CreateUpdatePassportDataComponent implements OnInit {
+export class UpdatePassportDataComponent implements OnInit {
+    /**
+     * Handling image before upload
+     */
     imageUploader = ImageUploaderComponent;
 
+    /**
+     * Page title
+     */
     title = 'Редактирование паспортных данных';
 
+    /**
+     * Determines whether any fetch operation is in progress
+     */
     isRequesting: boolean;
 
-    minDate = momentX('01.01.1900');
-    aultDate = moment().subtract(18, 'years');
+    /**
+     * Minimum date available to choose from MatDatePicker
+     */
+    minDate = AppConfig.constants.MIN_DATE;
+
+    /**
+     * The max date to show in MatDate picker for age
+     */
+    aultDate = AppConfig.constants.ADULT_DATE;
+
+    /**
+     * Current date
+     */
     today = moment();
 
+    /**
+     * Employee ID
+     */
     id: string;
+
+    /**
+     * Passport data that gets populated to 'Паспортные данные' tab
+     */
     passportData: PassportData;
 
+    /**
+     * List of nationalities for selectbox
+     */
     nationalities: Nationality[];
 
     /**
      * Register form and it's controls
      */
     form = new FormGroup({
-        passportScan: new FormControl('', Validators.required),
+        passportScan: new FormControl(''),
         passportNumber: new FormControl('', Validators.required),
         passportIssueDate: new FormControl('', Validators.required),
         passportIssuer: new FormControl('', Validators.required),
@@ -46,7 +76,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private service: CreateUpdatePassportDataService,
+        private service: UpdatePassportDataService,
         private nationalitiesService: NationalitiesService,
         public location: Location,
         private snackbar: MatSnackBar
@@ -54,6 +84,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
+
         this.form.get('nationalityId').disable();
         this.getNationalities();
         this.getPassportData(this.id);
@@ -175,12 +206,6 @@ export class CreateUpdatePassportDataComponent implements OnInit {
      * @param payload Form data
      */
     submit() {
-        if (this.form.get('passportScan').invalid) {
-            this.snackbar.open('Скан паспорта обязателен.');
-
-            return false;
-        }
-
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
 
@@ -197,7 +222,7 @@ export class CreateUpdatePassportDataComponent implements OnInit {
                 if (this.form.touched) this.snackbar.open('Изменения сохранены.');
 
                 this.router.navigate(['administration/employees/', this.id], {
-                    queryParams: { selectedTabIndex: 1 }
+                    queryParams: { activeTabIndex: 1 }
                 });
             },
             (error: Response) => {

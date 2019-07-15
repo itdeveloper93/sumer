@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
     /**
-     * Initial form title
+     * Card title
      */
     cardTitle: string;
 
@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit {
     }
 
     /**
-     * Sets determination class field value (declared above)
+     * Set determination field value (declared above)
      * @param $event boolean
      */
     setForgotPasswordState($event: boolean) {
@@ -35,6 +35,10 @@ export class AuthComponent implements OnInit {
         $event ? this.setCardTitle('Сброс пароля') : this.setCardTitle();
     }
 
+    /**
+     * Set card title
+     * @param title Title
+     */
     setCardTitle(title?: string) {
         if (!title) this.cardTitle = 'Вход в систему';
         else this.cardTitle = title;

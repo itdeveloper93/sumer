@@ -125,6 +125,10 @@ export class MainNavigationComponent implements OnInit {
                     label: 'Сотрудники',
                     items: [
                         {
+                            label: 'Добавить',
+                            link: '/administration/employees/create'
+                        },
+                        {
                             label: 'Активные',
                             link: '/administration/employees/active'
                         },

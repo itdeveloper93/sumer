@@ -9,14 +9,39 @@ import { MatSnackBar } from '@angular/material';
     styleUrls: ['./lock-form.component.sass']
 })
 export class LockFormComponent implements OnInit {
+    /**
+     * Determines whether any fetch operation is in progress
+     */
     isRequesting: boolean;
+
+    /**
+     * List of lock reasons for selectbox
+     */
     lockReasons: LockReason[];
 
+    /**
+     * Type of the entity to do job on (employee || user)
+     */
     @Input() entityType: string;
-    @Input() id: string;
-    @Input() horisontal: string;
 
+    /**
+     * Entity ID
+     */
+    @Input() id: string;
+
+    /**
+     * Form layout
+     */
+    @Input() horisontal: boolean;
+
+    /**
+     * Event which fires if filter form has errors
+     */
     @Output() onError = new EventEmitter<boolean>();
+
+    /**
+     * Event which fires if filter form has no errors
+     */
     @Output() onSuccess = new EventEmitter<boolean>();
 
     /**
@@ -46,9 +71,7 @@ export class LockFormComponent implements OnInit {
             (error: Response) => {
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:

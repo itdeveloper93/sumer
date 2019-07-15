@@ -6,10 +6,13 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./alert.component.sass']
 })
 export class AlertComponent {
+    /**
+     * Message body
+     */
     @Input() message: string;
+
+    /**
+     * Alert type (success || info || danger)
+     */
     @Input() type: string;
-
-    constructor() {}
-
-    ngOnInit() {}
 }

@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import BaseResponseInterface from 'src/app/base-response.interface';
 
+/**
+ * Shape of passport data to be fetched and sent
+ */
 export interface PassportData {
     passportScanPath: string;
     passportNumber: string;
@@ -16,24 +20,24 @@ export interface PassportData {
 @Injectable({
     providedIn: 'root'
 })
-export class CreateUpdatePassportDataService {
+export class UpdatePassportDataService {
     constructor(private http: HttpClient) {}
 
     /**
-     * Returns Employee passport data
+     * Get Employee passport data
      * @param id Employee ID
      */
-    get(id: string): Observable<any> {
-        return this.http.get<PassportData[]>(
+    get(id: string): Observable<BaseResponseInterface<PassportData>> {
+        return this.http.get<BaseResponseInterface<PassportData>>(
             environment.API.URL + 'Employee/GetPassportData/' + id
         );
     }
 
     /**
-     * Submits Employee passport data
+     * Submit Employee passport data
      * @param id Employee ID
      */
-    submit(payload: FormData): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/EditPassportData', payload);
+    submit(payload: FormData): Observable<BaseResponseInterface<any>> {
+        return this.http.post<BaseResponseInterface<any>>(environment.API.URL + 'Employee/EditPassportData', payload);
     }
 }

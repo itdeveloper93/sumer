@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class SignInComponent {
     /**
-     * Register form and it's controls
+     * Register form and it's controls.
      */
     form = new FormGroup({
         phone: new FormControl('', [
@@ -26,7 +26,7 @@ export class SignInComponent {
     });
 
     /**
-     * Set up custom event to emit up to AuthComponent
+     * Event that fires when 'Забыл пароль' link clicked.
      */
     @Output() onResetPassLinkClick = new EventEmitter<boolean>();
 
@@ -55,7 +55,7 @@ export class SignInComponent {
     }
 
     /**
-     * Do the sign in process
+     * Do the sign in process.
      */
     signIn() {
         // Don't submit if form has errors
@@ -92,8 +92,7 @@ export class SignInComponent {
 
     /**
      * Determines whether the user clicked "Забыл пароль".
-     * And emits custom event up to AuthComponent
-     * @param reset
+     * And emits custom event up to AuthComponent.
      */
     resetPassword() {
         this.onResetPassLinkClick.emit(true);

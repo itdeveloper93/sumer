@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import BaseResponseInterface from 'src/app/base-response.interface';
+import { MatTableDataSource } from '@angular/material';
 
 /**
- * The shape of returned Employee
+ * The shape of fetched Employee
  */
 export interface Employee {
     id: string;
@@ -18,6 +20,14 @@ export interface Employee {
     hireDate?: Date;
     lockDate?: Date;
     lockReason?: string;
+}
+
+interface Employees<T> {
+    items: T;
+    page: number;
+    totalPages: number;
+    totalCount: number;
+    pageSize: number;
 }
 
 /**
@@ -36,21 +46,22 @@ export interface FetchCriterias {
     providedIn: 'root'
 })
 export class EmployeesService {
-    /**
-     * Determines whether we're in the process of fetching
-     * data through HTTP
-     */
-    isRequesting = false;
-
     constructor(private http: HttpClient) {}
 
-    get(criterias?: FetchCriterias): Observable<any> {
+    /**
+     * Get employee list.
+     *
+     * Gets fetch criterias object, converts them into query string and
+     * appends to API URL
+     * @param criterias Fetch criterias
+     */
+    get(criterias?: FetchCriterias): Observable<BaseResponseInterface<Employees<MatTableDataSource<Employee[]>>>> {
         let ENDPOINT = 'Employee/All';
 
         if (criterias) {
             if (criterias.locked) ENDPOINT = 'Employee/AllLockedEmployees';
 
-            return this.http.get(
+            return this.http.get<BaseResponseInterface<Employees<MatTableDataSource<Employee[]>>>>(
                 environment.API.URL +
                     ENDPOINT +
                     '?' +
@@ -61,6 +72,9 @@ export class EmployeesService {
                         }, [])
                         .join('&')
             );
-        } else return this.http.get(environment.API.URL + ENDPOINT);
+        } else
+            return this.http.get<BaseResponseInterface<Employees<MatTableDataSource<Employee[]>>>>(
+                environment.API.URL + ENDPOINT
+            );
     }
 }
