@@ -2,7 +2,7 @@
     <h1 class="mb-4">{{ title }}</h1>
 
     <form class="row" [formGroup]="form" (ngSubmit)="submit()">
-        <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
+        <div class="col-12 col-md-4 col-lg-3 mb-3 mb-lg-0">
             <mat-card class="p-0">
                 <img
                     src="{{
@@ -25,7 +25,7 @@
                 </div>
             </mat-card>
         </div>
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="col-12 col-md-8 col-lg-6 mb-4 mb-lg-0">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Цифровые данные</mat-card-title>
@@ -41,12 +41,7 @@
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Серия и номер</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="А6771586"
-                                    formControlName="passportNumber"
-                                    required
-                                />
+                                <input matInput placeholder="А6771586" formControlName="passportNumber" required />
                                 <mat-error *ngIf="form.get('passportNumber').errors?.required">
                                     Серия и номер обязательны
                                 </mat-error>
@@ -64,17 +59,12 @@
                                     [max]="today"
                                     required
                                 />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="passportIssueDate"
-                                ></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix [for]="passportIssueDate"></mat-datepicker-toggle>
                                 <mat-datepicker #passportIssueDate></mat-datepicker>
                                 <mat-error *ngIf="form.get('passportIssueDate').errors?.required">
                                     Выберите дату
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="form.get('passportIssueDate').errors?.matDatepickerParse"
-                                >
+                                <mat-error *ngIf="form.get('passportIssueDate').errors?.matDatepickerParse">
                                     Введите дату в формате ДД.ММ.ГГГГ
                                 </mat-error>
                             </mat-form-field>
@@ -99,10 +89,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Национальность</mat-label>
                                 <mat-select formControlName="nationalityId" required>
-                                    <mat-option
-                                        *ngFor="let nationality of nationalities"
-                                        [value]="nationality.id"
-                                    >
+                                    <mat-option *ngFor="let nationality of nationalities" [value]="nationality.id">
                                         {{ nationality.name }}
                                     </mat-option>
                                 </mat-select>
@@ -124,17 +111,12 @@
                                     [min]="minDate"
                                     [max]="aultDate"
                                 />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="dateOfBirth"
-                                ></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
                                 <mat-datepicker #dateOfBirth></mat-datepicker>
                                 <mat-error *ngIf="form.get('dateOfBirth').errors?.required">
                                     Выберите дату
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="form.get('dateOfBirth').errors?.matDatepickerParse"
-                                >
+                                <mat-error *ngIf="form.get('dateOfBirth').errors?.matDatepickerParse">
                                     Введите дату в формате ДД.ММ.ГГГГ
                                 </mat-error>
                                 <mat-error *ngIf="form.get('dateOfBirth').errors?.matDatepickerMin">
@@ -161,23 +143,10 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="col-12 col-lg-3">
-            <button mat-flat-button color="primary" class="mb-3 w-100">
-                <mat-icon>save</mat-icon> Сохранить
-            </button>
+        <div class="col-12 col-lg-3 d-flex flex-row-reverse flex-lg-column">
+            <button mat-flat-button color="primary" class="mb-3 w-100"> <mat-icon>save</mat-icon> Сохранить </button>
 
-            <button
-                mat-flat-button
-                class="mb-3 w-100"
-                color="warn"
-                type="button"
-                (click)="this.form.reset()"
-                *ngIf="!id"
-            >
-                <mat-icon>clear</mat-icon> Очистить форму
-            </button>
-
-            <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
+            <button mat-button class="mb-3 mr-3 mr-lg-0 w-100" type="button" (click)="this.location.back()">
                 <mat-icon>keyboard_arrow_left</mat-icon> Назад
             </button>
         </div>

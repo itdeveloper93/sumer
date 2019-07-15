@@ -1,8 +1,4 @@
-<mat-progress-bar
-    mode="indeterminate"
-    *ngIf="isRequesting"
-    class="mat-progress-bar_top global"
-></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top global"></mat-progress-bar>
 
 <div class="container-fluid">
     <h1 class="mb-4">{{ title }}</h1>
@@ -12,9 +8,7 @@
             <mat-card class="p-0">
                 <img
                     src="{{
-                        essentialData?.photoPath
-                            ? essentialData.photoPath
-                            : '../../../../../../assets/img/noavatar.jpg'
+                        essentialData?.photoPath ? essentialData.photoPath : '../../../../../../assets/img/noavatar.jpg'
                     }}"
                     alt="Фото сотрудника"
                     class="photo-preview w-100 rounded-top object-cover"
@@ -31,7 +25,7 @@
                 </div>
             </mat-card>
         </div>
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="col-12 col-md-8 col-lg-6 mb-4">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Главное</mat-card-title>
@@ -41,15 +35,8 @@
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Фамилия</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Расулов"
-                                    formControlName="lastName"
-                                    required
-                                />
-                                <mat-error *ngIf="form.get('lastName').errors?.required"
-                                    >Фамилия обязательна</mat-error
-                                >
+                                <input matInput placeholder="Расулов" formControlName="lastName" required />
+                                <mat-error *ngIf="form.get('lastName').errors?.required">Фамилия обязательна</mat-error>
                                 <mat-error *ngIf="form.get('lastName').errors?.pattern"
                                     >Только буквы кириллического алфавита</mat-error
                                 >
@@ -59,15 +46,8 @@
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Имя</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Азамат"
-                                    formControlName="firstName"
-                                    required
-                                />
-                                <mat-error *ngIf="form.get('firstName').errors?.required"
-                                    >Имя обязательно</mat-error
-                                >
+                                <input matInput placeholder="Азамат" formControlName="firstName" required />
+                                <mat-error *ngIf="form.get('firstName').errors?.required">Имя обязательно</mat-error>
                                 <mat-error *ngIf="form.get('firstName').errors?.pattern"
                                     >Только буквы кириллического алфавита</mat-error
                                 >
@@ -77,11 +57,7 @@
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Отчество</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="Олимович"
-                                    formControlName="middleName"
-                                />
+                                <input matInput placeholder="Олимович" formControlName="middleName" />
                                 <mat-error *ngIf="form.get('middleName').errors?.pattern">
                                     Только буквы кириллического алфавита
                                 </mat-error>
@@ -100,17 +76,12 @@
                                     [min]="minDate"
                                     [max]="aultDate"
                                 />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="dateOfBirth"
-                                ></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
                                 <mat-datepicker #dateOfBirth></mat-datepicker>
                                 <mat-error *ngIf="form.get('dateOfBirth').errors?.required">
                                     Выберите дату
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="form.get('dateOfBirth').errors?.matDatepickerParse"
-                                >
+                                <mat-error *ngIf="form.get('dateOfBirth').errors?.matDatepickerParse">
                                     Введите дату в формате ДД.ММ.ГГГГ
                                 </mat-error>
                                 <mat-error *ngIf="form.get('dateOfBirth').errors?.matDatepickerMin">
@@ -121,12 +92,9 @@
 
                         <div class="col-12 col-md-6 d-flex align-items-center">
                             <mat-radio-group color="primary" formControlName="genderId">
-                                <mat-radio-button
-                                    value="{{ gender.id }}"
-                                    class="mr-3"
-                                    *ngFor="let gender of genders"
-                                    >{{ gender.name }}</mat-radio-button
-                                >
+                                <mat-radio-button value="{{ gender.id }}" class="mr-3" *ngFor="let gender of genders">{{
+                                    gender.name
+                                }}</mat-radio-button>
                             </mat-radio-group>
                         </div>
 
@@ -141,10 +109,7 @@
                                     [max]="today"
                                     required
                                 />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="hireDate"
-                                ></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix [for]="hireDate"></mat-datepicker-toggle>
                                 <mat-datepicker #hireDate></mat-datepicker>
 
                                 <mat-error *ngIf="form.get('hireDate').errors?.matDatepickerParse">
@@ -164,10 +129,7 @@
                                     required
                                     (selectionChange)="getPositions(form.get('departmentId').value)"
                                 >
-                                    <mat-option
-                                        *ngFor="let department of departments"
-                                        [value]="department.id"
-                                    >
+                                    <mat-option *ngFor="let department of departments" [value]="department.id">
                                         {{ department.name }}
                                     </mat-option>
                                 </mat-select>
@@ -178,10 +140,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Позиция</mat-label>
                                 <mat-select formControlName="positionId" required>
-                                    <mat-option
-                                        *ngFor="let position of positions"
-                                        [value]="position.id"
-                                    >
+                                    <mat-option *ngFor="let position of positions" [value]="position.id">
                                         {{ position.name }}
                                     </mat-option>
                                 </mat-select>
@@ -213,11 +172,7 @@
                         <div class="col-12 col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Email</mat-label>
-                                <input
-                                    matInput
-                                    placeholder="azamat@mail.ru"
-                                    formControlName="email"
-                                />
+                                <input matInput placeholder="azamat@mail.ru" formControlName="email" />
 
                                 <mat-error *ngIf="form.get('email').errors?.pattern">
                                     Неверный Email
@@ -264,7 +219,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="col-12 col-lg-3">
+        <div class="col-12 col-lg-3 d-flex flex-column flex-md-row flex-md-row-reverse flex-lg-column">
             <button
                 mat-flat-button
                 color="primary"
@@ -278,7 +233,7 @@
             <button
                 mat-flat-button
                 color="accent"
-                class="mb-3 w-100"
+                class="mb-3 w-100 mx-md-3 mx-lg-0"
                 (click)="submit('create', formDirective)"
                 *ngIf="!id"
                 [disabled]="isRequesting"

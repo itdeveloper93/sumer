@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
     selector: 'employees-list',
@@ -40,7 +41,7 @@ export class EmployeesListComponent implements OnInit {
         this.fetchCriterias = this.route.snapshot.queryParams;
 
         // Set paginator values if user navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page;
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1; // TODO: Configure MatPaginator pageIndex to start from 1
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
         // Fetch data on every URL query params change

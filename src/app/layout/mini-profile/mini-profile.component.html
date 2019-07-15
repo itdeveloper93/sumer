@@ -1,18 +1,15 @@
-<a
-    [routerLink]="['/user/', user.id]"
+<div
     matRipple
     matRippleColor="rgba(255, 255, 255, 0.1)"
-    class="mini-profile py-2 px-3 py-lg-3 px-lg-4 d-flex align-items-center"
+    class="mini-profile py-2 px-3 py-lg-3 px-lg-4 d-flex align-items-center justify-content-between"
 >
-    <div class="media align-items-center">
-        <img
-            src="{{ user.avatarUrl }}"
-            alt="{{ user.fullName }}"
-            class="avatar rounded-circle mr-2 mr-lg-3"
-        />
+    <div class="media align-items-center" routerLink="['/user/', user.id]">
+        <img src="{{ user.avatarUrl }}" alt="{{ user.fullName }}" class="avatar rounded-circle mr-2 mr-lg-3" />
         <div class="media-body">
             <span class="full-name d-block">{{ user.fullName }}</span>
             <span class="position">{{ user.position }}</span>
         </div>
     </div>
-</a>
+
+    <sidebar-toggle class="d-lg-none" theme="light"></sidebar-toggle>
+</div>

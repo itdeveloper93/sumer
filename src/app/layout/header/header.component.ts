@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SidenavStateService } from '../dashboard-layout/sidenav-state.service';
 
 @Component({
     selector: 'app-header',
@@ -7,9 +6,5 @@ import { SidenavStateService } from '../dashboard-layout/sidenav-state.service';
     styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent {
-    constructor(private sidenavState: SidenavStateService) {}
-
-    toggleSidebar() {
-        this.sidenavState.onSideNavToggle.emit();
-    }
+    constructor() {}
 }

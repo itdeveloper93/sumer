@@ -3,22 +3,13 @@
         <perfect-scrollbar class="light">
             <mini-profile></mini-profile>
 
-            <div class="p-4">
+            <div class="pt-4 px-4 pb-lg-4">
                 <notification-widget></notification-widget>
             </div>
 
             <main-navigation></main-navigation>
 
             <nav class="mt-auto list-unstyled pb-3">
-                <li>
-                    <button
-                        matRipple
-                        (click)="authService.signOut()"
-                        class="nav-link d-flex align-items-center px-4 w-100 border-0"
-                    >
-                        <mat-icon class="mr-3">exit_to_app</mat-icon> Выйти из системы
-                    </button>
-                </li>
                 <li>
                     <a
                         matRipple
@@ -27,6 +18,15 @@
                     >
                         <mat-icon class="mr-3">help</mat-icon> Помощь
                     </a>
+                </li>
+                <li>
+                    <button
+                        matRipple
+                        (click)="authService.signOut()"
+                        class="nav-link d-flex align-items-center px-4 w-100 border-0"
+                    >
+                        <mat-icon class="mr-3">exit_to_app</mat-icon> Выйти из системы
+                    </button>
                 </li>
             </nav>
         </perfect-scrollbar>
