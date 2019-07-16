@@ -20,7 +20,7 @@ export class MiniProfileService {
     constructor() {}
 
     /**
-     * Get current signed-in user info from JWT token
+     * Get current signed-in user info from JWT
      */
     getUser(): User {
         const token = localStorage.getItem('auth_token');

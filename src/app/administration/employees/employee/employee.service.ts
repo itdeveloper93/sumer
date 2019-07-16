@@ -26,14 +26,9 @@ export interface EssentialData {
     description: string;
     userId: string;
     isLocked: boolean;
-    lockReasonName: string;
+    employeeLockReasonName: string;
     lockDate: string;
 }
-
-/**
- * Shape of user data that gets populated to 'Учетная запись' tab
- */
-export interface UserData {}
 
 /**
  * Shape of log data that gets populated to widget
@@ -69,14 +64,6 @@ export class EmployeeService {
     }
 
     /**
-     * Get Employee User data
-     * @param id Employee ID
-     */
-    getUserData(id: string): UserData | null {
-        return 'UserData';
-    }
-
-    /**
      * Get Employee and User log data
      * @param id Employee ID
      */
@@ -86,13 +73,5 @@ export class EmployeeService {
             createdAt: '22.06.2019',
             lastEdit: '5.07.2019, 12:32'
         };
-    }
-
-    /**
-     * Unlock Employee
-     * @param id Employee ID
-     */
-    unlock(id: string): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/UnlockEmployee/' + id, {});
     }
 }

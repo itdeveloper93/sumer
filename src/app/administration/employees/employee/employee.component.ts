@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EmployeeService, EssentialData, UserData, Log } from './employee.service';
+import { EmployeeService, EssentialData, Log } from './employee.service';
 import { Location } from '@angular/common';
 import { MatTabChangeEvent, MatSnackBar } from '@angular/material';
 import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
 import { SidenavStateService } from 'src/app/layout/dashboard-layout/sidenav-state.service';
 import { UpdatePassportDataService, PassportData } from '../update-passport-data/update-passport-data.service';
+import { fade } from 'src/app/animations/all';
+import { UserService, User } from '../../users/user/user.service';
 
 @Component({
     selector: 'employee',
     templateUrl: './employee.component.html',
-    styleUrls: ['./employee.component.sass']
+    styleUrls: ['./employee.component.sass'],
+    animations: [fade]
 })
 export class EmployeeComponent implements OnInit {
     /**
@@ -31,7 +34,7 @@ export class EmployeeComponent implements OnInit {
     /**
      * User data that gets populated to 'Учетная запись' tab
      */
-    userData: UserData;
+    userData: User;
 
     /**
      * Log data that gets populated to right side widget
@@ -64,6 +67,11 @@ export class EmployeeComponent implements OnInit {
      */
     hasPassport = false;
 
+    /**
+     * Determines whether lock form is loaded
+     */
+    lockFormLoaded: boolean;
+
     constructor(
         private route: ActivatedRoute,
         private service: EmployeeService,
@@ -71,7 +79,8 @@ export class EmployeeComponent implements OnInit {
         private snackbar: MatSnackBar,
         private dashboardLayout: DashboardLayoutComponent,
         private sidenavStateService: SidenavStateService,
-        private passportDataService: UpdatePassportDataService
+        private passportDataService: UpdatePassportDataService,
+        private userService: UserService
     ) {}
 
     ngOnInit() {
@@ -155,8 +164,26 @@ export class EmployeeComponent implements OnInit {
      * Get user data
      * @param id Employee ID
      */
-    getUserData(id: string): UserData {
-        return this.service.getUserData(id);
+    getUserData(id: string) {
+        this.isRequesting = true;
+
+        this.userService.get(id).subscribe(
+            response => (this.userData = response.data),
+            (error: Response) => {
+                this.isRequesting = false;
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => (this.isRequesting = false)
+        );
     }
 
     /**
@@ -183,42 +210,19 @@ export class EmployeeComponent implements OnInit {
     catchTabChange(event: MatTabChangeEvent) {
         // Load nessesary data on first tab activation
         switch (event.tab.textLabel) {
+            case 'Главное':
+                this.getEssentialData(this.id);
+                break;
+
             case 'Паспортные данные':
-                if (!this.passportData) this.getPassportData(this.id);
+                this.getPassportData(this.id);
                 break;
 
             case 'Учетная запись':
-                if (!this.userData) this.userData = this.getUserData(this.id);
+                this.getUserData(this.id);
                 break;
         }
 
         this.activeTabLabel = event.tab.textLabel;
-    }
-
-    /**
-     * Unlock employee
-     */
-    unlock() {
-        this.isRequesting = true;
-        this.service.unlock(this.id).subscribe(
-            response => this.ngOnInit(),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-                this.snackbar.open('Сотрудник разблокирован');
-            }
-        );
     }
 }

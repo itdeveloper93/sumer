@@ -261,43 +261,17 @@
                 <mat-icon>insert_drive_file</mat-icon> Выгрузить карточку в PDF
             </button>
 
-            <mat-card class="mb-4" [class.d-none]="essentialData?.isLocked || activeTabLabel === 'Учетная запись'">
+            <mat-card
+                class="mb-4 lock-widget"
+                [class.d-none]="essentialData && activeTabLabel === 'Учетная запись'"
+                [class.visible]="lockFormLoaded"
+            >
                 <mat-card-header>
-                    <mat-card-title class="m-0">Заблокировать</mat-card-title>
+                    <mat-card-title class="m-0">Блокировка</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <lock-form entityType="employee" id="{{ id }}" (onSuccess)="ngOnInit()"></lock-form>
+                    <lock-form entityType="employee" id="{{ id }}" (onLoad)="lockFormLoaded = $event"></lock-form>
                 </mat-card-content>
-            </mat-card>
-
-            <mat-card class="mb-4" [class.d-none]="!essentialData?.isLocked || activeTabLabel === 'Учетная запись'">
-                <mat-card-header>
-                    <mat-card-title class="m-0">Сотрудник заблокирован</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <mat-progress-bar
-                        mode="indeterminate"
-                        *ngIf="isRequesting"
-                        class="mat-progress-bar_top rounded-top"
-                    ></mat-progress-bar>
-                    <mat-list role="list" class="p-0 no-mt">
-                        <mat-list-item role="listitem">
-                            <span class="key mr-auto">Причина</span>
-                            <span class="value text-right">{{ essentialData?.lockReasonName }}</span>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-
-                        <mat-list-item role="listitem">
-                            <span class="key mr-auto">Дата </span>
-                            <span class="value text-right">{{ essentialData?.lockDate }}</span>
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-                <mat-card-actions>
-                    <button (click)="unlock()" mat-flat-button color="accent" class="btn-lg btn-block">
-                        Разблокировать
-                    </button>
-                </mat-card-actions>
             </mat-card>
 
             <mat-card class="log-data mb-4">
