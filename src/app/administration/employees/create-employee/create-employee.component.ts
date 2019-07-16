@@ -128,6 +128,8 @@ export class CreateEmployeeComponent implements OnInit {
         this.getDepartments();
         this.getGenders();
 
+        this.form.get('positionId').disable();
+
         if (this.id) {
             this.title = 'Редактирование сотрудника';
             this.getEssentialData(this.id);
@@ -252,8 +254,6 @@ export class CreateEmployeeComponent implements OnInit {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.form.get('positionId').disable();
-
         this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
             response => (this.positions = response.data),
             (error: Response) => {
