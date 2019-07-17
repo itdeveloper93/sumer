@@ -91,7 +91,7 @@ export class LockService {
         }
 
         if (entityType === 'employee' || entityType === 'user')
-            return this.http.get<BaseResponseInterface<any>>(URL, {});
+            return this.http.post<BaseResponseInterface<any>>(URL, {});
         else new Observable();
     }
 }
