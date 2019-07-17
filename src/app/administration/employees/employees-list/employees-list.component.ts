@@ -3,6 +3,7 @@ import { EmployeesService, Employee, FetchCriterias } from '../employees.service
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
 import { AppConfig } from 'src/app/app.config';
+import { AuthService } from 'src/app/authentication/auth.service';
 
 @Component({
     selector: 'employees-list',

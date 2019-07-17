@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { decode } from 'punycode';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/authentication/auth.service';
 
 /**
  * Shape of the user data from JWT token
@@ -23,7 +24,7 @@ export class MiniProfileService {
      * Get current signed-in user info from JWT
      */
     getUser(): User {
-        const token = localStorage.getItem('auth_token');
+        const token = AuthService.getToken();
         const jwtHelper = new JwtHelperService();
         const decodedToken = jwtHelper.decodeToken(token);
 

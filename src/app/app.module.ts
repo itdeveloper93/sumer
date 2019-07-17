@@ -50,6 +50,7 @@ import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.ser
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 import { SidebarToggleComponent } from './layout/sidebar-toggle/sidebar-toggle.component';
+import { JwtInterceptor } from '@auth0/angular-jwt';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -103,6 +104,12 @@ const CUSTOM_DATE_FORMAT = {
         MatNativeDateModule
     ],
     providers: [
+        JwtInterceptor, // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: GlobalHttpHeadersInterceptorService,
