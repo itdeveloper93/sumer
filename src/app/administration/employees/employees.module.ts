@@ -40,6 +40,8 @@ import { CreateUserComponent } from '../users/create-user/create-user.component'
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 import { UpdatePassportDataComponent } from './update-passport-data/update-passport-data.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { MyProfileComponent } from '../users/my-profile/my-profile.component';
+import { ChangePasswordComponent } from '../users/change-password/change-password.component';
 
 @NgModule({
     declarations: [
@@ -54,7 +56,9 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
         AlertComponent,
         CreateUserComponent,
         CreateEmployeeComponent,
-        UpdatePassportDataComponent
+        UpdatePassportDataComponent,
+        MyProfileComponent,
+        ChangePasswordComponent
     ],
     imports: [
         CommonModule,

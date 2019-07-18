@@ -3,7 +3,7 @@
     matRippleColor="rgba(255, 255, 255, 0.1)"
     class="mini-profile py-2 px-3 py-lg-3 px-lg-4 d-flex align-items-center justify-content-between"
 >
-    <div class="d-flex align-items-center" routerLink="['/administration/users/', user.userId]">
+    <div class="d-flex align-items-center" routerLink="/me">
         <img
             src="{{ user.photo ? user.photo : '../../../../../assets/img/noavatar.jpg' }}"
             alt="{{ user.name }}"

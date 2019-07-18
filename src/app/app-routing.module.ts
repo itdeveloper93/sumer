@@ -10,6 +10,7 @@ import { EmployeesListComponent } from './administration/employees/employees-lis
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
+import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';
 
 const routes: Routes = [
     {
@@ -93,6 +94,11 @@ const routes: Routes = [
                         ]
                     }
                 ]
+            },
+            {
+                path: 'me',
+                data: { title: 'Мой профиль', showLocked: true },
+                component: MyProfileComponent
             }
         ]
     },

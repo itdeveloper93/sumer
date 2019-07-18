@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
  * Shape of the user data from JWT token
  */
 export default interface User {
-    userId: string;
+    id: string;
     photo: string;
     name: string;
     position: string;
@@ -31,7 +31,7 @@ export class MiniProfileService {
             name: decodedToken.name,
             photo: decodedToken.photo,
             position: decodedToken.position,
-            userId: decodedToken.userId
+            id: decodedToken.id
         };
 
         return user;
