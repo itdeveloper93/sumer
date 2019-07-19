@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { MatSnackBar, MatDatepickerInputEvent } from '@angular/material';
-import { DepartmentsAndPositionsService, Department } from 'src/app/common-services/departments-and-positions.service';
+import { MatSnackBar } from '@angular/material';
+import {
+    DepartmentsAndPositionsService,
+    Department,
+    Position
+} from 'src/app/common-services/departments-and-positions.service';
 import { CreateUpdateEmployeeService } from './create-update-employee.service';
 import { Location } from '@angular/common';
 import { Gender, GendersService } from 'src/app/common-services/genders.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService } from '../employee/employee.service';
-import { momentX } from 'src/app/app.component';
+import { EmployeeService, EssentialData } from '../employee/employee.service';
 import * as moment from 'moment-timezone';
 import { Employee } from '../employees.service';
 import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.component';
+import { AppConfig, momentX } from 'src/app/app.config';
 
 @Component({
     selector: 'app-create-employee',
@@ -18,21 +22,61 @@ import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.co
     styleUrls: ['./create-employee.component.sass']
 })
 export class CreateEmployeeComponent implements OnInit {
+    /**
+     * Handling image before upload
+     */
     imageUploader = ImageUploaderComponent;
 
+    /**
+     * Page title
+     */
     title: string;
 
+    /**
+     * Determines whether any fetch operation is in progress
+     */
     isRequesting: boolean;
 
-    minDate = momentX('01.01.1900');
+    /**
+     * Minimum date available to choose from MatDatePicker
+     */
+    minDate = AppConfig.constants.MIN_DATE;
+
+    /**
+     * Current date
+     */
     today = moment();
-    aultDate = moment().subtract(18, 'years');
 
+    /**
+     * The max date to show in MatDate picker for age
+     */
+    aultDate = AppConfig.constants.ADULT_DATE;
+
+    /**
+     * ID of current employee. If has value, then we're updating an
+     * employee, otherwise – creating
+     */
     id: string;
-    essentialData: Employee;
 
+    /**
+     * The existing employee data that gets populated to form if we're
+     * updating employee
+     */
+    essentialData: EssentialData;
+
+    /**
+     * List of departments for selectbox
+     */
     departments: Department[];
+
+    /**
+     * List of positions for selectbox
+     */
     positions: Position[];
+
+    /**
+     * List of genders for selectbox
+     */
     genders: Gender[];
 
     /**
@@ -78,12 +122,14 @@ export class CreateEmployeeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        // Get and assign employee ID if we want to edit his data
+        // Get and assign employee ID if we want to update his data
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
-        // Fetch nesessary initial data
+        // Fetch and assign nesessary data for select boxes
         this.getDepartments();
         this.getGenders();
+
+        this.form.get('positionId').disable();
 
         if (this.id) {
             this.title = 'Редактирование сотрудника';
@@ -96,8 +142,8 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     /**
-     * Renders selected image to given canvas and assigns it to respective
-     * form input
+     * Renders selected image to given img tag and assigns it to respective
+     * form field
      * @param files Files object
      */
     renderAndAssignPhoto(files: FileList) {
@@ -122,10 +168,12 @@ export class CreateEmployeeComponent implements OnInit {
                     hireDate: momentX(response.data.hireDate)
                 });
 
+                console.log(response.data);
+
                 this.essentialData = response.data;
             },
             (error: Response) => {
-                //this.isRequesting = false;
+                this.isRequesting = false;
 
                 switch (error.status) {
                     case 0:
@@ -147,7 +195,7 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     /**
-     * Get genders
+     * Get all genders
      */
     getGenders() {
         this.isRequesting = true;
@@ -205,12 +253,10 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
     /**
-     * Get positions
+     * Get all positions of passed department
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.form.get('positionId').disable();
-
         this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
             response => (this.positions = response.data),
             (error: Response) => {
@@ -241,6 +287,7 @@ export class CreateEmployeeComponent implements OnInit {
      */
     constructRequestPayload(): FormData {
         const payload = new FormData();
+        const photo = this.form.get('photo').value;
 
         if (this.id) payload.append('id', this.id);
 
@@ -252,13 +299,11 @@ export class CreateEmployeeComponent implements OnInit {
             if (!excludedFields.includes(key)) payload.append(key, this.form.value[key]);
         });
 
-        // Re-add fields with right format
+        // Re-add excluded fields with right format
         payload.append('dateOfBirth', this.form.get('dateOfBirth').value.toDateString());
         payload.append('hireDate', this.form.get('hireDate').value.toDateString());
 
-        if (this.form.get('photo').value) {
-            payload.append('photo', this.form.get('photo').value, this.form.get('photo').value.name);
-        }
+        if (photo) payload.append('photo', photo, photo.name);
 
         return payload;
     }
@@ -276,9 +321,7 @@ export class CreateEmployeeComponent implements OnInit {
             return false;
         }
 
-        let action = 'Create';
-        if (this.id) action = 'Edit';
-
+        const action = this.id ? 'Edit' : 'Create';
         const payload = this.constructRequestPayload();
 
         this.isRequesting = true;
@@ -322,10 +365,7 @@ export class CreateEmployeeComponent implements OnInit {
             },
             () => {
                 this.form.enable();
-
-                setTimeout(() => {
-                    this.isRequesting = false;
-                }, 10000);
+                this.isRequesting = false;
             }
         );
     }

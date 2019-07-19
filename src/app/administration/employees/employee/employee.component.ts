@@ -1,53 +1,95 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService, EssentialData, UserData, Log } from './employee.service';
+import { ActivatedRoute } from '@angular/router';
+import { EmployeeService, EssentialData, Log } from './employee.service';
 import { Location } from '@angular/common';
-import { MatTabChangeEvent, MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
-import { LockDialogComponent } from './lock-dialog/lock-dialog.component';
+import { MatTabChangeEvent, MatSnackBar } from '@angular/material';
 import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
 import { SidenavStateService } from 'src/app/layout/dashboard-layout/sidenav-state.service';
-import {
-    CreateUpdatePassportDataService,
-    PassportData
-} from '../create-update-passport-data/create-update-passport-data.service';
+import { UpdatePassportDataService, PassportData } from '../update-passport-data/update-passport-data.service';
+import { fade } from 'src/app/animations/all';
+import { UserService, User } from '../../users/user/user.service';
 
 @Component({
     selector: 'employee',
     templateUrl: './employee.component.html',
-    styleUrls: ['./employee.component.sass']
+    styleUrls: ['./employee.component.sass'],
+    animations: [fade]
 })
 export class EmployeeComponent implements OnInit {
+    /**
+     * Employee ID
+     */
     id: string;
-    essentialData: EssentialData;
-    passportData: PassportData;
-    userData: UserData;
-    logData: Log;
-    isRequesting: boolean;
-    activeTabLabel = 'Главное';
-    lockDialog: MatDialogRef<LockDialogComponent>;
-    isSidenavOpened: boolean;
-    selectedTabIndex: number;
 
+    /**
+     * Employee data that gets populated to 'Главное' tab
+     */
+    essentialData: EssentialData;
+
+    /**
+     * Passport data that gets populated to 'Паспортные данные' tab
+     */
+    passportData: PassportData;
+
+    /**
+     * User data that gets populated to 'Учетная запись' tab
+     */
+    userData: User;
+
+    /**
+     * Log data that gets populated to right side widget
+     */
+    logData: Log;
+
+    /**
+     * Determines whether any fetch operation is in progress
+     */
+    isRequesting: boolean;
+
+    /**
+     * Active tab title. Initially set to 'Главное' to fetch essential
+     * data straight away
+     */
+    activeTabLabel = 'Главное';
+
+    /**
+     * Active tab index
+     */
+    activeTabIndex: number;
+
+    /**
+     * Determines if sidebar is opened
+     */
+    isSidebarOpened: boolean;
+
+    /**
+     * Determines if employee has passport data
+     */
     hasPassport = false;
+
+    /**
+     * Determines whether lock form is loaded
+     */
+    lockFormLoaded: boolean;
 
     constructor(
         private route: ActivatedRoute,
         private service: EmployeeService,
         public location: Location,
-        public dialog: MatDialog,
         private snackbar: MatSnackBar,
         private dashboardLayout: DashboardLayoutComponent,
         private sidenavStateService: SidenavStateService,
-        private passportDataService: CreateUpdatePassportDataService
+        private passportDataService: UpdatePassportDataService,
+        private userService: UserService
     ) {}
 
     ngOnInit() {
-        this.selectedTabIndex = +this.route.snapshot.queryParamMap.get('selectedTabIndex');
+        this.activeTabIndex = +this.route.snapshot.queryParamMap.get('activeTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
         this.getEssentialData(this.id);
 
-        if (this.selectedTabIndex === 1) {
+        if (this.activeTabIndex === 1) {
             this.getPassportData(this.id);
             this.activeTabLabel = 'Паспортные данные';
         }
@@ -56,7 +98,7 @@ export class EmployeeComponent implements OnInit {
         this.logData = this.getLogData(this.id);
 
         this.sidenavStateService.onSideNavToggle.subscribe(
-            () => (this.isSidenavOpened = this.dashboardLayout.isSidebarOpened)
+            () => (this.isSidebarOpened = this.dashboardLayout.isSidebarOpened)
         );
     }
 
@@ -68,17 +110,13 @@ export class EmployeeComponent implements OnInit {
         this.isRequesting = true;
 
         this.service.getEssentialData(id).subscribe(
-            response => {
-                this.essentialData = response.data;
-            },
+            response => (this.essentialData = response.data),
             (error: Response) => {
                 this.isRequesting = false;
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -110,9 +148,7 @@ export class EmployeeComponent implements OnInit {
 
                 switch (error.status) {
                     case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
                         break;
 
                     default:
@@ -128,8 +164,26 @@ export class EmployeeComponent implements OnInit {
      * Get user data
      * @param id Employee ID
      */
-    getUserData(id: string): UserData {
-        return this.service.getUserData(id);
+    getUserData(id: string) {
+        this.isRequesting = true;
+
+        this.userService.get(id).subscribe(
+            response => (this.userData = response.data),
+            (error: Response) => {
+                this.isRequesting = false;
+
+                switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
+                    default:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
+                }
+            },
+            () => (this.isRequesting = false)
+        );
     }
 
     /**
@@ -156,50 +210,19 @@ export class EmployeeComponent implements OnInit {
     catchTabChange(event: MatTabChangeEvent) {
         // Load nessesary data on first tab activation
         switch (event.tab.textLabel) {
+            case 'Главное':
+                this.getEssentialData(this.id);
+                break;
+
             case 'Паспортные данные':
-                if (!this.passportData) this.getPassportData(this.id);
+                this.getPassportData(this.id);
                 break;
 
             case 'Учетная запись':
-                if (!this.userData) this.userData = this.getUserData(this.id);
+                this.getUserData(this.id);
                 break;
         }
 
         this.activeTabLabel = event.tab.textLabel;
-    }
-
-    /**
-     * Opens lock employee popup
-     */
-    openLockDialog() {
-        this.lockDialog = this.dialog.open(LockDialogComponent, {
-            data: { id: this.id }
-        });
-    }
-
-    unlock() {
-        this.isRequesting = true;
-        this.service.unlock(this.id).subscribe(
-            response => this.ngOnInit(),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open(
-                            'Ошибка. Проверьте подключение к Интернету или настройки Firewall.'
-                        );
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-                this.snackbar.open('Сотрудник разблокирован');
-            }
-        );
     }
 }

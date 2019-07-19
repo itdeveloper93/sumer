@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
     /**
-     * Initial form title
+     * Card title
      */
     cardTitle: string;
 
@@ -18,14 +18,19 @@ export class AuthComponent implements OnInit {
      */
     forgotPassword = false;
 
+    /**
+     * Determines whether any fetch operation is in progress
+     */
+    isRequesting = false;
+
     constructor(public authService: AuthService, private router: Router) {}
 
     ngOnInit() {
-        if (localStorage.getItem('auth_token')) this.router.navigate(['/']);
+        if (this.authService.getToken()) this.router.navigate(['/']);
     }
 
     /**
-     * Sets determination class field value (declared above)
+     * Set determination field value (declared above)
      * @param $event boolean
      */
     setForgotPasswordState($event: boolean) {
@@ -35,6 +40,10 @@ export class AuthComponent implements OnInit {
         $event ? this.setCardTitle('Сброс пароля') : this.setCardTitle();
     }
 
+    /**
+     * Set card title
+     * @param title Title
+     */
     setCardTitle(title?: string) {
         if (!title) this.cardTitle = 'Вход в систему';
         else this.cardTitle = title;
@@ -49,11 +58,11 @@ export class AuthComponent implements OnInit {
         switch (state) {
             case 'disable':
                 form.disable();
-                this.authService.isRequesting = true;
+                this.isRequesting = true;
                 break;
             case 'enable':
                 form.enable();
-                this.authService.isRequesting = false;
+                this.isRequesting = false;
                 break;
         }
     }

@@ -33,14 +33,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FloatingFabComponent } from 'src/app/floating-fab/floating-fab.component';
 import { EmployeeComponent } from './employee/employee.component';
 import { LoadingIndicatorComponent } from 'src/app/loading-indicator/loading-indicator.component';
-import { LockDialogComponent } from './employee/lock-dialog/lock-dialog.component';
 import { UserComponent } from '../users/user/user.component';
 import { LockFormComponent } from '../lock-form/lock-form.component';
 import { AlertComponent } from 'src/app/alert/alert.component';
 import { CreateUserComponent } from '../users/create-user/create-user.component';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
-import { CreateUpdatePassportDataComponent } from './create-update-passport-data/create-update-passport-data.component';
+import { UpdatePassportDataComponent } from './update-passport-data/update-passport-data.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { MyProfileComponent } from '../users/my-profile/my-profile.component';
+import { ChangePasswordComponent } from '../users/change-password/change-password.component';
 
 @NgModule({
     declarations: [
@@ -50,13 +51,14 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
         FloatingFabComponent,
         EmployeeComponent,
         LoadingIndicatorComponent,
-        LockDialogComponent,
         UserComponent,
         LockFormComponent,
         AlertComponent,
         CreateUserComponent,
         CreateEmployeeComponent,
-        CreateUpdatePassportDataComponent
+        UpdatePassportDataComponent,
+        MyProfileComponent,
+        ChangePasswordComponent
     ],
     imports: [
         CommonModule,
@@ -88,7 +90,6 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
         PerfectScrollbarModule,
         MatSortModule
     ],
-    exports: [UserComponent, TableBadgeComponent, EmployeesFilterComponent, FloatingFabComponent, LoadingIndicatorComponent],
-    entryComponents: [LockDialogComponent]
+    exports: [UserComponent]
 })
 export class EmployeesModule {}

@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { Observable } from 'rxjs';
-import { PassportData } from '../create-update-passport-data/create-update-passport-data.service';
+import { PassportData } from '../update-passport-data/update-passport-data.service';
+import BaseResponseInterface from 'src/app/base-response.interface';
 
+/**
+ * Shape of essential employee data that gets populated
+ * to 'Главное' tab
+ */
 export interface EssentialData {
     id: string;
     photoPath: string;
@@ -21,12 +26,13 @@ export interface EssentialData {
     description: string;
     userId: string;
     isLocked: boolean;
-    lockReasonName: string;
+    employeeLockReasonName: string;
     lockDate: string;
 }
 
-export interface UserData {}
-
+/**
+ * Shape of log data that gets populated to widget
+ */
 export interface Log {
     authorName: string;
     createdAt: string;
@@ -40,33 +46,25 @@ export class EmployeeService {
     constructor(private http: HttpClient) {}
 
     /**
-     * Returns Employee essential data
+     * Get Employee essential data
      * @param id Employee ID
      */
-    getEssentialData(id: string): Observable<any> {
-        return this.http.get<EssentialData[]>(environment.API.URL + 'Employee/Get/' + id);
+    getEssentialData(id: string): Observable<BaseResponseInterface<EssentialData>> {
+        return this.http.get<BaseResponseInterface<EssentialData>>(environment.API.URL + 'Employee/Get/' + id);
     }
 
     /**
-     * Returns Employee passport data
+     * Get Employee passport data
      * @param id Employee ID
      */
-    getPassportData(id: string): Observable<any> {
-        return this.http.get<PassportData[]>(
+    getPassportData(id: string): Observable<BaseResponseInterface<PassportData>> {
+        return this.http.get<BaseResponseInterface<PassportData>>(
             environment.API.URL + 'Employee/GetPassportData/' + id
         );
     }
 
     /**
-     * Returns Employee User data
-     * @param id Employee ID
-     */
-    getUserData(id: string): UserData | null {
-        return 'UserData';
-    }
-
-    /**
-     * Returns Employee and User log data
+     * Get Employee and User log data
      * @param id Employee ID
      */
     getLog(id: string): Log {
@@ -75,9 +73,5 @@ export class EmployeeService {
             createdAt: '22.06.2019',
             lastEdit: '5.07.2019, 12:32'
         };
-    }
-
-    unlock(id: string): Observable<any> {
-        return this.http.post(environment.API.URL + 'Employee/UnlockEmployee/' + id, {});
     }
 }

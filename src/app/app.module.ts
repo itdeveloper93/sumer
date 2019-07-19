@@ -43,8 +43,8 @@ import {
     MatDialogConfig,
     MatNativeDateModule,
     DateAdapter,
-    MAT_DATE_LOCALE,
     MAT_DATE_FORMATS,
+    MatProgressBarModule
     MatPaginatorModule,
     MatTableModule,
     MatTooltipModule,
@@ -79,6 +79,8 @@ import { CreateUpdateEmployeeLockReasonComponent } from './dictionaries/employee
 import { DictionariesModule } from './dictionaries/dictionaries.module';
 import { CreateUpdateNationalityComponent } from './dictionaries/nationality/create-update-nationality/create-update-nationality.component';
 import { CreateUpdateNewsCategoriesComponent } from './dictionaries/news-categories/create-update-news-categories/create-update-news-categories.component';
+import { SidebarToggleComponent } from './layout/sidebar-toggle/sidebar-toggle.component';
+import { JwtInterceptor } from '@auth0/angular-jwt';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -132,6 +134,8 @@ const CUSTOM_DATE_FORMAT = {
         CreateUpdateEmployeeLockReasonComponent,
         CreateUpdateNationalityComponent,
         CreateUpdateNewsCategoriesComponent
+        ImageUploaderComponent,
+        SidebarToggleComponent
     ],
     imports: [
         BrowserModule,
@@ -146,6 +150,8 @@ const CUSTOM_DATE_FORMAT = {
         PerfectScrollbarModule,
         AuthModule,
         AdministrationModule,
+        MatNativeDateModule,
+        MatProgressBarModule
         MatNativeDateModule,
         MatPaginatorModule,
         EmployeesModule,
@@ -170,6 +176,12 @@ const CUSTOM_DATE_FORMAT = {
         CreateUpdateNewsCategoriesComponent
     ],
     providers: [
+        JwtInterceptor, // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
+        {
+            provide: HTTP_INTERCEPTORS,
+            useExisting: JwtInterceptor,
+            multi: true
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: GlobalHttpHeadersInterceptorService,

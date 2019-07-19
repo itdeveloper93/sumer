@@ -11,7 +11,6 @@ import { EmployeeComponent } from './administration/employees/employee/employee.
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
 import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
-// tslint:disable-next-line:max-line-length
 import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
 import { UsefulLinkCategoryComponent } from './dictionaries/useful-link-category/useful-link-category.component';
 import { FileCategoryComponent } from './dictionaries/file-category/file-category.component';
@@ -20,6 +19,9 @@ import { PositionComponent } from './dictionaries/position/position.component';
 import { EmployeeLockReasonComponent } from './dictionaries/employee-lock-reason/employee-lock-reason.component';
 import { NationalityComponent } from './dictionaries/nationality/nationality.component';
 import { NewsCategoriesComponent } from './dictionaries/news-categories/news-categories.component';
+import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
+import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -74,7 +76,7 @@ const routes: Routes = [
                                     {
                                         path: 'passport-data/:id',
                                         data: 'Паспортные данные',
-                                        component: CreateUpdatePassportDataComponent
+                                        component: UpdatePassportDataComponent
                                     }
                                 ]
                             },
@@ -102,6 +104,11 @@ const routes: Routes = [
                         ]
                     }
                 ]
+            },
+            {
+                path: 'me',
+                data: { title: 'Мой профиль', showLocked: true },
+                component: MyProfileComponent
             },
             {
                 path: 'dictionaries',

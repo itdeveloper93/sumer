@@ -1,4 +1,8 @@
 import { MatPaginatorIntl } from '@angular/material';
+
+/**
+ * Translation for MatPaginator
+ */
 export class MatPaginatorIntlRus extends MatPaginatorIntl {
     itemsPerPageLabel = 'Показать на странице';
     nextPageLabel = 'Следующая страница';

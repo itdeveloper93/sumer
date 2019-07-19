@@ -1,23 +1,15 @@
-<mat-progress-bar
-    mode="indeterminate"
-    *ngIf="isRequesting"
-    class="mat-progress-bar_top global"
-></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top global"></mat-progress-bar>
 
 <mat-card class="introduction-card rounded-0 d-flex align-items-center justify-content-between">
     <div class="d-flex flex-column flex-md-row align-items-center m-auto m-md-0">
         <img
-            src="{{
-                essentialData?.photoPath
-                    ? essentialData.photoPath
-                    : '../../../../../../assets/img/noavatar.jpg'
-            }}"
+            src="{{ essentialData?.photoPath ? essentialData.photoPath : '../../../../../../assets/img/noavatar.jpg' }}"
             alt="{{ essentialData?.fullName }}"
             class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0 object-cover"
         />
 
         <div class="text-center text-md-left" *ngIf="essentialData">
-            <h1 class="introduction-card__name">{{ essentialData?.fullName }}</h1>
+            <h1 class="introduction-card__name mb-1">{{ essentialData?.fullName }}</h1>
             <span class="introduction-card__position">
                 {{ essentialData?.department }} › {{ essentialData?.position }}
             </span>
@@ -34,13 +26,14 @@
 </mat-card>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidenavOpened">
+        <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidebarOpened">
             <mat-tab-group
                 dynamicHeight
                 animationDuration="0ms"
                 (selectedTabChange)="catchTabChange($event)"
                 mat-stretch-tabs
-                [selectedIndex]="selectedTabIndex"
+                [selectedIndex]="activeTabIndex"
+                class="mb-2 mb-md-0"
             >
                 <div class="container-fluid">
                     <mat-tab label="Главное" matRipple matRippleColor="#533dfe">
@@ -48,33 +41,25 @@
                             <mat-list role="list" class="p-0 no-mt no-mb">
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата рождения</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.dateOfBirth
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.dateOfBirth }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Подразделение</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.department
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.department }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Позиция</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.position
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.position }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата приема на работу</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.hireDate
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.hireDate }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
@@ -92,17 +77,13 @@
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Фактический адрес</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.factualAddress
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.factualAddress }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Пол</span>
-                                    <span class="value text-right">{{
-                                        essentialData?.genderName
-                                    }}</span>
+                                    <span class="value text-right">{{ essentialData?.genderName }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </mat-list>
@@ -244,20 +225,14 @@
                                 *ngIf="essentialData?.userId; else createUser"
                             ></user>
                             <ng-template #createUser>
-                                <create-user
-                                    employeeId="{{ id }}"
-                                    (onAddEnd)="ngOnInit()"
-                                ></create-user>
+                                <create-user employeeId="{{ id }}" (onAddEnd)="ngOnInit()"></create-user>
                             </ng-template>
                         </ng-container>
                     </mat-tab>
                 </div>
             </mat-tab-group>
         </div>
-        <div
-            class="col-12 col-md-5 col-lg-4 mat-tab-body-padding"
-            [class.col-xl-3]="!isSidenavOpened"
-        >
+        <div class="col-12 col-md-5 col-lg-4 mat-tab-body-padding" [class.col-xl-3]="!isSidebarOpened">
             <button
                 [routerLink]="['/administration/employees/edit/essentials/', id]"
                 mat-button
@@ -280,66 +255,23 @@
                 mat-flat-button
                 color="primary"
                 (click)="export(id, 'essential')"
-                class="mb-3 w-100"
+                class="mb-4 w-100"
                 *ngIf="activeTabLabel !== 'Учетная запись'"
             >
                 <mat-icon>insert_drive_file</mat-icon> Выгрузить карточку в PDF
             </button>
 
             <mat-card
-                class="mb-4"
-                [class.d-none]="essentialData?.isLocked || activeTabLabel === 'Учетная запись'"
+                class="mb-4 lock-widget"
+                [class.d-none]="essentialData && activeTabLabel === 'Учетная запись'"
+                [class.visible]="lockFormLoaded"
             >
                 <mat-card-header>
-                    <mat-card-title class="m-0">Заблокировать</mat-card-title>
+                    <mat-card-title class="m-0">Блокировка</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <lock-form
-                        entityType="employee"
-                        id="{{ id }}"
-                        (onSuccess)="ngOnInit()"
-                    ></lock-form>
+                    <lock-form entityType="employee" id="{{ id }}" (onLoad)="lockFormLoaded = $event"></lock-form>
                 </mat-card-content>
-            </mat-card>
-
-            <mat-card
-                class="mb-4"
-                [class.d-none]="!essentialData?.isLocked || activeTabLabel === 'Учетная запись'"
-            >
-                <mat-card-header>
-                    <mat-card-title class="m-0">Сотрудник заблокирован</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <mat-progress-bar
-                        mode="indeterminate"
-                        *ngIf="isRequesting"
-                        class="mat-progress-bar_top rounded-top"
-                    ></mat-progress-bar>
-                    <mat-list role="list" class="p-0 no-mt">
-                        <mat-list-item role="listitem">
-                            <span class="key mr-auto">Причина</span>
-                            <span class="value text-right">{{
-                                essentialData?.lockReasonName
-                            }}</span>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-
-                        <mat-list-item role="listitem">
-                            <span class="key mr-auto">Дата </span>
-                            <span class="value text-right">{{ essentialData?.lockDate }}</span>
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-                <mat-card-actions>
-                    <button
-                        (click)="unlock()"
-                        mat-flat-button
-                        color="accent"
-                        class="btn-lg btn-block"
-                    >
-                        Разблокировать
-                    </button>
-                </mat-card-actions>
             </mat-card>
 
             <mat-card class="log-data mb-4">
@@ -367,12 +299,7 @@
                     </mat-list>
                 </mat-card-content>
                 <mat-card-actions>
-                    <a
-                        [routerLink]="['/log/emloyee', id]"
-                        mat-button
-                        color="primary"
-                        class="btn-lg btn-block"
-                    >
+                    <a [routerLink]="['/log/emloyee', id]" mat-button color="primary" class="btn-lg btn-block">
                         История изменений
                     </a>
                 </mat-card-actions>

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12 col-lg-8 col-xl-9">
             <mat-card class="p-0 table-responsive mb-3">
-                <perfect-scrollbar style="max-height: 70vh">
+                <perfect-scrollbar class="table-wrapper">
                     <loading-indicator *ngIf="isRequesting"></loading-indicator>
                     <table mat-table [dataSource]="employees" class="stripped" matSort matSortStart="desc"
                         matSortDirection="asc" matSortDisableClear (matSortChange)="setSortingQueryParams($event)">
@@ -106,10 +106,16 @@
                     <p class="text-muted">Попробуйте другие параметры фильтрации</p>
                 </div>
 
-                <mat-card class="p-0 mb-5 mb-lg-0" *ngIf="employees?.length">
-                    <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="employeesCount" class="rounded"
-                        [disabled]="isRequesting" (page)="pageEvent = setPaginationQueryParams($event)"
-                        [pageIndex]="pageIndex" [pageSize]="pageSize"></mat-paginator>
+                <mat-card class="p-0 mb-4 mb-lg-0" *ngIf="employees?.length">
+                    <mat-paginator
+                        [pageSizeOptions]="pageSizeOptions"
+                        [length]="employeesCount"
+                        class="rounded"
+                        [disabled]="isRequesting"
+                        (page)="pageEvent = setPaginationQueryParams($event)"
+                        [pageIndex]="pageIndex"
+                        [pageSize]="pageSize"
+                    ></mat-paginator>
                 </mat-card>
             </ng-container>
         </div>
