@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource, PageEvent, MatSnackBar, Sort, MatSort } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
 import {
+    DictionariesSubValuesList,
     DictionariesService,
-    FetchDictionariesValuesCriterias,
-    DictionariesSubValuesList
+    FetchDictionariesValuesCriterias
 } from 'src/app/common-services/dictionaries.service';
-import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-reason/create-update-user-lock-reason.component';
 
 @Component({
-    selector: 'app-department-list',
-    templateUrl: './department-list.component.html',
-    styleUrls: ['./department-list.component.sass']
+    selector: 'app-user-lock-reason',
+    templateUrl: './user-lock-reason.component.html',
+    styleUrls: ['./user-lock-reason.component.sass']
 })
-export class DepartmentListComponent implements OnInit {
+export class UserLockReasonComponent implements OnInit {
     title = this.route.snapshot.data['title'];
     isRequesting: boolean;
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
@@ -21,13 +21,13 @@ export class DepartmentListComponent implements OnInit {
     pageSize: number;
     pageSizeOptions = [20, 50, 100];
     pageIndex: number;
-    departmentsCount: number;
+    userLockReasonsCount: number;
     pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    department = new MatTableDataSource<DictionariesSubValuesList[]>();
+    userLockReason = new MatTableDataSource<DictionariesSubValuesList[]>();
     private id: any;
 
     constructor(
@@ -39,11 +39,11 @@ export class DepartmentListComponent implements OnInit {
     ) {}
 
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateDepartmentComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateUserLockReasonComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getDepartment();
+            this.getUserLockReason();
         });
     }
     ngOnInit() {
@@ -51,11 +51,11 @@ export class DepartmentListComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getDepartment();
+        this.getUserLockReason();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUserLockReason(params);
         });
     }
 
@@ -88,7 +88,7 @@ export class DepartmentListComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getDepartment();
+        this.getUserLockReason();
     }
 
     /**
@@ -128,15 +128,15 @@ export class DepartmentListComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getDepartment(criterias?: FetchDictionariesValuesCriterias) {
+    getUserLockReason(criterias?: FetchDictionariesValuesCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'UserLockReason').subscribe(
             response => {
-                this.department = response.data.items;
+                this.userLockReason = response.data.items;
 
                 this.id = response.data.items.id;
-                this.departmentsCount = response.data.totalCount;
+                this.userLockReasonsCount = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -153,8 +153,8 @@ export class DepartmentListComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.department.paginator = this.paginator;
-                this.department.sort = this.sort;
+                this.userLockReason.paginator = this.paginator;
+                this.userLockReason.sort = this.sort;
             }
         );
     }

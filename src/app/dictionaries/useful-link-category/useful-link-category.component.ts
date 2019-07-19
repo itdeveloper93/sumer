@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource, PageEvent, MatSnackBar, Sort, MatSort } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-    DictionariesService,
     FetchDictionariesValuesCriterias,
+    DictionariesService,
     DictionariesSubValuesList
 } from 'src/app/common-services/dictionaries.service';
-import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
+import { PageEvent, MatDialog, MatSnackBar, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
 
 @Component({
-    selector: 'app-department-list',
-    templateUrl: './department-list.component.html',
-    styleUrls: ['./department-list.component.sass']
+    selector: 'app-useful-link-category',
+    templateUrl: './useful-link-category.component.html',
+    styleUrls: ['./useful-link-category.component.sass']
 })
-export class DepartmentListComponent implements OnInit {
+export class UsefulLinkCategoryComponent implements OnInit {
     title = this.route.snapshot.data['title'];
     isRequesting: boolean;
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
@@ -21,14 +21,13 @@ export class DepartmentListComponent implements OnInit {
     pageSize: number;
     pageSizeOptions = [20, 50, 100];
     pageIndex: number;
-    departmentsCount: number;
+    usfulLinkCategorysCount: number;
     pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    department = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
+    usfulLinkCategory = new MatTableDataSource<DictionariesSubValuesList[]>();
 
     constructor(
         private dictionarieService: DictionariesService,
@@ -39,11 +38,11 @@ export class DepartmentListComponent implements OnInit {
     ) {}
 
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateDepartmentComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateUsefulLinkCategoryComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getDepartment();
+            this.getUsfulLinkCategory();
         });
     }
     ngOnInit() {
@@ -51,11 +50,11 @@ export class DepartmentListComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getDepartment();
+        this.getUsfulLinkCategory();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUsfulLinkCategory(params);
         });
     }
 
@@ -88,7 +87,7 @@ export class DepartmentListComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getDepartment();
+        this.getUsfulLinkCategory();
     }
 
     /**
@@ -128,15 +127,14 @@ export class DepartmentListComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getDepartment(criterias?: FetchDictionariesValuesCriterias) {
+    getUsfulLinkCategory(criterias?: FetchDictionariesValuesCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'UsefulLinkCategory').subscribe(
             response => {
-                this.department = response.data.items;
+                this.usfulLinkCategory = response.data.items;
 
-                this.id = response.data.items.id;
-                this.departmentsCount = response.data.totalCount;
+                this.usfulLinkCategorysCount = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -153,8 +151,8 @@ export class DepartmentListComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.department.paginator = this.paginator;
-                this.department.sort = this.sort;
+                this.usfulLinkCategory.paginator = this.paginator;
+                this.usfulLinkCategory.sort = this.sort;
             }
         );
     }

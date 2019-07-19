@@ -6,49 +6,31 @@
             <mat-card class="p-0 table-responsive mb-3">
                 <perfect-scrollbar style="max-height: 70vh">
                     <loading-indicator *ngIf="isRequesting"></loading-indicator>
-                    <table
-                        mat-table
-                        [dataSource]="employees"
-                        class="stripped"
-                        matSort
-                        matSortStart="desc"
-                        matSortDirection="asc"
-                        matSortDisableClear
-                        (matSortChange)="setSortingQueryParams($event)"
-                    >
+                    <table mat-table [dataSource]="employees" class="stripped" matSort matSortStart="desc"
+                        matSortDirection="asc" matSortDisableClear (matSortChange)="setSortingQueryParams($event)">
                         <ng-container matColumnDef="photo">
                             <th mat-header-cell *matHeaderCellDef>Фото</th>
                             <td mat-cell *matCellDef="let employee">
-                                <img
-                                    src="{{
+                                <img src="{{
                                         employee.photoPath
                                             ? employee.photoPath
                                             : '../../../../../../assets/img/noavatar.jpg'
-                                    }}"
-                                    alt="{{ employee.fullName }}"
-                                    class="avatar rounded-circle object-cover"
-                                />
+                                    }}" alt="{{ employee.fullName }}" class="avatar rounded-circle object-cover" />
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="fullName">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>ФИО</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.fullName }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="department">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Подразделение, должность</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.department }},<br />
                                 {{ employee.position }}
                             </td>
@@ -56,59 +38,41 @@
 
                         <ng-container matColumnDef="hireDate">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Дата приема</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.hireDate | date }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="lockDate">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Дата блокировки</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.lockDate | date }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="lockReason">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Причина</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.lockReason }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="hasAccount">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Пользователь</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                class="text-center"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
-                                <table-badge
-                                    state="{{ employee.userId ? true : false }}"
-                                    value="{{ employee.userId ? 'да' : 'нет' }}"
-                                ></table-badge>
+                            <td mat-cell *matCellDef="let employee" class="text-center"
+                                [routerLink]="['/administration/employees', employee.id]">
+                                <table-badge state="{{ employee.userId ? true : false }}"
+                                    value="{{ employee.userId ? 'да' : 'нет' }}"></table-badge>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="email">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Контакты</th>
-                            <td
-                                mat-cell
-                                *matCellDef="let employee"
-                                [routerLink]="['/administration/employees', employee.id]"
-                            >
+                            <td mat-cell *matCellDef="let employee"
+                                [routerLink]="['/administration/employees', employee.id]">
                                 {{ employee.phone }},<br />
                                 {{ employee.email }}
                             </td>
@@ -117,22 +81,14 @@
                         <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef class="text-right">Действия</th>
                             <td mat-cell *matCellDef="let employee" class="text-right">
-                                <button
-                                    mat-mini-fab
-                                    class="mat-fab-basic mr-3"
-                                    matTooltip="Просмотреть карточку"
+                                <button mat-mini-fab class="mat-fab-basic mr-3" matTooltip="Просмотреть карточку"
                                     matTooltipPosition="above"
-                                    [routerLink]="['/administration/employees/', employee.id]"
-                                >
+                                    [routerLink]="['/administration/employees/', employee.id]">
                                     <mat-icon>remove_red_eye</mat-icon>
                                 </button>
-                                <button
-                                    mat-mini-fab
-                                    class="mat-fab-basic"
-                                    matTooltip="Редактировать данные"
+                                <button mat-mini-fab class="mat-fab-basic" matTooltip="Редактировать данные"
                                     matTooltipPosition="above"
-                                    [routerLink]="['/administration/employees/edit/essentials/', employee.id]"
-                                >
+                                    [routerLink]="['/administration/employees/edit/essentials/', employee.id]">
                                     <mat-icon>edit</mat-icon>
                                 </button>
                             </td>
@@ -151,26 +107,18 @@
                 </div>
 
                 <mat-card class="p-0 mb-5 mb-lg-0" *ngIf="employees?.length">
-                <mat-paginator
-                    [pageSizeOptions]="pageSizeOptions"
-                    [length]="employeesCount"
-                    class="rounded"
-                    [disabled]="isRequesting"
-                    (page)="pageEvent = setPaginationQueryParams($event)"
-                    [pageIndex]="pageIndex"
-                    [pageSize]="pageSize"
-                ></mat-paginator>
-            </mat-card>
+                    <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="employeesCount" class="rounded"
+                        [disabled]="isRequesting" (page)="pageEvent = setPaginationQueryParams($event)"
+                        [pageIndex]="pageIndex" [pageSize]="pageSize"></mat-paginator>
+                </mat-card>
             </ng-container>
         </div>
         <div class="col-12 col-lg-4 col-xl-3">
             <button (click)="export()" mat-flat-button color="accent" class="w-100 mb-4">
                 Выгрузить список в Excel
             </button>
-            <employees-filter
-                (onFilter)="setFilterQueryParams($event)"
-                (onResetFilter)="resetFilter()"
-            ></employees-filter>
+            <employees-filter (onFilter)="setFilterQueryParams($event)" (onResetFilter)="resetFilter()">
+            </employees-filter>
         </div>
     </div>
 </div>

@@ -1,0 +1,26 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top rounded-top">
+</mat-progress-bar>
+<h5 *ngIf="heading">Создайте</h5>
+<h5 *ngIf="!heading">Редактировать</h5>
+<form [formGroup]="createUpdatePosition" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    <mat-label>Название</mat-label>
+    <input matInput placeholder="Название" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Подразделение</mat-label>
+    <mat-select formControlName="departmentId">
+      <ng-container *ngFor="let department of departments">
+        <mat-option [value]="department.id">
+          {{ department.name }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-slide-toggle labelPosition="before" formControlName="isActive">Активен</mat-slide-toggle>
+  <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block">
+    <mat-icon class="mat-18 mr-1">save</mat-icon>Сохранить
+  </button>
+</form>

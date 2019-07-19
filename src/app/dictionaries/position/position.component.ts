@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource, PageEvent, MatSnackBar, Sort, MatSort } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-    DictionariesService,
     FetchDictionariesValuesCriterias,
+    DictionariesService,
     DictionariesSubValuesList
 } from 'src/app/common-services/dictionaries.service';
-import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
+import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { CreateUpdatePositionComponent } from './create-update-position/create-update-position.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-department-list',
-    templateUrl: './department-list.component.html',
-    styleUrls: ['./department-list.component.sass']
+    selector: 'app-position',
+    templateUrl: './position.component.html',
+    styleUrls: ['./position.component.sass']
 })
-export class DepartmentListComponent implements OnInit {
+export class PositionComponent implements OnInit {
     title = this.route.snapshot.data['title'];
     isRequesting: boolean;
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
@@ -21,13 +21,13 @@ export class DepartmentListComponent implements OnInit {
     pageSize: number;
     pageSizeOptions = [20, 50, 100];
     pageIndex: number;
-    departmentsCount: number;
+    positionsCount: number;
     pageEvent: PageEvent;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    department = new MatTableDataSource<DictionariesSubValuesList[]>();
+    position = new MatTableDataSource<DictionariesSubValuesList[]>();
     private id: any;
 
     constructor(
@@ -39,11 +39,11 @@ export class DepartmentListComponent implements OnInit {
     ) {}
 
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateDepartmentComponent, {
+        const dialogRef = this.dialog.open(CreateUpdatePositionComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getDepartment();
+            this.getPosition();
         });
     }
     ngOnInit() {
@@ -51,11 +51,11 @@ export class DepartmentListComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getDepartment();
+        this.getPosition();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getPosition(params);
         });
     }
 
@@ -88,7 +88,7 @@ export class DepartmentListComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getDepartment();
+        this.getPosition();
     }
 
     /**
@@ -128,15 +128,15 @@ export class DepartmentListComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getDepartment(criterias?: FetchDictionariesValuesCriterias) {
+    getPosition(criterias?: FetchDictionariesValuesCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'Position').subscribe(
             response => {
-                this.department = response.data.items;
+                this.position = response.data.items;
 
                 this.id = response.data.items.id;
-                this.departmentsCount = response.data.totalCount;
+                this.positionsCount = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -153,8 +153,8 @@ export class DepartmentListComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.department.paginator = this.paginator;
-                this.department.sort = this.sort;
+                this.position.paginator = this.paginator;
+                this.position.sort = this.sort;
             }
         );
     }

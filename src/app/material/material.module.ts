@@ -13,7 +13,16 @@ import {
     MAT_SNACK_BAR_DEFAULT_OPTIONS,
     MatSidenavModule,
     MatToolbarModule,
-    MatRippleModule
+    MatRippleModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatOptionModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatDialogModule,
+    MatProgressBarModule
 } from '@angular/material';
 
 const modules = [
@@ -27,7 +36,16 @@ const modules = [
     MatProgressSpinnerModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatRippleModule
+    MatRippleModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatDialogModule,
+    MatProgressBarModule
 ];
 
 @NgModule({

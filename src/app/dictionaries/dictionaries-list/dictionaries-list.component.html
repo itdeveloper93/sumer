@@ -2,29 +2,29 @@
     <h1 class="mb-4">{{ title }}</h1>
 
     <div class="row">
-        <div class="col-12 col-lg-7 col-xl-9">
+        <div class="col-12 col-lg-12 col-xl-12">
             <mat-card class="p-0 table-responsive mb-3">
                 <loading-indicator *ngIf="isRequesting"></loading-indicator>
-                <table mat-table [dataSource]="department" class="stripped">
+                <table mat-table [dataSource]="dictionaries" class="stripped">
 
                     <ng-container matColumnDef="fullName">
                         <th mat-header-cell *matHeaderCellDef>Название</th>
-                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/department-list']">
-                            {{ dictionary.name }}
+                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/' + dictionary.name]">
+                            {{ dictionary.displayName }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="departmentAndPosition">
                         <th mat-header-cell *matHeaderCellDef>Последние редактирование</th>
-                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/department-list']">
-                            {{dictionary.hairDate}}
+                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/' + dictionary.name]">
+                            {{dictionary.lastEditedAt}}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="contacts">
                         <th mat-header-cell *matHeaderCellDef>Автор</th>
-                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/department-list']">
-                            {{dictionary.Author}}
+                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/' + dictionary.name]">
+                            {{dictionary.createdUserName}}
                         </td>
                     </ng-container>
 
@@ -36,7 +36,7 @@
                                 <mat-icon>history</mat-icon>
                             </button>
                             <button mat-mini-fab class="mat-fab-basic" matTooltip="Просмотреть лист"
-                                matTooltipPosition="above" [routerLink]="['/department-list']">
+                                matTooltipPosition="above" [routerLink]="['/' + dictionary.name]">
                                 <mat-icon>remove_red_eye</mat-icon>
                             </button>
                         </td>
@@ -46,15 +46,6 @@
                     <tr mat-row *matRowDef="let dictionary; columns: displayedColumns"></tr>
                 </table>
             </mat-card>
-
-        </div>
-        <div class="col-12 col-lg-5 col-xl-3">
-            <app-dictionaries-filter (onFilter)="get($event)"></app-dictionaries-filter>
         </div>
     </div>
 </div>
-<!--<floating-fab-->
-<!--    link=""-->
-<!--    title="Добавить "-->
-<!--    icon="add"-->
-<!--&gt;</floating-fab>-->

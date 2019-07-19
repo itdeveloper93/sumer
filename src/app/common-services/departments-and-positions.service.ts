@@ -48,7 +48,6 @@ export class DepartmentsAndPositionsService {
             );
         } else return this.http.get(environment.API.URL + ENDPOINT);
     }
-
     /**
      * Get all departments for selects
      */

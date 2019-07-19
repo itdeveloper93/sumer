@@ -9,10 +9,17 @@ import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-la
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
-import {DictionariesListComponent} from './dictionaries/dictionaries-list/dictionaries-list.component';
-import {DepartmentListComponent} from './dictionaries/department-list/department-list.component';
+import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
+import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
 // tslint:disable-next-line:max-line-length
 import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
+import { UsefulLinkCategoryComponent } from './dictionaries/useful-link-category/useful-link-category.component';
+import { FileCategoryComponent } from './dictionaries/file-category/file-category.component';
+import { UserLockReasonComponent } from './dictionaries/user-lock-reason/user-lock-reason.component';
+import { PositionComponent } from './dictionaries/position/position.component';
+import { EmployeeLockReasonComponent } from './dictionaries/employee-lock-reason/employee-lock-reason.component';
+import { NationalityComponent } from './dictionaries/nationality/nationality.component';
+import { NewsCategoriesComponent } from './dictionaries/news-categories/news-categories.component';
 const routes: Routes = [
     {
         path: '',
@@ -104,12 +111,61 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'department-list',
+                path: 'UsefulLinkCategory',
+                component: UsefulLinkCategoryComponent,
+                data: {
+                    title: 'Полезная ссылка'
+                }
+            },
+            {
+                path: 'FileCategory',
+                component: FileCategoryComponent,
+                data: {
+                    title: 'Категория файла'
+                }
+            },
+            {
+                path: 'UserLockReason',
+                component: UserLockReasonComponent,
+                data: {
+                    title: 'Причина блокировки пользователя'
+                }
+            },
+            {
+                path: 'Position',
+                component: PositionComponent,
+                data: {
+                    title: 'Позиция'
+                }
+            },
+            {
+                path: 'EmployeeLockReason',
+                component: EmployeeLockReasonComponent,
+                data: {
+                    title: 'Причина блокировки сотрудника'
+                }
+            },
+            {
+                path: 'Nationality',
+                component: NationalityComponent,
+                data: {
+                    title: 'Национальность'
+                }
+            },
+            {
+                path: 'NewsCategories',
+                component: NewsCategoriesComponent,
+                data: {
+                    title: 'Категория полезных ссылок'
+                }
+            },
+            {
+                path: 'Department',
                 component: DepartmentListComponent,
                 data: {
                     title: 'Подразделение лист'
                 }
-            },
+            }
         ]
     },
     {

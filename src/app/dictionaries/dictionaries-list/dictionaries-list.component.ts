@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { DictionariesService, DictionariesList } from 'src/app/common-services/dictionaries.service';
 
-export interface DictionariesList {
-    id: number;
-    name: string;
-    hairDate: string;
-    Author: string;
-}
-
-const dictionaries: DictionariesList[] = [
-    { id: 1, name: 'Подразделение', hairDate: '7/10/2019 13:00', Author: 'Искандар Мирзоев' }
+const dictionariesValue: DictionariesList[] = [
+    { name: 'UsefulLinkCategory', displayName: 'Полезная ссылка' },
+    { name: 'FileCategory', displayName: 'Категория файла' },
+    { name: 'UserLockReason', displayName: 'Причина блокировки пользователя' },
+    { name: 'Position', displayName: 'Позиция' },
+    { name: 'EmployeeLockReason', displayName: 'Причина блокировки сотрудника' },
+    { name: 'Nationality', displayName: 'Национальность' },
+    { name: 'NewsCategories', displayName: 'Категория полезных ссылок' },
+    { name: 'Department', displayName: 'Отдел' }
 ];
+
 @Component({
     selector: 'app-dictionaries-list',
     templateUrl: './dictionaries-list.component.html',
@@ -20,11 +22,12 @@ const dictionaries: DictionariesList[] = [
 export class DictionariesListComponent implements OnInit {
     title = this.route.snapshot.data['title'];
 
-    employees: MatTableDataSource<DictionariesList>;
+    // dictionaries: MatTableDataSource<DictionariesList[]>;
     isRequesting: boolean;
-    department = dictionaries;
     displayedColumns: any;
+    dictionaries = dictionariesValue;
     constructor(private route: ActivatedRoute) {}
+
     ngOnInit() {
         this.displayedColumns = ['fullName', 'departmentAndPosition', 'contacts', 'actions'];
     }
