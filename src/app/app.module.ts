@@ -37,50 +37,21 @@ import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
-import {
-    MatPaginatorIntl,
-    MAT_DIALOG_DEFAULT_OPTIONS,
-    MatDialogConfig,
-    MatNativeDateModule,
-    DateAdapter,
-    MAT_DATE_FORMATS,
-    MatProgressBarModule
-    MatPaginatorModule,
-    MatTableModule,
-    MatTooltipModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatDialogModule,
-    MatProgressBarModule,
-    MatSortModule
-} from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
-import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
 import { EmployeesModule } from './administration/employees/employees.module';
-import { DictionariesFilterComponent } from './dictionaries/dictionaries-filter/dictionaries-filter.component';
-import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
-import { CreateUpdateDepartmentComponent } from './dictionaries/department-list/create-update-department/create-update-department.component';
-import { UsefulLinkCategoryComponent } from './dictionaries/useful-link-category/useful-link-category.component';
-import { FileCategoryComponent } from './dictionaries/file-category/file-category.component';
-import { UserLockReasonComponent } from './dictionaries/user-lock-reason/user-lock-reason.component';
-import { PositionComponent } from './dictionaries/position/position.component';
-import { EmployeeLockReasonComponent } from './dictionaries/employee-lock-reason/employee-lock-reason.component';
-import { NationalityComponent } from './dictionaries/nationality/nationality.component';
-import { NewsCategoriesComponent } from './dictionaries/news-categories/news-categories.component';
-import { CreateUpdateUsefulLinkCategoryComponent } from './dictionaries/useful-link-category/create-update-useful-link-category/create-update-useful-link-category.component';
-import { CreateUpdateFileCategoryComponent } from './dictionaries/file-category/create-update-file-category/create-update-file-category.component';
-import { CreateUpdateUserLockReasonComponent } from './dictionaries/user-lock-reason/create-update-user-lock-reason/create-update-user-lock-reason.component';
-import { CreateUpdatePositionComponent } from './dictionaries/position/create-update-position/create-update-position.component';
-import { CreateUpdateEmployeeLockReasonComponent } from './dictionaries/employee-lock-reason/create-update-employee-lock-reason/create-update-employee-lock-reason.component';
-import { DictionariesModule } from './dictionaries/dictionaries.module';
-import { CreateUpdateNationalityComponent } from './dictionaries/nationality/create-update-nationality/create-update-nationality.component';
-import { CreateUpdateNewsCategoriesComponent } from './dictionaries/news-categories/create-update-news-categories/create-update-news-categories.component';
 import { SidebarToggleComponent } from './layout/sidebar-toggle/sidebar-toggle.component';
 import { JwtInterceptor } from '@auth0/angular-jwt';
+import { DictionariesModule } from './dictionaries/dictionaries.module';
+import {
+    MatDialogConfig,
+    MAT_DIALOG_DEFAULT_OPTIONS,
+    MatPaginatorIntl,
+    MAT_DATE_FORMATS,
+    DateAdapter
+} from '@angular/material';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -115,25 +86,7 @@ const CUSTOM_DATE_FORMAT = {
         MiniProfileComponent,
         NotificationWidgetComponent,
         ImageUploaderComponent,
-        DictionariesListComponent,
-        DictionariesFilterComponent,
-        DepartmentListComponent,
-        CreateUpdateDepartmentComponent,
         MainNavigationComponent,
-        UsefulLinkCategoryComponent,
-        FileCategoryComponent,
-        UserLockReasonComponent,
-        PositionComponent,
-        EmployeeLockReasonComponent,
-        NationalityComponent,
-        NewsCategoriesComponent,
-        CreateUpdateUsefulLinkCategoryComponent,
-        CreateUpdateFileCategoryComponent,
-        CreateUpdateUserLockReasonComponent,
-        CreateUpdatePositionComponent,
-        CreateUpdateEmployeeLockReasonComponent,
-        CreateUpdateNationalityComponent,
-        CreateUpdateNewsCategoriesComponent
         ImageUploaderComponent,
         SidebarToggleComponent
     ],
@@ -150,31 +103,10 @@ const CUSTOM_DATE_FORMAT = {
         PerfectScrollbarModule,
         AuthModule,
         AdministrationModule,
-        MatNativeDateModule,
-        MatProgressBarModule
-        MatNativeDateModule,
-        MatPaginatorModule,
         EmployeesModule,
-        MatTableModule,
-        MatTooltipModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatSlideToggleModule,
-        MatDialogModule,
-        MatProgressBarModule,
-        MatSortModule
-        // DictionariesModule
+        DictionariesModule
     ],
-    entryComponents: [
-        CreateUpdateDepartmentComponent,
-        CreateUpdateUsefulLinkCategoryComponent,
-        CreateUpdateFileCategoryComponent,
-        CreateUpdateUserLockReasonComponent,
-        CreateUpdatePositionComponent,
-        CreateUpdateEmployeeLockReasonComponent,
-        CreateUpdateNationalityComponent,
-        CreateUpdateNewsCategoriesComponent
-    ],
+    entryComponents: [],
     providers: [
         JwtInterceptor, // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor
         {

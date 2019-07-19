@@ -90,6 +90,6 @@ import { ChangePasswordComponent } from '../users/change-password/change-passwor
         PerfectScrollbarModule,
         MatSortModule
     ],
-    exports: [UserComponent]
+    exports: [UserComponent, FloatingFabComponent]
 })
 export class EmployeesModule {}

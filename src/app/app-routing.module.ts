@@ -11,7 +11,6 @@ import { EmployeeComponent } from './administration/employees/employee/employee.
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
 import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
-import { CreateUpdatePassportDataComponent } from './administration/employees/create-update-passport-data/create-update-passport-data.component';
 import { UsefulLinkCategoryComponent } from './dictionaries/useful-link-category/useful-link-category.component';
 import { FileCategoryComponent } from './dictionaries/file-category/file-category.component';
 import { UserLockReasonComponent } from './dictionaries/user-lock-reason/user-lock-reason.component';

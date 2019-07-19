@@ -10,7 +10,6 @@ import {
     MatSnackBarModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MAT_SNACK_BAR_DEFAULT_OPTIONS,
     MatSidenavModule,
     MatToolbarModule,
     MatRippleModule,
@@ -22,7 +21,9 @@ import {
     MatSelectModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    DateAdapter,
+    MatSortModule
 } from '@angular/material';
 
 const modules = [
@@ -45,18 +46,14 @@ const modules = [
     MatSelectModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSortModule
 ];
 
 @NgModule({
     declarations: [],
     imports: [CommonModule, modules],
-    providers: [
-        {
-            provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-            useValue: { duration: 5000, panelClass: 'text-center' }
-        }
-    ],
+    providers: [],
     exports: [modules]
 })
 export class MaterialModule {}

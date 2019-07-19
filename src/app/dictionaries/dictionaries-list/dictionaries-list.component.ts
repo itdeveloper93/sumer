@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { DictionariesService, DictionariesList } from 'src/app/common-services/dictionaries.service';
+import { DictionariesList } from 'src/app/common-services/dictionaries.service';
 
 const dictionariesValue: DictionariesList[] = [
     { name: 'UsefulLinkCategory', displayName: 'Полезная ссылка' },
@@ -22,7 +21,6 @@ const dictionariesValue: DictionariesList[] = [
 export class DictionariesListComponent implements OnInit {
     title = this.route.snapshot.data['title'];
 
-    // dictionaries: MatTableDataSource<DictionariesList[]>;
     isRequesting: boolean;
     displayedColumns: any;
     dictionaries = dictionariesValue;
