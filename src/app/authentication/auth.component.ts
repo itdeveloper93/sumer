@@ -18,6 +18,11 @@ export class AuthComponent implements OnInit {
      */
     forgotPassword = false;
 
+    /**
+     * Determines whether any fetch operation is in progress
+     */
+    isRequesting = false;
+
     constructor(public authService: AuthService, private router: Router) {}
 
     ngOnInit() {
@@ -53,11 +58,11 @@ export class AuthComponent implements OnInit {
         switch (state) {
             case 'disable':
                 form.disable();
-                this.authService.isRequesting = true;
+                this.isRequesting = true;
                 break;
             case 'enable':
                 form.enable();
-                this.authService.isRequesting = false;
+                this.isRequesting = false;
                 break;
         }
     }

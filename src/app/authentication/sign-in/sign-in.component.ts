@@ -1,6 +1,6 @@
 import { AuthComponent } from './../auth.component';
 import { AuthService } from '../auth.service';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,19 +10,24 @@ import { Router, ActivatedRoute } from '@angular/router';
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.sass']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
+    /**
+     * Determines whether any fetch operation is in progress
+     */
+    isRequesting: boolean;
+
     /**
      * Register form and it's controls.
      */
     form = new FormGroup({
-        phone: new FormControl('', [
+        phoneNumber: new FormControl('', [
             Validators.required,
             Validators.minLength(9),
             Validators.maxLength(9),
             Validators.pattern('^[0-9]*$')
         ]),
         password: new FormControl('', [Validators.required]),
-        remember: new FormControl(false)
+        rememberMe: new FormControl(false)
     });
 
     /**
@@ -38,20 +43,8 @@ export class SignInComponent {
         private route: ActivatedRoute
     ) {}
 
-    /**
-     * Provide short access to field from markup for validation
-     * purposes.
-     */
-    get phone() {
-        return this.form.get('phone');
-    }
-
-    /**
-     * Provide short access to field from markup for validation
-     * purposes.
-     */
-    get password() {
-        return this.form.get('password');
+    ngOnInit() {
+        this.isRequesting = this.authComponent.isRequesting;
     }
 
     /**
@@ -61,14 +54,9 @@ export class SignInComponent {
         // Don't submit if form has errors
         if (this.form.invalid) return false;
 
-        const credentials = {
-            phoneNumber: this.form.value.phone,
-            password: this.form.value.password
-        };
-
         this.authComponent.switchFormState(this.form, 'disable');
 
-        this.authService.signIn(credentials).subscribe(
+        this.authService.signIn(this.form.value).subscribe(
             response => {
                 const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
                 this.router.navigate([returnUrl || '/']);

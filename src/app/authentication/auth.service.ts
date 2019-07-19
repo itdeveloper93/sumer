@@ -13,6 +13,7 @@ import BaseResponseInterface from '../base-response.interface';
 export interface SignInCredentials {
     phoneNumber: number;
     password: string;
+    rememberMe: boolean;
 }
 
 /**
@@ -34,11 +35,6 @@ export interface SignInResponse {
     providedIn: 'root'
 })
 export class AuthService {
-    /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting = false;
-
     constructor(private http: HttpClient, public jwtHelper: JwtHelperService, private router: Router) {}
 
     /**
@@ -95,41 +91,30 @@ export class AuthService {
                 environment.API.URL + 'Account/ResetPassword',
                 JSON.stringify(credentials)
             )
-            .pipe(tap(() => (this.isRequesting = false)))
             .pipe(
                 map(response => {
                     if (response.meta.success) return true;
+
                     return false;
                 })
             );
     }
 
     /**
-     * Refresh token
+     * Refresh JWT
      */
     refreshToken(): Observable<BaseResponseInterface<SignInResponse>> {
         return this.http.post<BaseResponseInterface<SignInResponse>>(environment.API.URL + 'Account/RefreshToken', {
             accessToken: this.getToken(),
             refreshToken: this.getToken('refresh')
         });
-        // .pipe(
-        //     map(response => {
-        //         console.log(response);
-
-        //         if (response.data.token) {
-        //             this.storeTokens(response.data.token, response.data.refreshToken);
-        //         }
-
-        //         return response.data.token;
-        //     })
-        // );
     }
 
     /**
      * Get auth or refresh token
      * @param type Type of the token to return (auth || refresh)
      */
-    getToken(type: string = 'auth') {
+    getToken(type = 'auth') {
         return type === 'auth' ? localStorage.getItem('auth_token') : localStorage.getItem('refresh_token');
     }
 

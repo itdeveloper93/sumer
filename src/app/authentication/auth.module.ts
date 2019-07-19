@@ -11,6 +11,7 @@ import { AuthComponent } from './auth.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MaterialModule } from '../material/material.module';
+import { MatProgressBarModule } from '@angular/material';
 
 export function jwtTokenGetter() {
     return localStorage.getItem('access_token');
@@ -25,6 +26,7 @@ export function jwtTokenGetter() {
         MaterialModule,
         ReactiveFormsModule,
         HttpClientModule,
+        MatProgressBarModule,
         JwtModule.forRoot({
             config: {
                 tokenGetter: jwtTokenGetter,

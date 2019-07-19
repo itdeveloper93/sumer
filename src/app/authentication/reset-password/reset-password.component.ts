@@ -14,7 +14,7 @@ export class ResetPasswordComponent {
      * Register form and it's controls.
      */
     form = new FormGroup({
-        phone: new FormControl('', [
+        phoneNumber: new FormControl('', [
             Validators.required,
             Validators.minLength(9),
             Validators.maxLength(9),
@@ -30,14 +30,6 @@ export class ResetPasswordComponent {
     constructor(private snackbar: MatSnackBar, public authService: AuthService, private authComponent: AuthComponent) {}
 
     /**
-     * Provide short access to field from markup for validation
-     * purposes.
-     */
-    get phone() {
-        return this.form.get('phone');
-    }
-
-    /**
      * Reset password.
      */
     resetPassword() {
@@ -46,9 +38,9 @@ export class ResetPasswordComponent {
 
         this.authComponent.switchFormState(this.form, 'disable');
 
-        this.authService.resetPassword({ phoneNumber: this.phone.value }).subscribe(
+        this.authService.resetPassword(this.form.value).subscribe(
             response => {
-                this.snackbar.open('Новый пароль отправлен на номер ' + this.phone.value);
+                this.snackbar.open('Новый пароль отправлен на номер ' + this.form.get('phoneNumber').value);
 
                 setTimeout(() => this.undo(), 5000);
             },
