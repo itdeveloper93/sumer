@@ -167,6 +167,8 @@ export class CreateEmployeeComponent implements OnInit {
                     hireDate: momentX(response.data.hireDate)
                 });
 
+                console.log(response.data);
+
                 this.essentialData = response.data;
             },
             (error: Response) => {

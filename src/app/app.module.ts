@@ -43,7 +43,8 @@ import {
     MatDialogConfig,
     MatNativeDateModule,
     DateAdapter,
-    MAT_DATE_FORMATS
+    MAT_DATE_FORMATS,
+    MatProgressBarModule
 } from '@angular/material';
 import { MatPaginatorIntlRus } from './paginator';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
@@ -101,7 +102,8 @@ const CUSTOM_DATE_FORMAT = {
         PerfectScrollbarModule,
         AuthModule,
         AdministrationModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatProgressBarModule
     ],
     providers: [
         JwtInterceptor, // Providing JwtInterceptor allow to inject JwtInterceptor manually into RefreshTokenInterceptor

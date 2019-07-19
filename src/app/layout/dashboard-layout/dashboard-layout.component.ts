@@ -9,6 +9,22 @@ import { SidenavStateService } from './sidenav-state.service';
     styleUrls: ['./dashboard-layout.component.sass']
 })
 export class DashboardLayoutComponent implements OnInit {
+    /**
+     * This component. Needed to access isRequesting form template.
+     *
+     * Could also use a getter, but it would cost some performance
+     * drawbacks as posted here https://stackoverflow.com/a/50060043
+     */
+    self = DashboardLayoutComponent;
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
+    static isRequesting: boolean;
+
+    /**
+     * Determines whether sidebar is opened.
+     */
     isSidebarOpened = true;
 
     constructor(

@@ -1,30 +1,25 @@
 import { Injectable } from '@angular/core';
 import {
-    HttpEvent,
     HttpHandler,
     HttpInterceptor,
     HttpRequest,
     HttpHeaders,
-    HttpErrorResponse,
     HttpSentEvent,
     HttpHeaderResponse,
     HttpProgressEvent,
     HttpResponse,
-    HttpUserEvent
+    HttpUserEvent,
+    HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, switchMap, filter, take, finalize, mergeMap, tap } from 'rxjs/operators';
-import { AuthService, SignInResponse } from './authentication/auth.service';
-import BaseResponseInterface from './base-response.interface';
-import { JwtInterceptor, JwtHelperService } from '@auth0/angular-jwt';
+import { Observable, throwError } from 'rxjs';
+import { catchError, flatMap } from 'rxjs/operators';
+import { AuthService } from './authentication/auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
-    isRefreshing: boolean;
-
-    constructor(private authService: AuthService, private jwtHelper: JwtHelperService) {}
+    constructor(private authService: AuthService) {}
 
     intercept(
         request: HttpRequest<any>,
@@ -32,6 +27,8 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
     ): Observable<
         HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any
     > {
+        const authToken = this.authService.getToken() as string;
+
         if (!(request.body instanceof FormData)) {
             request = request.clone({
                 headers: new HttpHeaders({
@@ -41,29 +38,30 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
             });
         }
 
-        const authToken = AuthService.getToken() as string;
+        if (authToken) request = this.addAuthToken(request, authToken);
 
-        console.log(authToken);
+        return next.handle(request).pipe(
+            catchError((error: HttpErrorResponse) => {
+                switch (error.status) {
+                    case 401:
+                        return this.authService.refreshToken().pipe(
+                            flatMap(response => {
+                                if (response.meta.success) {
+                                    this.authService.storeTokens(response.data.token, response.data.refreshToken);
 
-        if (authToken) {
-            const isExpired = this.jwtHelper.isTokenExpired(authToken);
+                                    request = this.addAuthToken(request, response.data.token);
 
-            console.log(isExpired && !this.isRefreshing);
+                                    return next.handle(request);
+                                } else this.authService.signOut();
 
-            if (isExpired && !this.isRefreshing) {
-                this.isRefreshing = true;
-                this.authService.refreshToken().subscribe(response => {
-                    this.isRefreshing = false;
-                    console.log(response);
+                                return next.handle(request);
+                            })
+                        );
+                }
 
-                    this.authService.storeTokens(response.data.token, response.data.refreshToken);
-
-                    return next.handle(this.addTokenToRequest(request, response.data.token));
-                });
-            }
-        }
-
-        return next.handle(this.addTokenToRequest(request, AuthService.getToken()));
+                return throwError(error);
+            })
+        );
     }
 
     /**
@@ -71,7 +69,9 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
      * @param request Request object
      * @param token Auth token
      */
-    addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    addAuthToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
         return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }
+
+    refreshToken() {}
 }

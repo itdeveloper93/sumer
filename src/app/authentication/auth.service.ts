@@ -46,8 +46,6 @@ export class AuthService {
      * @param credentials Sign-in credentials
      */
     signIn(credentials: SignInCredentials): Observable<boolean> {
-        console.log(credentials);
-
         return this.http
             .post<BaseResponseInterface<SignInResponse>>(
                 environment.API.URL + 'Account/Login',
@@ -70,7 +68,7 @@ export class AuthService {
      * Sign-out
      */
     signOut() {
-        AuthService.removeTokens();
+        this.removeTokens();
         this.router.navigate(['/auth']);
     }
 
@@ -78,7 +76,7 @@ export class AuthService {
      * Detemines if user signed-in
      */
     isSignedIn() {
-        const token = AuthService.getToken('auth');
+        const token = this.getToken('auth');
 
         if (!token) return false;
 
@@ -111,8 +109,8 @@ export class AuthService {
      */
     refreshToken(): Observable<BaseResponseInterface<SignInResponse>> {
         return this.http.post<BaseResponseInterface<SignInResponse>>(environment.API.URL + 'Account/RefreshToken', {
-            accessToken: AuthService.getToken(),
-            refreshToken: AuthService.getToken('refresh')
+            accessToken: this.getToken(),
+            refreshToken: this.getToken('refresh')
         });
         // .pipe(
         //     map(response => {
@@ -131,14 +129,14 @@ export class AuthService {
      * Get auth or refresh token
      * @param type Type of the token to return (auth || refresh)
      */
-    static getToken(type: string = 'auth') {
+    getToken(type: string = 'auth') {
         return type === 'auth' ? localStorage.getItem('auth_token') : localStorage.getItem('refresh_token');
     }
 
     /**
      * Remove tokens
      */
-    static removeTokens() {
+    removeTokens() {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('refresh_token');
     }

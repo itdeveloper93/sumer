@@ -1,7 +1,5 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { decode } from 'punycode';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/authentication/auth.service';
 
 /**
@@ -18,13 +16,13 @@ export default interface User {
     providedIn: 'root'
 })
 export class MiniProfileService {
-    constructor() {}
+    constructor(private authService: AuthService) {}
 
     /**
      * Get current signed-in user info from JWT
      */
     getUser(): User {
-        const token = AuthService.getToken();
+        const token = this.authService.getToken();
         const jwtHelper = new JwtHelperService();
         const decodedToken = jwtHelper.decodeToken(token);
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { MyProfileService, EmployeeData } from './my-profile.service';
-import { request } from 'http';
 import { fade } from 'src/app/animations/all';
 
 @Component({

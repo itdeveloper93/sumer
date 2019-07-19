@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Route } from '@angular/compiler/src/core';
+import { map, tap } from 'rxjs/operators';
+import { DashboardLayoutComponent } from '../layout/dashboard-layout/dashboard-layout.component';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+    dashboardLayout = DashboardLayoutComponent;
+
     constructor(private authService: AuthService, private router: Router) {}
 
     /**
@@ -16,9 +20,27 @@ export class AuthGuard implements CanActivate {
      */
     canActivate(route: Route, state: RouterStateSnapshot) {
         if (this.authService.isSignedIn()) return true;
+        else {
+            this.dashboardLayout.isRequesting = true;
 
+            return this.authService.refreshToken().pipe(
+                map(response => {
+                    this.dashboardLayout.isRequesting = false;
+
+                    if (response.meta.success) return true;
+                    else this.cantActivate(state);
+                })
+            );
+        }
+    }
+
+    /**
+     * Redirect user to sign in route
+     * @param state Router sate snapshot
+     */
+    cantActivate(state: RouterStateSnapshot) {
         this.router.navigate(['/auth'], {
-            queryParams: { returnUrl: state.url }
+            queryParams: { returnUrl: state.url ? state.url : '' }
         });
 
         return false;
