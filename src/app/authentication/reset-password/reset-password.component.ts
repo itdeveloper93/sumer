@@ -27,7 +27,7 @@ export class ResetPasswordComponent {
      */
     @Output() onResetPassLinkClick = new EventEmitter<boolean>();
 
-    constructor(private snackbar: MatSnackBar, public authService: AuthService, private authComponent: AuthComponent) {}
+    constructor(private snackbar: MatSnackBar, public authService: AuthService, public authComponent: AuthComponent) {}
 
     /**
      * Reset password.

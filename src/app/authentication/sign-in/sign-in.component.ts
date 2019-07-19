@@ -38,7 +38,7 @@ export class SignInComponent implements OnInit {
     constructor(
         private snackbar: MatSnackBar,
         public authService: AuthService,
-        private authComponent: AuthComponent,
+        public authComponent: AuthComponent,
         private router: Router,
         private route: ActivatedRoute
     ) {}
