@@ -5,7 +5,7 @@ import {
     DictionariesService,
     FetchDictionariesValuesCriterias,
     DictionariesSubValuesList
-} from 'src/app/common-services/dictionaries.service';
+} from 'src/app/dictionaries/dictionaries.service';
 import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
 
 @Component({

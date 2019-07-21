@@ -4,7 +4,7 @@ import {
     DictionariesService,
     FetchDictionariesValuesCriterias,
     DictionariesSubValuesList
-} from 'src/app/common-services/dictionaries.service';
+} from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
 

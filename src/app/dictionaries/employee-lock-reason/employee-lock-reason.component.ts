@@ -4,7 +4,7 @@ import {
     DictionariesService,
     DictionariesSubValuesList,
     FetchDictionariesValuesCriterias
-} from 'src/app/common-services/dictionaries.service';
+} from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateEmployeeLockReasonComponent } from './create-update-employee-lock-reason/create-update-employee-lock-reason.component';
 

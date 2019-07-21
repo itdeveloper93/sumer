@@ -3,7 +3,7 @@ import {
     FetchDictionariesValuesCriterias,
     DictionariesService,
     DictionariesSubValuesList
-} from 'src/app/common-services/dictionaries.service';
+} from 'src/app/dictionaries/dictionaries.service';
 import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateUpdateNationalityComponent } from './create-update-nationality/create-update-nationality.component';

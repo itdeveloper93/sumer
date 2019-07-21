@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DictionariesList } from 'src/app/common-services/dictionaries.service';
+import { DictionariesList } from 'src/app/dictionaries/dictionaries.service';
 
 const dictionariesValue: DictionariesList[] = [
-    { name: 'UsefulLinkCategory', displayName: 'Полезная ссылка' },
-    { name: 'FileCategory', displayName: 'Категория файла' },
-    { name: 'UserLockReason', displayName: 'Причина блокировки пользователя' },
-    { name: 'Position', displayName: 'Позиция' },
-    { name: 'EmployeeLockReason', displayName: 'Причина блокировки сотрудника' },
-    { name: 'Nationality', displayName: 'Национальность' },
-    { name: 'NewsCategories', displayName: 'Категория полезных ссылок' },
-    { name: 'Department', displayName: 'Отдел' }
+    { name: 'useful-link-categories', displayName: 'Полезная ссылка' },
+    { name: 'file-categories', displayName: 'Категория файла' },
+    { name: 'user-lock-reasons', displayName: 'Причина блокировки пользователя' },
+    { name: 'positions', displayName: 'Позиция' },
+    { name: 'employee-lock-reasons', displayName: 'Причина блокировки сотрудника' },
+    { name: 'nationalities', displayName: 'Национальность' },
+    { name: 'news-categories', displayName: 'Категория полезных ссылок' },
+    { name: 'departments', displayName: 'Отдел' }
 ];
 
 @Component({
@@ -27,6 +27,6 @@ export class DictionariesListComponent implements OnInit {
     constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.displayedColumns = ['fullName', 'departmentAndPosition', 'contacts', 'actions'];
+        this.displayedColumns = ['name', 'actions'];
     }
 }

@@ -3,7 +3,7 @@ import {
     FetchDictionariesValuesCriterias,
     DictionariesService,
     DictionariesSubValuesList
-} from 'src/app/common-services/dictionaries.service';
+} from 'src/app/dictionaries/dictionaries.service';
 import { PageEvent, MatDialog, MatSnackBar, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';

@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { FetchDictionariesValuesCriterias } from 'src/app/common-services/dictionaries.service';
+import { FetchDictionariesValuesCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 

@@ -37,10 +37,11 @@ export interface Department {
     providedIn: 'root'
 })
 export class DictionariesService {
+    url = environment.API.URL;
     constructor(private http: HttpClient) {}
 
     getDictionaries(): Observable<any> {
-        return this.http.get<DictionariesList[]>(environment.API.URL + 'Handbook/All');
+        return this.http.get<DictionariesList[]>(this.url + 'Handbook/All');
     }
 
     /**
@@ -50,7 +51,7 @@ export class DictionariesService {
         let ENDPOINT = actionName + '/ALL';
         if (criterias) {
             return this.http.get(
-                environment.API.URL +
+                this.url +
                     ENDPOINT +
                     '?' +
                     Object.keys(criterias)
@@ -60,22 +61,22 @@ export class DictionariesService {
                         }, [])
                         .join('&')
             );
-        } else return this.http.get(environment.API.URL + ENDPOINT);
+        } else return this.http.get(this.url + ENDPOINT);
     }
 
     getDictionariesForDropdown(actionName?: string): Observable<any> {
-        return this.http.get<Department[]>(environment.API.URL + actionName + '/ALL');
+        return this.http.get<Department[]>(this.url + actionName + '/ALL');
     }
 
     getDictionariesSubValuesById(id?: string, actionName?: string): Observable<any> {
-        return this.http.get<DictionariesSubValuesList[]>(environment.API.URL + actionName + '/Get/' + id);
+        return this.http.get<DictionariesSubValuesList[]>(this.url + actionName + '/Get/' + id);
     }
 
     updateDictionariesSubValues(value: string, actionName: string) {
-        return this.http.post(environment.API.URL + actionName + '/Edit', value);
+        return this.http.post(this.url + actionName + '/Edit', value);
     }
 
     createDictionariesSubValues(name?: string, isActive?: boolean, actionName?: string, departmentId?: string) {
-        return this.http.post(environment.API.URL + actionName + '/Create', { name, isActive, departmentId });
+        return this.http.post(this.url + actionName + '/Create', { name, isActive, departmentId });
     }
 }

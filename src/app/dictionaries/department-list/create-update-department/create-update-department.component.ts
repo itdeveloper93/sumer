@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { DictionariesService } from 'src/app/common-services/dictionaries.service';
+import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({
     selector: 'app-update-department',

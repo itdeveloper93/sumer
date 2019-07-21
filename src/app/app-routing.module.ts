@@ -111,66 +111,69 @@ const routes: Routes = [
             },
             {
                 path: 'dictionaries',
-                component: DictionariesListComponent,
-                data: {
-                    title: 'Справочники'
-                }
-            },
-            {
-                path: 'UsefulLinkCategory',
-                component: UsefulLinkCategoryComponent,
-                data: {
-                    title: 'Полезная ссылка'
-                }
-            },
-            {
-                path: 'FileCategory',
-                component: FileCategoryComponent,
-                data: {
-                    title: 'Категория файла'
-                }
-            },
-            {
-                path: 'UserLockReason',
-                component: UserLockReasonComponent,
-                data: {
-                    title: 'Причина блокировки пользователя'
-                }
-            },
-            {
-                path: 'Position',
-                component: PositionComponent,
-                data: {
-                    title: 'Позиция'
-                }
-            },
-            {
-                path: 'EmployeeLockReason',
-                component: EmployeeLockReasonComponent,
-                data: {
-                    title: 'Причина блокировки сотрудника'
-                }
-            },
-            {
-                path: 'Nationality',
-                component: NationalityComponent,
-                data: {
-                    title: 'Национальность'
-                }
-            },
-            {
-                path: 'NewsCategories',
-                component: NewsCategoriesComponent,
-                data: {
-                    title: 'Категория полезных ссылок'
-                }
-            },
-            {
-                path: 'Department',
-                component: DepartmentListComponent,
-                data: {
-                    title: 'Подразделение лист'
-                }
+                data: { title: 'Справочники' },
+                children: [
+                    {
+                        path: '',
+                        component: DictionariesListComponent
+                    },
+                    {
+                        path: 'useful-link-categories',
+                        component: UsefulLinkCategoryComponent,
+                        data: {
+                            title: 'Полезная ссылка'
+                        }
+                    },
+                    {
+                        path: 'file-categories',
+                        component: FileCategoryComponent,
+                        data: {
+                            title: 'Категория файла'
+                        }
+                    },
+                    {
+                        path: 'user-lock-reasons',
+                        component: UserLockReasonComponent,
+                        data: {
+                            title: 'Причина блокировки пользователя'
+                        }
+                    },
+                    {
+                        path: 'positions',
+                        component: PositionComponent,
+                        data: {
+                            title: 'Позиция'
+                        }
+                    },
+                    {
+                        path: 'employee-lock-reasons',
+                        component: EmployeeLockReasonComponent,
+                        data: {
+                            title: 'Причина блокировки сотрудника'
+                        }
+                    },
+                    {
+                        path: 'nationalities',
+                        component: NationalityComponent,
+                        data: {
+                            title: 'Национальность'
+                        }
+                    },
+                    {
+                        path: 'news-categories',
+                        component: NewsCategoriesComponent,
+                        data: {
+                            title: 'Категория полезных ссылок'
+                        }
+                    },
+                    {
+                        path: 'departments',
+                        component: DepartmentListComponent,
+                        data: {
+                            title: 'Подразделение лист'
+                        }
+                    }
+                ]
             }
         ]
     },
