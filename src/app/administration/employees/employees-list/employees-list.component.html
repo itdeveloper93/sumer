@@ -1,9 +1,9 @@
 <div class="container-fluid">
-    <h1 class="mb-4">{{ title }}</h1>
+    <h1 class="mb-4" [@fade]>{{ title }}</h1>
 
     <div class="row">
         <div class="col-12 col-lg-8 col-xl-9">
-            <mat-card class="p-0 table-responsive mb-3">
+            <mat-card class="p-0 table-responsive mb-3" *ngIf="employees" [@fade]>
                 <perfect-scrollbar class="table-wrapper">
                     <loading-indicator *ngIf="isRequesting"></loading-indicator>
                     <table
@@ -61,7 +61,7 @@
                                 *matCellDef="let employee"
                                 [routerLink]="['/administration/employees', employee.id]"
                             >
-                                {{ employee.hireDate | date }}
+                                {{ employee.hireDate }}
                             </td>
                         </ng-container>
 
@@ -72,7 +72,7 @@
                                 *matCellDef="let employee"
                                 [routerLink]="['/administration/employees', employee.id]"
                             >
-                                {{ employee.lockDate | date }}
+                                {{ employee.lockDate }}
                             </td>
                         </ng-container>
 
@@ -164,7 +164,7 @@
             </ng-container>
         </div>
         <div class="col-12 col-lg-4 col-xl-3">
-            <button (click)="export()" mat-flat-button color="accent" class="w-100 mb-4">
+            <button (click)="export()" mat-flat-button color="accent" class="w-100 mb-4" *ngIf="employees" [@fade]>
                 Выгрузить список в Excel
             </button>
             <employees-filter (onFilter)="setFilterQueryParams($event)" (onResetFilter)="resetFilter()">

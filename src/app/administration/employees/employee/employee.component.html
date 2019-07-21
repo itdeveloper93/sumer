@@ -1,17 +1,19 @@
-<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top global"></mat-progress-bar>
-
-<mat-card class="introduction-card rounded-0 d-flex align-items-center justify-content-between">
+<mat-card
+    class="introduction-card rounded-0 d-flex align-items-center justify-content-between"
+    *ngIf="essentialData"
+    [@fade]
+>
     <div class="d-flex flex-column flex-md-row align-items-center m-auto m-md-0">
         <img
-            src="{{ essentialData?.photoPath ? essentialData.photoPath : '../../../../../../assets/img/noavatar.jpg' }}"
-            alt="{{ essentialData?.fullName }}"
+            src="{{ essentialData.photoPath ? essentialData.photoPath : '../../../../../../assets/img/noavatar.jpg' }}"
+            alt="{{ essentialData.fullName }}"
             class="introduction-card__avatar rounded-circle mr-md-4 mb-3 mb-md-0 object-cover"
         />
 
         <div class="text-center text-md-left" *ngIf="essentialData">
-            <h1 class="introduction-card__name mb-1">{{ essentialData?.fullName }}</h1>
+            <h1 class="introduction-card__name mb-1">{{ essentialData.fullName }}</h1>
             <span class="introduction-card__position">
-                {{ essentialData?.department }} › {{ essentialData?.position }}
+                {{ essentialData.department }} › {{ essentialData.position }}
             </span>
         </div>
     </div>
@@ -24,7 +26,7 @@
         <mat-icon>keyboard_arrow_left</mat-icon> Назад к списку
     </button>
 </mat-card>
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="essentialData" [@fade]>
     <div class="row">
         <div class="col-12 col-md-7 col-lg-8" [class.col-xl-9]="!isSidebarOpened">
             <mat-tab-group
@@ -41,55 +43,55 @@
                             <mat-list role="list" class="p-0 no-mt no-mb">
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата рождения</span>
-                                    <span class="value text-right">{{ essentialData?.dateOfBirth }}</span>
+                                    <span class="value text-right">{{ essentialData.dateOfBirth }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Подразделение</span>
-                                    <span class="value text-right">{{ essentialData?.department }}</span>
+                                    <span class="value text-right">{{ essentialData.department }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Позиция</span>
-                                    <span class="value text-right">{{ essentialData?.position }}</span>
+                                    <span class="value text-right">{{ essentialData.position }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Дата приема на работу</span>
-                                    <span class="value text-right">{{ essentialData?.hireDate }}</span>
+                                    <span class="value text-right">{{ essentialData.hireDate }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Телефон</span>
-                                    <span class="value text-right">{{ essentialData?.phone }}</span>
+                                    <span class="value text-right">{{ essentialData.phone }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Email</span>
-                                    <span class="value text-right">{{ essentialData?.email }}</span>
+                                    <span class="value text-right">{{ essentialData.email }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Фактический адрес</span>
-                                    <span class="value text-right">{{ essentialData?.factualAddress }}</span>
+                                    <span class="value text-right">{{ essentialData.factualAddress }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
 
                                 <mat-list-item role="listitem">
                                     <span class="key mr-auto">Пол</span>
-                                    <span class="value text-right">{{ essentialData?.genderName }}</span>
+                                    <span class="value text-right">{{ essentialData.genderName }}</span>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </mat-list>
                             <div class="d-flex flex-column mt-5">
                                 <span class="key mr-auto mb-2">Дополнительное описание</span>
-                                <span class="value">{{ essentialData?.description }}</span>
+                                <span class="text-muted">{{ essentialData.description }}</span>
                             </div>
                         </mat-card>
                     </mat-tab>
@@ -97,6 +99,7 @@
                         <mat-card
                             class="d-flex flex-column justify-content-center"
                             *ngIf="passportData && !passportData?.passportNumber"
+                            [@fade]
                         >
                             <alert
                                 message="У этого сотрудника не заполнены паспортные данные"
@@ -113,7 +116,7 @@
                                 Добавить паспортные данные
                             </a>
                         </mat-card>
-                        <div class="row" *ngIf="passportData && passportData?.passportNumber">
+                        <div class="row" *ngIf="passportData && passportData?.passportNumber" [@fade]>
                             <div class="col-12 col-lg-5 col-xl-4 mb-4 mb-lg-0">
                                 <mat-card class="p-0">
                                     <img
@@ -122,7 +125,7 @@
                                                 ? passportData.passportScanPath
                                                 : '../../../../../../assets/img/noavatar.jpg'
                                         }}"
-                                        alt="{{ essentialData?.fullName }}"
+                                        alt="{{ essentialData.fullName }}"
                                         class="passport-scan w-100 rounded-top object-cover"
                                     />
                                     <div class="p-4">
@@ -221,8 +224,8 @@
                     <mat-tab label="Учетная запись">
                         <ng-container *ngIf="activeTabLabel === 'Учетная запись'">
                             <user
-                                id="{{ essentialData?.userId ? essentialData?.userId : null }}"
-                                *ngIf="essentialData?.userId; else createUser"
+                                id="{{ essentialData.userId ? essentialData.userId : null }}"
+                                *ngIf="essentialData.userId; else createUser"
                             ></user>
                             <ng-template #createUser>
                                 <create-user employeeId="{{ id }}" (onAddEnd)="ngOnInit()"></create-user>

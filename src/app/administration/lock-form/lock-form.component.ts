@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { EmployeeService } from '../employees/employee/employee.service';
 import { fade } from '../../animations/all';
 import { UserService } from '../users/user/user.service';
+import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
 
 @Component({
     selector: 'lock-form',
@@ -27,6 +28,11 @@ export class LockFormComponent implements OnInit {
      * Form layout
      */
     @Input() horisontal: boolean;
+
+    /**
+     * Access dashboard layout props and methods
+     */
+    dashboardLayout = DashboardLayoutComponent;
 
     /**
      * Determines whether any fetch operation is in progress

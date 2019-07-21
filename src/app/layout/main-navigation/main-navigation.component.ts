@@ -138,24 +138,13 @@ export class MainNavigationComponent implements OnInit {
                         }
                     ]
                 },
-                // {
-                //     label: 'Пользователи',
-                //     items: [
-                //         {
-                //             label: 'Активные',
-                //             link: '/administration/users/active'
-                //         },
-                //         {
-                //             label: 'Заблокированные',
-                //             link: '/administration/users/locked'
-                //         }
-                //     ]
-                // },
                 {
+                    hidden: true,
                     label: 'Административно-территориальное деление',
                     link: '/administration/administrative-divisions'
                 },
                 {
+                    hidden: true,
                     label: 'Организационная структура SUMR',
                     link: '/administration/organizational-structure'
                 }

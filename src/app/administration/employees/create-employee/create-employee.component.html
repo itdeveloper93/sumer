@@ -1,11 +1,9 @@
-<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top global"></mat-progress-bar>
-
 <div class="container-fluid">
-    <h1 class="mb-4">{{ title }}</h1>
+    <h1 class="mb-4" [@fade]>{{ title }}</h1>
 
     <form class="row" [formGroup]="form" #formDirective="ngForm">
         <div class="col-12 col-md-4 col-lg-3 mb-4 mb-lg-0">
-            <mat-card class="p-0">
+            <mat-card class="p-0" *ngIf="essentialData?.photoPath || departments" [@fade]>
                 <img
                     src="{{
                         essentialData?.photoPath ? essentialData.photoPath : '../../../../../../assets/img/noavatar.jpg'
@@ -26,7 +24,7 @@
             </mat-card>
         </div>
         <div class="col-12 col-md-8 col-lg-6 mb-4">
-            <mat-card>
+            <mat-card *ngIf="essentialData || departments" [@fade]>
                 <mat-card-header>
                     <mat-card-title>Главное</mat-card-title>
                 </mat-card-header>
@@ -225,7 +223,8 @@
                 color="primary"
                 class="mb-3 w-100"
                 (click)="submit('profile', formDirective)"
-                [disabled]="isRequesting"
+                *ngIf="essentialData?.photoPath || departments"
+                [@fade]
             >
                 <mat-icon>save</mat-icon> Сохранить
             </button>
@@ -235,13 +234,13 @@
                 color="accent"
                 class="mb-3 w-100 mx-md-3 mx-lg-0"
                 (click)="submit('create', formDirective)"
-                *ngIf="!id"
-                [disabled]="isRequesting"
+                *ngIf="!id && (essentialData?.photoPath || departments)"
+                [@fade]
             >
                 <mat-icon>save</mat-icon> Сохранить и добавить еще
             </button>
 
-            <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()">
+            <button mat-button class="mb-3 w-100" type="button" (click)="this.location.back()" [@fade]>
                 <mat-icon>keyboard_arrow_left</mat-icon> Назад
             </button>
         </div>

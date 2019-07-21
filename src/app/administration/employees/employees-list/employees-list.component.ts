@@ -3,12 +3,13 @@ import { EmployeesService, Employee, FetchCriterias } from '../employees.service
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
 import { AppConfig } from 'src/app/app.config';
-import { AuthService } from 'src/app/authentication/auth.service';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'employees-list',
     templateUrl: './employees-list.component.html',
-    styleUrls: ['./employees-list.component.sass']
+    styleUrls: ['./employees-list.component.sass'],
+    animations: [fade]
 })
 export class EmployeesListComponent implements OnInit {
     /**

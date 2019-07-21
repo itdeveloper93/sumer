@@ -8,11 +8,13 @@ import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
 import { AppConfig, momentX } from 'src/app/app.config';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'update-passport-data',
     templateUrl: './update-passport-data.component.html',
-    styleUrls: ['./update-passport-data.component.sass']
+    styleUrls: ['./update-passport-data.component.sass'],
+    animations: [fade]
 })
 export class UpdatePassportDataComponent implements OnInit {
     /**

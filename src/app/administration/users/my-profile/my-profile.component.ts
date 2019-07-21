@@ -17,11 +17,6 @@ export class MyProfileComponent implements OnInit {
     employeeData: EmployeeData;
 
     /**
-     * Determines whether any fetch operation is in progress.
-     */
-    isRequesting: boolean;
-
-    /**
      * Does the same thing as field above, but extracted to separate
      * filed to not invoke global loading indicator while updating
      * just employee data. Maybe its better to extract editing this
@@ -33,7 +28,7 @@ export class MyProfileComponent implements OnInit {
     /**
      * Determines if user wants to edit his essential data.
      */
-    isEditing: boolean;
+    isEditingUserDetails: boolean;
 
     /**
      * Register update essentials form and it's controls.
@@ -58,16 +53,12 @@ export class MyProfileComponent implements OnInit {
      * Get employee data.
      */
     getEmployeeData() {
-        this.isRequesting = true;
-
         this.service.getEmployeeData().subscribe(
             response => {
                 this.employeeData = response.data;
                 this.form.patchValue(response.data);
             },
             (error: Response) => {
-                this.isRequesting = false;
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
@@ -77,8 +68,7 @@ export class MyProfileComponent implements OnInit {
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                         break;
                 }
-            },
-            () => (this.isRequesting = false)
+            }
         );
     }
 
@@ -120,7 +110,7 @@ export class MyProfileComponent implements OnInit {
             },
             () => {
                 this.isRequestingEditUserDetails = false;
-                this.isEditing = false;
+                this.isEditingUserDetails = false;
                 this.form.enable();
             }
         );

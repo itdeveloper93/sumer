@@ -42,11 +42,6 @@ export class EmployeeComponent implements OnInit {
     logData: Log;
 
     /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting: boolean;
-
-    /**
      * Active tab title. Initially set to 'Главное' to fetch essential
      * data straight away
      */
@@ -107,13 +102,9 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getEssentialData(id: string) {
-        this.isRequesting = true;
-
         this.service.getEssentialData(id).subscribe(
             response => (this.essentialData = response.data),
             (error: Response) => {
-                this.isRequesting = false;
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
@@ -125,8 +116,7 @@ export class EmployeeComponent implements OnInit {
                 }
 
                 this.location.back();
-            },
-            () => (this.isRequesting = false)
+            }
         );
     }
 
@@ -135,8 +125,6 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getPassportData(id: string) {
-        this.isRequesting = true;
-
         return this.passportDataService.get(id).subscribe(
             response => {
                 this.passportData = response.data;
@@ -144,8 +132,6 @@ export class EmployeeComponent implements OnInit {
                 if (response.data.passportNumber) this.hasPassport = true;
             },
             (error: Response) => {
-                this.isRequesting = false;
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
@@ -155,8 +141,7 @@ export class EmployeeComponent implements OnInit {
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                         break;
                 }
-            },
-            () => (this.isRequesting = false)
+            }
         );
     }
 
@@ -165,13 +150,9 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getUserData(id: string) {
-        this.isRequesting = true;
-
         this.userService.get(id).subscribe(
             response => (this.userData = response.data),
             (error: Response) => {
-                this.isRequesting = false;
-
                 switch (error.status) {
                     case 0:
                         this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
@@ -181,8 +162,7 @@ export class EmployeeComponent implements OnInit {
                         this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
                         break;
                 }
-            },
-            () => (this.isRequesting = false)
+            }
         );
     }
 

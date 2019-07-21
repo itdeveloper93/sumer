@@ -41,17 +41,17 @@ const routes: Routes = [
                         children: [
                             {
                                 path: 'active',
-                                data: { title: 'Активные' },
+                                data: { title: 'Активные сотрудники' },
                                 component: EmployeesListComponent
                             },
                             {
                                 path: 'locked',
-                                data: { title: 'Заблокированные', showLocked: true },
+                                data: { title: 'Заблокированные сотрудники', showLocked: true },
                                 component: EmployeesListComponent
                             },
                             {
                                 path: 'create',
-                                data: { title: 'Добавить сотрудника' },
+                                data: { title: 'Добавление сотрудника' },
                                 component: CreateEmployeeComponent
                             },
                             {

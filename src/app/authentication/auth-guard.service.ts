@@ -9,6 +9,9 @@ import { DashboardLayoutComponent } from '../layout/dashboard-layout/dashboard-l
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+    /**
+     * Access dashboard layout props
+     */
     dashboardLayout = DashboardLayoutComponent;
 
     constructor(private authService: AuthService, private router: Router) {}

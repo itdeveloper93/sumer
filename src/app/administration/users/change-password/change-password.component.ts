@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { ChangePasswordService } from './change-password.service';
 import { MatSnackBar } from '@angular/material';
@@ -12,22 +12,27 @@ import { fade } from 'src/app/animations/all';
 })
 export class ChangePasswordComponent implements OnInit {
     /**
-     * Determines whether any fetch operation is in progress
+     * User phone number / login.
+     */
+    @Input() phone: string;
+
+    /**
+     * Determines whether any fetch operation is in progress.
      */
     isRequesting: boolean;
 
     /**
-     * Determines whether confirmation code was requested
+     * Determines whether confirmation code was requested.
      */
     isConfirmationCodePending: boolean;
 
     /**
-     * Determines whether confirmation code resend button is visible
+     * Determines whether confirmation code resend button is visible.
      */
     isConfirmationCodeResendButtonVisible: boolean;
 
     /**
-     * Register form and it's controls
+     * Register form and it's controls.
      */
     form = new FormGroup({
         password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -69,7 +74,7 @@ export class ChangePasswordComponent implements OnInit {
         this.isConfirmationCodeResendButtonVisible = false;
 
         this.service.requestConfirmationCode().subscribe(
-            response => this.snackbar.open('На Ваш номер отправлено СМС с кодом подтверждения'),
+            response => {},
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.get('password').enable();
@@ -102,7 +107,7 @@ export class ChangePasswordComponent implements OnInit {
 
     /**
      * Change password.
-     * @param formDirective Form directive for clearing form values
+     * @param formDirective Form directive for clearing form values.
      */
     submit(formDirective: FormGroupDirective) {
         if (!this.form.get('smsConfirmationCode').value) {
@@ -118,11 +123,13 @@ export class ChangePasswordComponent implements OnInit {
         }
 
         this.isRequesting = true;
+        this.form.disable();
 
         this.service.changePassword(this.form.value).subscribe(
             response => this.snackbar.open('Новый пароль установлен'),
             (error: Response) => {
                 this.isRequesting = false;
+                this.form.enable();
 
                 switch (error.status) {
                     case 0:
@@ -146,6 +153,8 @@ export class ChangePasswordComponent implements OnInit {
 
                 formDirective.resetForm();
                 this.form.reset();
+
+                this.form.enable();
             }
         );
     }
