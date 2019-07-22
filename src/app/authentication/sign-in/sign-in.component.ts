@@ -4,6 +4,7 @@ import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'sign-in',
@@ -40,7 +41,8 @@ export class SignInComponent implements OnInit {
         public authService: AuthService,
         public authComponent: AuthComponent,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private app: AppComponent
     ) {}
 
     ngOnInit() {
@@ -58,6 +60,9 @@ export class SignInComponent implements OnInit {
 
         this.authService.signIn(this.form.value).subscribe(
             response => {
+                // Reset user permissions object
+                this.app.resetPermissions;
+
                 const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
                 this.router.navigate([returnUrl || '/']);
             },
