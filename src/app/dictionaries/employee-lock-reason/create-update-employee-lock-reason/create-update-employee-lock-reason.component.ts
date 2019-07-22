@@ -9,14 +9,24 @@ import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
     styleUrls: ['./create-update-employee-lock-reason.component.sass']
 })
 export class CreateUpdateEmployeeLockReasonComponent implements OnInit {
-    public heading = true;
+    /**
+     * Page heading
+     */
+    heading = true;
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
-    createUpdateEmployeeLockReason = new FormGroup({
+
+    /**
+     * Employee-lock-reasons form
+     */
+    form = new FormGroup({
         id: new FormControl(''),
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
-    private id: string;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateEmployeeLockReasonComponent>,
@@ -25,12 +35,19 @@ export class CreateUpdateEmployeeLockReasonComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.getEmployeeLockReasonById();
+    }
+
+    /**
+     * Get Employee-lock-reasons by ID
+     */
+    getEmployeeLockReasonById() {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'EmployeeLockReason').subscribe(
                 res => {
-                    this.createUpdateEmployeeLockReason.patchValue({
+                    this.form.patchValue({
                         id: this.data.id,
                         name: this.data.name,
                         isActive: res.data.isActive
@@ -48,29 +65,27 @@ export class CreateUpdateEmployeeLockReasonComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.createUpdateEmployeeLockReason.invalid) {
+        if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
         if (this.data.id) {
             this.isRequesting = true;
-            this.dictionarieService
-                .updateDictionariesSubValues(this.createUpdateEmployeeLockReason.value, 'EmployeeLockReason')
-                .subscribe(
-                    response => {
-                        this.dialogRef.close();
-                    },
-                    () => {
-                        this.isRequesting = false;
-                    },
+            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'EmployeeLockReason').subscribe(
+                response => {
+                    this.dialogRef.close();
+                },
+                () => {
+                    this.isRequesting = false;
+                },
 
-                    () => {
-                        this.isRequesting = false;
-                    }
-                );
+                () => {
+                    this.isRequesting = false;
+                }
+            );
         } else {
             this.isRequesting = true;
-            const { name, isActive } = this.createUpdateEmployeeLockReason.value;
+            const { name, isActive } = this.form.value;
             this.dictionarieService.createDictionariesSubValues(name, isActive, 'EmployeeLockReason').subscribe(
                 response => {
                     this.dialogRef.close();

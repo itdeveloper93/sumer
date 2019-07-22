@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { FetchDictionariesValuesCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { FetchCriterias } from '../dictionaries.service';
 
 export interface FilterData {
     name?: string;
@@ -50,7 +50,7 @@ export class DictionariesFilterComponent implements OnInit {
             return false;
         }
 
-        const criterias: FetchDictionariesValuesCriterias = this.form.value;
+        const criterias: FetchCriterias = this.form.value;
 
         const name = this.form.get('name');
         const onlyActive = this.form.get('onlyActive');

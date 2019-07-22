@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import {
-    DictionariesService,
-    FetchDictionariesValuesCriterias,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateNewsCategoriesComponent } from './create-update-news-categories/create-update-news-categories.component';
 
@@ -14,22 +10,51 @@ import { CreateUpdateNewsCategoriesComponent } from './create-update-news-catego
     styleUrls: ['./news-categories.component.sass']
 })
 export class NewsCategoriesComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of news-categories in DB.
+     */
     newsCategoriesCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * news-categories in the shape of MatTableDataSource.
+     */
+    newsCategories = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    newsCategories = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -38,6 +63,11 @@ export class NewsCategoriesComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id news-categories ID
+     * @param name news-categories name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateNewsCategoriesComponent, {
             data: { id, name }
@@ -63,7 +93,7 @@ export class NewsCategoriesComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -124,18 +154,16 @@ export class NewsCategoriesComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get departments
+     * Send search criterias to departmentService and get news-categories
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getNewsCategories(criterias?: FetchDictionariesValuesCriterias) {
+    getNewsCategories(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'NewsCategories').subscribe(
             response => {
                 this.newsCategories = response.data.items;
-
-                this.id = response.data.items.id;
                 this.newsCategoriesCount = response.data.totalCount;
             },
             (error: Response) => {

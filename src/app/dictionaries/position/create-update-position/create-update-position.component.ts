@@ -9,16 +9,31 @@ import { DictionariesService, Department } from 'src/app/dictionaries/dictionari
     styleUrls: ['./create-update-position.component.sass']
 })
 export class CreateUpdatePositionComponent implements OnInit {
-    public heading = true;
+    /**
+     * Page heading
+     */
+    heading = true;
+
+    /**
+     * Hold departments values
+     */
     departments: Department[];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
-    createUpdatePosition = new FormGroup({
+
+    /**
+     * Positions form
+     */
+    form = new FormGroup({
         id: new FormControl(''),
         name: new FormControl(''),
         departmentId: new FormControl(''),
         isActive: new FormControl(true)
     });
-    private id: string;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdatePositionComponent>,
@@ -30,16 +45,25 @@ export class CreateUpdatePositionComponent implements OnInit {
         // Fetch nesessary initial data
         this.getDepartments();
 
+        this.getPositionsById();
+    }
+
+    /**
+     * Get position by ID
+     */
+    getPositionsById() {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'Position').subscribe(
-                res => {
-                    this.createUpdatePosition.patchValue({
+                response => {
+                    console.log(response);
+
+                    this.form.patchValue({
                         id: this.data.id,
                         name: this.data.name,
-                        departmentId: res.data.departmentId,
-                        isActive: res.data.isActive
+                        departmentId: response.data.departmentId,
+                        isActive: response.data.isActive
                     });
                 },
                 () => {
@@ -53,19 +77,23 @@ export class CreateUpdatePositionComponent implements OnInit {
         }
     }
 
+    /**
+     * Get all department
+     */
     getDepartments() {
-        this.dictionarieService.getDictionariesForDropdown('Department').subscribe(res => {
-            this.departments = res.data.items;
+        this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
+            this.departments = response.data.items;
         });
     }
+
     onSubmit() {
-        if (this.createUpdatePosition.invalid) {
+        if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
         if (this.data.id) {
             this.isRequesting = true;
-            this.dictionarieService.updateDictionariesSubValues(this.createUpdatePosition.value, 'Position').subscribe(
+            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'Position').subscribe(
                 response => {
                     this.dialogRef.close();
                 },
@@ -79,7 +107,7 @@ export class CreateUpdatePositionComponent implements OnInit {
             );
         } else {
             this.isRequesting = true;
-            const { name, isActive, departmentId } = this.createUpdatePosition.value;
+            const { name, isActive, departmentId } = this.form.value;
             this.dictionarieService.createDictionariesSubValues(name, isActive, departmentId, 'Position').subscribe(
                 response => {
                     this.dialogRef.close();

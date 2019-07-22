@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource, PageEvent, MatSnackBar, Sort, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-    DictionariesService,
-    FetchDictionariesValuesCriterias,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
 
 @Component({
@@ -14,21 +10,54 @@ import { CreateUpdateDepartmentComponent } from './create-update-department/crea
     styleUrls: ['./department-list.component.sass']
 })
 export class DepartmentListComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
+    /**
+     *
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of department in DB.
+     */
     departmentsCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * Department in the shape of MatTableDataSource.
+     */
+    departments = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    department = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
 
     constructor(
         private dictionarieService: DictionariesService,
@@ -38,6 +67,11 @@ export class DepartmentListComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id Department ID
+     * @param name Department name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateDepartmentComponent, {
             data: { id, name }
@@ -63,7 +97,7 @@ export class DepartmentListComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -128,14 +162,13 @@ export class DepartmentListComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getDepartment(criterias?: FetchDictionariesValuesCriterias) {
+    getDepartment(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(
             response => {
-                this.department = response.data.items;
+                this.departments = response.data.items;
 
-                this.id = response.data.items.id;
                 this.departmentsCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +186,8 @@ export class DepartmentListComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.department.paginator = this.paginator;
-                this.department.sort = this.sort;
+                this.departments.paginator = this.paginator;
+                this.departments.sort = this.sort;
             }
         );
     }

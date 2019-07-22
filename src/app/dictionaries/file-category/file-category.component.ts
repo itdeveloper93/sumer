@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent, MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import {
-    DictionariesService,
-    FetchDictionariesValuesCriterias,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
 
@@ -14,21 +10,51 @@ import { CreateUpdateFileCategoryComponent } from './create-update-file-category
     styleUrls: ['./file-category.component.sass']
 })
 export class FileCategoryComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of file-categories in DB.
+     */
     fileCategoriesCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * employeeLockReason in the shape of MatTableDataSource.
+     */
+    fileCategories = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    fileCategory = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
 
     constructor(
         private dictionarieService: DictionariesService,
@@ -38,6 +64,11 @@ export class FileCategoryComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id file-categories ID
+     * @param name file-categories name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateFileCategoryComponent, {
             data: { id, name }
@@ -63,7 +94,7 @@ export class FileCategoryComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -124,18 +155,16 @@ export class FileCategoryComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get departments
+     * Send search criterias to departmentService and get file-categories
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getFileCategory(criterias?: FetchDictionariesValuesCriterias) {
+    getFileCategory(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'FileCategory').subscribe(
             response => {
-                this.fileCategory = response.data.items;
-
-                this.id = response.data.items.id;
+                this.fileCategories = response.data.items;
                 this.fileCategoriesCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +182,8 @@ export class FileCategoryComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.fileCategory.paginator = this.paginator;
-                this.fileCategory.sort = this.sort;
+                this.fileCategories.paginator = this.paginator;
+                this.fileCategories.sort = this.sort;
             }
         );
     }

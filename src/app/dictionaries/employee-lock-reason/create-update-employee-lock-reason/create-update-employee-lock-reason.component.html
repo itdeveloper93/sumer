@@ -1,14 +1,26 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top rounded-top">
 </mat-progress-bar>
-<h5 *ngIf="heading">Создайте</h5>
-<h5 *ngIf="!heading">Редактировать</h5>
-<form [formGroup]="createUpdateEmployeeLockReason" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="outline">
-    <mat-label>Название</mat-label>
-    <input matInput placeholder="Название" formControlName="name">
-  </mat-form-field>
-  <mat-slide-toggle labelPosition="before" formControlName="isActive">Активен</mat-slide-toggle>
-  <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block">
-    <mat-icon class="mat-18 mr-1">save</mat-icon>Сохранить
-  </button>
-</form>
+<mat-card class="p-0 shadow-none">
+  <mat-card-header>
+    <mat-card-title class="m-0">
+      <p *ngIf="heading">Создайте</p>
+      <p *ngIf="!heading">Редактировать</p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="mb-0">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" #submitForm="ngForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Название</mat-label>
+        <input matInput placeholder="Название" formControlName="name">
+      </mat-form-field>
+      <mat-slide-toggle labelPosition="before" formControlName="isActive" color="primary" class="mb-3">Активен
+      </mat-slide-toggle>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block m-0"
+      (click)="submitForm.ngSubmit.emit()">
+      <mat-icon class="mat-18">save</mat-icon>Сохранить
+    </button>
+  </mat-card-actions>
+</mat-card>

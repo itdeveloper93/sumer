@@ -1,32 +1,15 @@
 <div class="container-fluid">
-    <h1 class="mb-4">{{ title }}</h1>
-
     <div class="row">
-        <div class="col-12 col-lg-6 col-xl-12">
+        <div class="col-12 col-lg-6 mx-auto">
+            <h1 class="mb-4">{{ title }}</h1>
             <mat-card class="p-0 table-responsive mb-3">
                 <table mat-table [dataSource]="dictionaries" class="stripped">
-
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>Название</th>
                         <td mat-cell *matCellDef="let dictionary" [routerLink]="['/dictionaries/' + dictionary.name]">
                             {{ dictionary.displayName }}
                         </td>
                     </ng-container>
-
-                    <!-- <ng-container matColumnDef="lastEdit">
-                        <th mat-header-cell *matHeaderCellDef>Последние редактирование</th>
-                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/' + dictionary.name]">
-                            {{dictionary.lastEditedAt}}
-                        </td>
-                    </ng-container> -->
-
-                    <!-- <ng-container matColumnDef="author">
-                        <th mat-header-cell *matHeaderCellDef>Автор</th>
-                        <td mat-cell *matCellDef="let dictionary" [routerLink]="['/' + dictionary.name]">
-                            {{dictionary.createdUserName}}
-                        </td>
-                    </ng-container> -->
-
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef class="text-right">Действия</th>
                         <td mat-cell *matCellDef="let dictionary" class="text-right">
@@ -35,12 +18,11 @@
                                 <mat-icon>history</mat-icon>
                             </button>
                             <button mat-mini-fab class="mat-fab-basic" matTooltip="Просмотреть лист"
-                                matTooltipPosition="above" [routerLink]="['/' + dictionary.name]">
+                                matTooltipPosition="above" [routerLink]="['/dictionaries/' + dictionary.name]">
                                 <mat-icon>remove_red_eye</mat-icon>
                             </button>
                         </td>
                     </ng-container>
-
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let dictionary; columns: displayedColumns"></tr>
                 </table>

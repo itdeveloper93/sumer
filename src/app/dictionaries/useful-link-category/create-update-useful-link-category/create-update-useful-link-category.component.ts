@@ -9,14 +9,25 @@ import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
     styleUrls: ['./create-update-useful-link-category.component.sass']
 })
 export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
-    public heading = true;
+    /**
+     * Page heading
+     */
+    heading = true;
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
-    createUpdateUsefulLinkCategory = new FormGroup({
+
+    /**
+     * Usful-link-categories form
+     */
+    form = new FormGroup({
         id: new FormControl(''),
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
-    private id: string;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateUsefulLinkCategoryComponent>,
@@ -25,15 +36,22 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.getUsefulLinkCategoryById();
+    }
+
+    /**
+     * Get usful-link-categories by ID
+     */
+    getUsefulLinkCategoryById() {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'UsefulLinkCategory').subscribe(
-                res => {
-                    this.createUpdateUsefulLinkCategory.patchValue({
+                response => {
+                    this.form.patchValue({
                         id: this.data.id,
                         name: this.data.name,
-                        isActive: res.data.isActive
+                        isActive: response.data.isActive
                     });
                 },
                 () => {
@@ -48,29 +66,27 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.createUpdateUsefulLinkCategory.invalid) {
+        if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
         if (this.data.id) {
             this.isRequesting = true;
-            this.dictionarieService
-                .updateDictionariesSubValues(this.createUpdateUsefulLinkCategory.value, 'UsefulLinkCategory')
-                .subscribe(
-                    response => {
-                        this.dialogRef.close();
-                    },
-                    () => {
-                        this.isRequesting = false;
-                    },
+            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'UsefulLinkCategory').subscribe(
+                response => {
+                    this.dialogRef.close();
+                },
+                () => {
+                    this.isRequesting = false;
+                },
 
-                    () => {
-                        this.isRequesting = false;
-                    }
-                );
+                () => {
+                    this.isRequesting = false;
+                }
+            );
         } else {
             this.isRequesting = true;
-            const { name, isActive } = this.createUpdateUsefulLinkCategory.value;
+            const { name, isActive } = this.form.value;
             this.dictionarieService.createDictionariesSubValues(name, isActive, 'UsefulLinkCategory').subscribe(
                 response => {
                     this.dialogRef.close();
