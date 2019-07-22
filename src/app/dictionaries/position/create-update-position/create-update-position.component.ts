@@ -57,8 +57,6 @@ export class CreateUpdatePositionComponent implements OnInit {
             this.isRequesting = true;
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'Position').subscribe(
                 response => {
-                    console.log(response);
-
                     this.form.patchValue({
                         id: this.data.id,
                         name: this.data.name,
