@@ -59,20 +59,9 @@ export class EmployeesFilterComponent implements OnInit {
      * Get all departments
      */
     getDepartments() {
-        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
-            response => (this.departments = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.departmentsAndPositionsService
+            .getDepartmentsListItems()
+            .subscribe(response => (this.departments = response.data));
     }
 
     /**

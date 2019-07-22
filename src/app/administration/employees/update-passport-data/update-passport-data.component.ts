@@ -125,16 +125,6 @@ export class UpdatePassportDataComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
             },
             () => {
                 this.isRequesting = false;
@@ -154,19 +144,7 @@ export class UpdatePassportDataComponent implements OnInit {
                 this.nationalities = response.data;
                 this.form.get('nationalityId').enable();
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => (this.isRequesting = false)
         );
     }
@@ -230,16 +208,6 @@ export class UpdatePassportDataComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
             },
             () => {
                 this.isRequesting = false;

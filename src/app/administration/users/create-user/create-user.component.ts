@@ -37,18 +37,6 @@ export class CreateUserComponent {
                 this.snackbar.open('Пользователь создан. Пароль выслан сотруднику на его номер телефона.');
             },
             (error: Response) => {
-                console.log(error);
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-
                 this.isRequesting = false;
                 this.onAddEnd.emit(false);
             },

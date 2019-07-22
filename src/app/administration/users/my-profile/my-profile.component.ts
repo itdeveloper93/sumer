@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { MyProfileService, EmployeeData } from './my-profile.service';
 import { fade } from 'src/app/animations/all';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'my-profile',
@@ -43,33 +45,24 @@ export class MyProfileComponent implements OnInit {
         factualAddress: new FormControl('', Validators.required)
     });
 
-    constructor(private service: MyProfileService, private snackbar: MatSnackBar) {}
+    constructor(private service: MyProfileService, private snackbar: MatSnackBar, private http: HttpClient) {}
 
     ngOnInit() {
         this.getEmployeeData();
+
+        // this.http.get(environment.API.URL + 'HideInfo/ErrorByCode?statusCode=0').subscribe(res => {
+        //     console.log(res);
+        // });
     }
 
     /**
      * Get employee data.
      */
     getEmployeeData() {
-        this.service.getEmployeeData().subscribe(
-            response => {
-                this.employeeData = response.data;
-                this.form.patchValue(response.data);
-            },
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.service.getEmployeeData().subscribe(response => {
+            this.employeeData = response.data;
+            this.form.patchValue(response.data);
+        });
     }
 
     /**
@@ -97,16 +90,6 @@ export class MyProfileComponent implements OnInit {
             (error: Response) => {
                 this.isRequestingEditUserDetails = false;
                 this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
             },
             () => {
                 this.isRequestingEditUserDetails = false;

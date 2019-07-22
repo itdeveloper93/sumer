@@ -28,23 +28,9 @@ export class UserComponent implements OnInit {
      * Get user data
      */
     get() {
-        this.service.get(this.id).subscribe(
-            response => {
-                this.isLocked = response.data.isLocked;
-
-                this.isLocked;
-            },
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.service.get(this.id).subscribe(response => {
+            this.isLocked = response.data.isLocked;
+            this.isLocked;
+        });
     }
 }

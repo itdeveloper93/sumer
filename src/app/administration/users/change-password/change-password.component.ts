@@ -130,22 +130,7 @@ export class ChangePasswordComponent implements OnInit {
             (error: Response) => {
                 this.isRequesting = false;
                 this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        this.isConfirmationCodePending = false;
-                        break;
-
-                    case 400:
-                        this.snackbar.open('Неверный код подтверждения');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        this.isConfirmationCodePending = false;
-                        break;
-                }
+                this.isConfirmationCodePending = false;
             },
             () => {
                 this.isRequesting = false;

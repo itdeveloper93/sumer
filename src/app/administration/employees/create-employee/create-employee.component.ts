@@ -84,7 +84,6 @@ export class CreateEmployeeComponent implements OnInit {
         firstName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Я]*')]),
         middleName: new FormControl('', Validators.pattern('[а-яА-Я]*')),
         dateOfBirth: new FormControl(''),
-        // TODO: Fetch genders from server
         genderId: new FormControl(''),
         hireDate: new FormControl(''),
         departmentId: new FormControl(''),
@@ -161,22 +160,7 @@ export class CreateEmployeeComponent implements OnInit {
 
                 this.essentialData = response.data;
             },
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    case 400:
-                        this.snackbar.open('Ошибка. Проверьте введенные данные.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        this.location.back();
-                        break;
-                }
-            }
+            (error: Response) => this.location.back()
         );
     }
 
@@ -184,40 +168,16 @@ export class CreateEmployeeComponent implements OnInit {
      * Get all genders
      */
     getGenders() {
-        this.gendersService.get().subscribe(
-            response => (this.genders = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.gendersService.get().subscribe(response => (this.genders = response.data));
     }
 
     /**
      * Get all departments
      */
     getDepartments() {
-        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
-            response => (this.departments = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.departmentsAndPositionsService
+            .getDepartmentsListItems()
+            .subscribe(response => (this.departments = response.data));
     }
 
     /**
@@ -225,20 +185,9 @@ export class CreateEmployeeComponent implements OnInit {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
-            response => (this.positions = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.departmentsAndPositionsService
+            .getPositions(departmentId)
+            .subscribe(response => (this.positions = response.data));
     }
 
     // TODO: Don't know what does this do. Fix.
@@ -313,22 +262,8 @@ export class CreateEmployeeComponent implements OnInit {
                     if (this.form.touched) this.snackbar.open('Изменения сохранены.');
                 }
             },
-            (error: Response) => {
-                this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору.`);
-                        break;
-                }
-            },
-            () => {
-                this.form.enable();
-            }
+            (error: Response) => this.form.enable(),
+            () => this.form.enable()
         );
     }
 }

@@ -102,22 +102,9 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getEssentialData(id: string) {
-        this.service.getEssentialData(id).subscribe(
-            response => (this.essentialData = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-
-                this.location.back();
-            }
-        );
+        this.service
+            .getEssentialData(id)
+            .subscribe(response => (this.essentialData = response.data), (error: Response) => this.location.back());
     }
 
     /**
@@ -125,24 +112,11 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getPassportData(id: string) {
-        return this.passportDataService.get(id).subscribe(
-            response => {
-                this.passportData = response.data;
+        return this.passportDataService.get(id).subscribe(response => {
+            this.passportData = response.data;
 
-                if (response.data.passportNumber) this.hasPassport = true;
-            },
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+            if (response.data.passportNumber) this.hasPassport = true;
+        });
     }
 
     /**
@@ -150,20 +124,7 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getUserData(id: string) {
-        this.userService.get(id).subscribe(
-            response => (this.userData = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            }
-        );
+        this.userService.get(id).subscribe(response => (this.userData = response.data));
     }
 
     /**
