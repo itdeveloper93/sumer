@@ -266,3 +266,41 @@ label
 
 .text-muted
     color: $grey !important
+
+
+// Vertical tabs
+.mat-tab-group
+    &:not(.global-tabgroup) .mat-tab-body-content
+        padding-top: 2rem
+    
+    .mat-tab-header,
+    .mat-tab-nav-bar
+        border-color: $white
+
+    .vertical
+        flex-direction: row
+
+        .mat-tab-header,
+        .mat-tab-nav-bar
+            border-bottom: none
+            border-right: 1px solid $white
+
+            .mat-tab-labels
+                flex-direction: column
+
+                .mat-tab-label
+                    border-radius: 6px 0 0 6px
+                    justify-content: start
+                    transition: background-color .2s
+
+                    &-active
+                        background-color: $white
+            
+            mat-ink-bar
+                display: none
+        
+        .mat-tab-body-wrapper
+            width: 100%
+
+            .mat-tab-body-content
+                padding: 2rem

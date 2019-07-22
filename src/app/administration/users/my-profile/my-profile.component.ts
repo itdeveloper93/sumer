@@ -49,10 +49,6 @@ export class MyProfileComponent implements OnInit {
 
     ngOnInit() {
         this.getEmployeeData();
-
-        // this.http.get(environment.API.URL + 'HideInfo/ErrorByCode?statusCode=0').subscribe(res => {
-        //     console.log(res);
-        // });
     }
 
     /**
