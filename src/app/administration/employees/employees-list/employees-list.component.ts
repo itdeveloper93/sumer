@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
 import { AppConfig } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'employees-list',
@@ -69,6 +70,11 @@ export class EmployeesListComponent implements OnInit {
      */
     pageEvent: PageEvent;
 
+    /**
+     * Granted permissions
+     */
+    permissions = this.app.grantedPermissions;
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -76,7 +82,7 @@ export class EmployeesListComponent implements OnInit {
         private service: EmployeesService,
         private route: ActivatedRoute,
         private router: Router,
-        private snackbar: MatSnackBar
+        private app: AppComponent
     ) {}
 
     ngOnInit() {

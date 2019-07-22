@@ -29,7 +29,7 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
     /**
      * Initialize form.
      */
-    form: FormGroup;
+    private form: FormGroup;
 
     /**
      * All permissions

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from './router-transitions';
 import { DateAdapter } from '@angular/material';
+import { PermissionsService } from './authentication/permissions.service';
 
 @Component({
     selector: 'app-root',
@@ -9,11 +10,33 @@ import { DateAdapter } from '@angular/material';
     styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
-    constructor(private dateAdapter: DateAdapter<any>) {}
+    /**
+     * An array of granted permissions
+     */
+    grantedPermissionsObject: object;
+
+    constructor(private dateAdapter: DateAdapter<any>, private permissionsService: PermissionsService) {}
 
     ngOnInit() {
         // Set MatDatePicker locale
         this.dateAdapter.setLocale('ru');
+
+        this.resetPermissionsObject();
+    }
+
+    resetPermissionsObject() {
+        this.grantedPermissionsObject = this.permissionsService.get();
+    }
+
+    public get resetPermissions() {
+        return this.resetPermissionsObject();
+    }
+
+    /**
+     * Access granted permissions array from outside
+     */
+    public get grantedPermissions(): object {
+        return this.grantedPermissionsObject;
     }
 
     getState(outlet) {

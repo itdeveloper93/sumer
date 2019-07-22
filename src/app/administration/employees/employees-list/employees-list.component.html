@@ -123,6 +123,7 @@
                                     matTooltip="Просмотреть карточку"
                                     matTooltipPosition="above"
                                     [routerLink]="['/administration/employees/', employee.id]"
+                                    *ngIf="permissions['Employee.Details']"
                                 >
                                     <mat-icon>remove_red_eye</mat-icon>
                                 </button>
@@ -132,6 +133,7 @@
                                     matTooltip="Редактировать данные"
                                     matTooltipPosition="above"
                                     [routerLink]="['/administration/employees/edit/essentials/', employee.id]"
+                                    *ngIf="permissions['Employee.Edit']"
                                 >
                                     <mat-icon>edit</mat-icon>
                                 </button>
@@ -172,4 +174,9 @@
         </div>
     </div>
 </div>
-<floating-fab link="/administration/employees/create" title="Добавить сотрудника" icon="add"></floating-fab>
+<floating-fab
+    link="/administration/employees/create"
+    title="Добавить сотрудника"
+    icon="add"
+    *ngIf="permissions['Employee.Create']"
+></floating-fab>
