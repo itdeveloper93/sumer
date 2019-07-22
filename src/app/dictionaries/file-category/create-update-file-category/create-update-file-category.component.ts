@@ -9,14 +9,24 @@ import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
     styleUrls: ['./create-update-file-category.component.sass']
 })
 export class CreateUpdateFileCategoryComponent implements OnInit {
-    public heading = true;
+    /**
+     * Page heading
+     */
+    heading = true;
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
-    createUpdateFileCategory = new FormGroup({
+
+    /**
+     * File-categories form
+     */
+    form = new FormGroup({
         id: new FormControl(''),
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
-    private id: string;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateFileCategoryComponent>,
@@ -25,15 +35,22 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.getFileCategoryById();
+    }
+
+    /**
+     * Get file categories by ID
+     */
+    getFileCategoryById() {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'FileCategory').subscribe(
-                res => {
-                    this.createUpdateFileCategory.patchValue({
+                response => {
+                    this.form.patchValue({
                         id: this.data.id,
                         name: this.data.name,
-                        isActive: res.data.isActive
+                        isActive: response.data.isActive
                     });
                 },
                 () => {
@@ -48,29 +65,27 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.createUpdateFileCategory.invalid) {
+        if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
         if (this.data.id) {
             this.isRequesting = true;
-            this.dictionarieService
-                .updateDictionariesSubValues(this.createUpdateFileCategory.value, 'FileCategory')
-                .subscribe(
-                    response => {
-                        this.dialogRef.close();
-                    },
-                    () => {
-                        this.isRequesting = false;
-                    },
+            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'FileCategory').subscribe(
+                response => {
+                    this.dialogRef.close();
+                },
+                () => {
+                    this.isRequesting = false;
+                },
 
-                    () => {
-                        this.isRequesting = false;
-                    }
-                );
+                () => {
+                    this.isRequesting = false;
+                }
+            );
         } else {
             this.isRequesting = true;
-            const { name, isActive } = this.createUpdateFileCategory.value;
+            const { name, isActive } = this.form.value;
             this.dictionarieService.createDictionariesSubValues(name, isActive, 'FileCategory').subscribe(
                 response => {
                     this.dialogRef.close();

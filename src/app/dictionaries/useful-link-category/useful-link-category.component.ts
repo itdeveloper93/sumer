@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-    FetchDictionariesValuesCriterias,
-    DictionariesService,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { PageEvent, MatDialog, MatSnackBar, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
@@ -14,21 +10,51 @@ import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-
     styleUrls: ['./useful-link-category.component.sass']
 })
 export class UsefulLinkCategoryComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
-    usfulLinkCategorysCount: number;
+
+    /**
+     * Total number of usful-link-categories in DB.
+     */
+    usfulLinkCategoriesCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * usful-link-categories in the shape of MatTableDataSource.
+     */
+    usfulLinkCategories = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    usfulLinkCategory = new MatTableDataSource<DictionariesSubValuesList[]>();
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -37,6 +63,11 @@ export class UsefulLinkCategoryComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id usful-link-categories ID
+     * @param name usful-link-categories name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateUsefulLinkCategoryComponent, {
             data: { id, name }
@@ -62,7 +93,7 @@ export class UsefulLinkCategoryComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -127,14 +158,14 @@ export class UsefulLinkCategoryComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getUsfulLinkCategory(criterias?: FetchDictionariesValuesCriterias) {
+    getUsfulLinkCategory(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'UsefulLinkCategory').subscribe(
             response => {
-                this.usfulLinkCategory = response.data.items;
+                this.usfulLinkCategories = response.data.items;
 
-                this.usfulLinkCategorysCount = response.data.totalCount;
+                this.usfulLinkCategoriesCount = response.data.totalCount;
             },
             (error: Response) => {
                 this.isRequesting = false;
@@ -151,8 +182,8 @@ export class UsefulLinkCategoryComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.usfulLinkCategory.paginator = this.paginator;
-                this.usfulLinkCategory.sort = this.sort;
+                this.usfulLinkCategories.paginator = this.paginator;
+                this.usfulLinkCategories.sort = this.sort;
             }
         );
     }

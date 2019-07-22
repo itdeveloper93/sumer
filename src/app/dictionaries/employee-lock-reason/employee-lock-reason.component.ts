@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatPaginator, PageEvent, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import {
-    DictionariesService,
-    DictionariesSubValuesList,
-    FetchDictionariesValuesCriterias
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateEmployeeLockReasonComponent } from './create-update-employee-lock-reason/create-update-employee-lock-reason.component';
 
@@ -14,22 +10,51 @@ import { CreateUpdateEmployeeLockReasonComponent } from './create-update-employe
     styleUrls: ['./employee-lock-reason.component.sass']
 })
 export class EmployeeLockReasonComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of employee-lock-reasons in DB.
+     */
     employeeLockReasonsCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * employee-lock-reason in the shape of MatTableDataSource.
+     */
+    employeeLockReasons = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    employeeLockReason = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -38,6 +63,11 @@ export class EmployeeLockReasonComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id employee-lock-reasons ID
+     * @param name employee-lock-reasons name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateEmployeeLockReasonComponent, {
             data: { id, name }
@@ -63,7 +93,7 @@ export class EmployeeLockReasonComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -124,18 +154,16 @@ export class EmployeeLockReasonComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get departments
+     * Send search criterias to departmentService and get employee-lock-reasons
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getEmployeeLockReason(criterias?: FetchDictionariesValuesCriterias) {
+    getEmployeeLockReason(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'EmployeeLockReason').subscribe(
             response => {
-                this.employeeLockReason = response.data.items;
-
-                this.id = response.data.items.id;
+                this.employeeLockReasons = response.data.items;
                 this.employeeLockReasonsCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +181,8 @@ export class EmployeeLockReasonComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.employeeLockReason.paginator = this.paginator;
-                this.employeeLockReason.sort = this.sort;
+                this.employeeLockReasons.paginator = this.paginator;
+                this.employeeLockReasons.sort = this.sort;
             }
         );
     }

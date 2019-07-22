@@ -2,29 +2,42 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import BaseResponseInterface from '../base-response.interface';
+import { MatTableDataSource } from '@angular/material';
+
+/**
+ * The shape of fetch criterias for DB searching
+ */
+export interface FetchCriterias {
+    isActive?: boolean;
+    name?: string;
+    id?: string;
+    onlyActive?: boolean;
+    page?: number;
+    pageSize?: number;
+}
 
 export interface DictionariesList {
     name?: string;
     displayName?: string;
 }
 
-export interface FetchDictionariesValuesCriterias {
-    id?: string;
-    name?: string;
-    rootId?: string;
-    page?: number;
-    pageSize?: number;
-    isActive?: boolean;
-    createdUserName?: string;
-    createdAt?: string;
+interface Items<T> {
+    items: T;
+    page: number;
+    totalPages: number;
+    totalCount: number;
+    pageSize: number;
 }
 
-export interface DictionariesSubValuesList {
+export interface Item {
+    id: string;
+    name: string;
+    rootId: string;
     isActive: boolean;
     createdUserName: string;
     createdAt: string;
-    id: string;
-    name: string;
+    departmentId?: string;
 }
 
 export interface Department {
@@ -47,10 +60,13 @@ export class DictionariesService {
     /**
      * Get all Dictionaries subValues
      */
-    getDictionariesSubValues(criterias?: FetchDictionariesValuesCriterias, actionName?: string): Observable<any> {
+    getDictionariesSubValues(
+        criterias?: FetchCriterias,
+        actionName?: string
+    ): Observable<BaseResponseInterface<Items<MatTableDataSource<Item[]>>>> {
         let ENDPOINT = actionName + '/ALL';
         if (criterias) {
-            return this.http.get(
+            return this.http.get<BaseResponseInterface<Items<MatTableDataSource<Item[]>>>>(
                 this.url +
                     ENDPOINT +
                     '?' +
@@ -61,15 +77,19 @@ export class DictionariesService {
                         }, [])
                         .join('&')
             );
-        } else return this.http.get(this.url + ENDPOINT);
+        } else return this.http.get<BaseResponseInterface<Items<MatTableDataSource<Item[]>>>>(this.url + ENDPOINT);
     }
 
-    getDictionariesForDropdown(actionName?: string): Observable<any> {
-        return this.http.get<Department[]>(this.url + actionName + '/ALL');
+    /**
+     *
+     * @param actionName
+     */
+    getDictionariesForDropdown(actionName?: string): Observable<BaseResponseInterface<Items<Department[]>>> {
+        return this.http.get<BaseResponseInterface<Items<Department[]>>>(this.url + actionName + '/All');
     }
 
-    getDictionariesSubValuesById(id?: string, actionName?: string): Observable<any> {
-        return this.http.get<DictionariesSubValuesList[]>(this.url + actionName + '/Get/' + id);
+    getDictionariesSubValuesById(id?: string, actionName?: string): Observable<BaseResponseInterface<Item>> {
+        return this.http.get<BaseResponseInterface<Item>>(this.url + actionName + '/Get/' + id);
     }
 
     updateDictionariesSubValues(value: string, actionName: string) {

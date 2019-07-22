@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-    FetchDictionariesValuesCriterias,
-    DictionariesService,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { CreateUpdatePositionComponent } from './create-update-position/create-update-position.component';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,22 +10,51 @@ import { Router, ActivatedRoute } from '@angular/router';
     styleUrls: ['./position.component.sass']
 })
 export class PositionComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of positions in DB.
+     */
     positionsCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * positions in the shape of MatTableDataSource.
+     */
+    positions = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    position = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -38,6 +63,11 @@ export class PositionComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id positions ID
+     * @param name positions name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdatePositionComponent, {
             data: { id, name }
@@ -63,7 +93,7 @@ export class PositionComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -128,14 +158,12 @@ export class PositionComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getPosition(criterias?: FetchDictionariesValuesCriterias) {
+    getPosition(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'Position').subscribe(
             response => {
-                this.position = response.data.items;
-
-                this.id = response.data.items.id;
+                this.positions = response.data.items;
                 this.positionsCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +181,8 @@ export class PositionComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.position.paginator = this.paginator;
-                this.position.sort = this.sort;
+                this.positions.paginator = this.paginator;
+                this.positions.sort = this.sort;
             }
         );
     }

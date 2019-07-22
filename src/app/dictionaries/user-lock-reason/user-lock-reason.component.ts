@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import {
-    DictionariesSubValuesList,
-    DictionariesService,
-    FetchDictionariesValuesCriterias
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, FetchCriterias, Item } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-reason/create-update-user-lock-reason.component';
 
@@ -14,22 +10,51 @@ import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-r
     styleUrls: ['./user-lock-reason.component.sass']
 })
 export class UserLockReasonComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of file-categories in DB.
+     */
     userLockReasonsCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * user-lock-reasons in the shape of MatTableDataSource.
+     */
+    userLockReasons = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    userLockReason = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -38,6 +63,11 @@ export class UserLockReasonComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id user-lock-reason ID
+     * @param name user-lock-reason name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateUserLockReasonComponent, {
             data: { id, name }
@@ -63,7 +93,7 @@ export class UserLockReasonComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -128,14 +158,13 @@ export class UserLockReasonComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getUserLockReason(criterias?: FetchDictionariesValuesCriterias) {
+    getUserLockReason(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'UserLockReason').subscribe(
             response => {
-                this.userLockReason = response.data.items;
+                this.userLockReasons = response.data.items;
 
-                this.id = response.data.items.id;
                 this.userLockReasonsCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +182,8 @@ export class UserLockReasonComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.userLockReason.paginator = this.paginator;
-                this.userLockReason.sort = this.sort;
+                this.userLockReasons.paginator = this.paginator;
+                this.userLockReasons.sort = this.sort;
             }
         );
     }

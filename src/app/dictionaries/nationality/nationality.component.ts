@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-    FetchDictionariesValuesCriterias,
-    DictionariesService,
-    DictionariesSubValuesList
-} from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateUpdateNationalityComponent } from './create-update-nationality/create-update-nationality.component';
@@ -14,22 +10,51 @@ import { CreateUpdateNationalityComponent } from './create-update-nationality/cr
     styleUrls: ['./nationality.component.sass']
 })
 export class NationalityComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
+
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
+
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
+    /**
+     * Number of department to show on one page.
+     */
     pageSize: number;
+
+    /**
+     * An array of numbers to show on one page.
+     */
     pageSizeOptions = [20, 50, 100];
+
+    /**
+     * Page number.
+     */
     pageIndex: number;
+
+    /**
+     * Total number of nationalities in DB.
+     */
     nationalitiesCount: number;
+
+    /**
+     * En event that fires when user interacts with MatPaginator.
+     * Contains paginator controls' values.
+     */
     pageEvent: PageEvent;
+
+    /**
+     * nationalities in the shape of MatTableDataSource.
+     */
+    nationalities = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    nationality = new MatTableDataSource<DictionariesSubValuesList[]>();
-    private id: any;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -38,6 +63,11 @@ export class NationalityComponent implements OnInit {
         private snackbar: MatSnackBar
     ) {}
 
+    /**
+     * Create or update department
+     * @param id nationalities ID
+     * @param name nationalities name
+     */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateNationalityComponent, {
             data: { id, name }
@@ -63,7 +93,7 @@ export class NationalityComponent implements OnInit {
      * Set filter query params
      * @param event Object with fetch criterias
      */
-    setFilterQueryParams(event: FetchDictionariesValuesCriterias) {
+    setFilterQueryParams(event: FetchCriterias) {
         if (Object.keys(event).length === 0 && event.constructor === Object) this.resetFilter();
         else {
             this.router.navigate([], {
@@ -128,14 +158,12 @@ export class NationalityComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getNationality(criterias?: FetchDictionariesValuesCriterias) {
+    getNationality(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'Nationality').subscribe(
             response => {
-                this.nationality = response.data.items;
-
-                this.id = response.data.items.id;
+                this.nationalities = response.data.items;
                 this.nationalitiesCount = response.data.totalCount;
             },
             (error: Response) => {
@@ -153,8 +181,8 @@ export class NationalityComponent implements OnInit {
             },
             () => {
                 this.isRequesting = false;
-                this.nationality.paginator = this.paginator;
-                this.nationality.sort = this.sort;
+                this.nationalities.paginator = this.paginator;
+                this.nationalities.sort = this.sort;
             }
         );
     }

@@ -121,56 +121,56 @@ const routes: Routes = [
                         path: 'useful-link-categories',
                         component: UsefulLinkCategoryComponent,
                         data: {
-                            title: 'Полезная ссылка'
+                            title: 'Полезные ссылки'
                         }
                     },
                     {
                         path: 'file-categories',
                         component: FileCategoryComponent,
                         data: {
-                            title: 'Категория файла'
+                            title: 'Категории файлов'
                         }
                     },
                     {
                         path: 'user-lock-reasons',
                         component: UserLockReasonComponent,
                         data: {
-                            title: 'Причина блокировки пользователя'
+                            title: 'Причины блокировки пользователя'
                         }
                     },
                     {
                         path: 'positions',
                         component: PositionComponent,
                         data: {
-                            title: 'Позиция'
+                            title: 'Позиции'
                         }
                     },
                     {
                         path: 'employee-lock-reasons',
                         component: EmployeeLockReasonComponent,
                         data: {
-                            title: 'Причина блокировки сотрудника'
+                            title: 'Причины блокировки сотрудника'
                         }
                     },
                     {
                         path: 'nationalities',
                         component: NationalityComponent,
                         data: {
-                            title: 'Национальность'
+                            title: 'Национальности'
                         }
                     },
                     {
                         path: 'news-categories',
                         component: NewsCategoriesComponent,
                         data: {
-                            title: 'Категория полезных ссылок'
+                            title: 'Категории полезных ссылок'
                         }
                     },
                     {
                         path: 'departments',
                         component: DepartmentListComponent,
                         data: {
-                            title: 'Подразделение лист'
+                            title: 'Список подразделений'
                         }
                     }
                 ]
