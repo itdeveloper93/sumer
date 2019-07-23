@@ -14,6 +14,11 @@ export class UserComponent implements OnInit {
     @Input() id: string;
 
     /**
+     * Determines whether any fetch operation is in progress
+     */
+    isRequesting: boolean;
+
+    /**
      * Determines whther user is locked or not
      */
     isLocked: boolean;

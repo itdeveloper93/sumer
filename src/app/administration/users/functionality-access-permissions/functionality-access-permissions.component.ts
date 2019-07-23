@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
     FunctionalityAccessPermissionsService,
@@ -41,6 +41,11 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
      */
     isSmallScreen: boolean = false;
 
+    /**
+     * Determines whether any fetch operation is in progress to emit the state up
+     */
+    @Output() isRequestingFunctionalityAccessPermissions = new EventEmitter<boolean>();
+
     constructor(
         private fb: FormBuilder,
         private service: FunctionalityAccessPermissionsService,
@@ -66,19 +71,32 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
      * Get all permissions.
      */
     private get() {
-        this.service.get(this.id).subscribe(response => {
-            const formControlPermissions: object = {};
+        this.isRequesting = true;
+        setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(true));
 
-            this.permissions = response.data;
+        this.service.get(this.id).subscribe(
+            response => {
+                const formControlPermissions: object = {};
 
-            response.data.forEach(permissionGroup =>
-                permissionGroup.roles.forEach(permission => {
-                    formControlPermissions[permission.name] = [permission.selected];
-                })
-            );
+                this.permissions = response.data;
 
-            this.form = this.fb.group(formControlPermissions);
-        });
+                response.data.forEach(permissionGroup =>
+                    permissionGroup.roles.forEach(permission => {
+                        formControlPermissions[permission.name] = [permission.selected];
+                    })
+                );
+
+                this.form = this.fb.group(formControlPermissions);
+            },
+            (error: Response) => {
+                this.isRequesting = false;
+                setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(false));
+            },
+            () => {
+                this.isRequesting = false;
+                setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(false));
+            }
+        );
     }
 
     /**
