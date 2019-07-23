@@ -12,7 +12,7 @@
             <lock-form horisontal="true" entityType="user" id="{{ id }}"></lock-form>
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
+        <mat-expansion-panel [disabled]="isReqesting">
             <mat-expansion-panel-header>
                 <mat-panel-title>Права доступа к функционалу</mat-panel-title>
             </mat-expansion-panel-header>

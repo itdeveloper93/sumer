@@ -25,7 +25,7 @@ export class UpdatePassportDataComponent implements OnInit {
     /**
      * Page title
      */
-    title = 'Редактирование паспортных данных';
+    title = this.route.snapshot.data.title;
 
     /**
      * Determines whether any fetch operation is in progress

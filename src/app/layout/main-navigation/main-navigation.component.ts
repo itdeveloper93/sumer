@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'main-navigation',
@@ -7,6 +8,14 @@ import { Router } from '@angular/router';
     styleUrls: ['./main-navigation.component.sass']
 })
 export class MainNavigationComponent implements OnInit {
+    /**
+     * Granted permissions
+     */
+    permissions: object = this.app.grantedPermissions;
+
+    /**
+     * Component config object
+     */
     config = {
         classname: 'main-navigation',
         fontColor: '#D2D7E8',
@@ -122,17 +131,21 @@ export class MainNavigationComponent implements OnInit {
             icon: 'settings_input_component',
             items: [
                 {
+                    hidden: this.permissions['Employee.All'] ? false : true,
                     label: 'Сотрудники',
                     items: [
                         {
+                            hidden: this.permissions['Employee.Create'] ? false : true,
                             label: 'Добавить',
                             link: '/administration/employees/create'
                         },
                         {
+                            hidden: this.permissions['Employee.All'] ? false : true,
                             label: 'Активные',
                             link: '/administration/employees/active'
                         },
                         {
+                            hidden: this.permissions['Employee.All'] ? false : true,
                             label: 'Заблокированные',
                             link: '/administration/employees/locked'
                         }
@@ -151,7 +164,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         }
     ];
-    constructor(private router: Router) {}
+    constructor(private router: Router, private app: AppComponent) {}
 
     ngOnInit() {}
 }
