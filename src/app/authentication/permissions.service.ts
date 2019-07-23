@@ -30,8 +30,6 @@ export class PermissionsService {
                 });
             }
 
-            console.log(grantedPermissions);
-
             return grantedPermissionsObject;
         }
     }
