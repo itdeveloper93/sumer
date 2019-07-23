@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'main-navigation',
@@ -6,6 +8,14 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./main-navigation.component.sass']
 })
 export class MainNavigationComponent implements OnInit {
+    /**
+     * Granted permissions
+     */
+    permissions: object = this.app.grantedPermissions;
+
+    /**
+     * Component config object
+     */
     config = {
         classname: 'main-navigation',
         fontColor: '#D2D7E8',
@@ -21,6 +31,7 @@ export class MainNavigationComponent implements OnInit {
             link: '/'
         },
         {
+            hidden: true,
             label: 'Новости и информация',
             icon: 'library_books',
             items: [
@@ -30,6 +41,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Товары',
             icon: 'local_offer',
             items: [
@@ -39,6 +51,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Склады',
             icon: 'storage',
             items: [
@@ -54,6 +67,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Магазины',
             icon: 'shopping_cart',
             items: [
@@ -77,6 +91,7 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Ярмарки',
             icon: 'store',
             items: [
@@ -92,18 +107,22 @@ export class MainNavigationComponent implements OnInit {
             ]
         },
         {
+            hidden: true,
             label: 'Бухгалтерия',
             icon: 'keyboard'
         },
         {
+            hidden: true,
             label: 'Контрагенты',
             icon: 'work'
         },
         {
+            hidden: true,
             label: 'Транспорт',
             icon: 'directions_car'
         },
         {
+            hidden: true,
             label: 'Справочники',
             icon: 'view_list'
         },
@@ -111,23 +130,41 @@ export class MainNavigationComponent implements OnInit {
             label: 'Администрирование',
             icon: 'settings_input_component',
             items: [
-                { label: 'Сотрудники', link: '/admin/employees' },
                 {
-                    label: 'Пользователи',
-                    link: '/admin/users'
+                    hidden: this.permissions['Employee.All'] ? false : true,
+                    label: 'Сотрудники',
+                    items: [
+                        {
+                            hidden: this.permissions['Employee.Create'] ? false : true,
+                            label: 'Добавить',
+                            link: '/administration/employees/create'
+                        },
+                        {
+                            hidden: this.permissions['Employee.All'] ? false : true,
+                            label: 'Активные',
+                            link: '/administration/employees/active'
+                        },
+                        {
+                            hidden: this.permissions['Employee.All'] ? false : true,
+                            label: 'Заблокированные',
+                            link: '/administration/employees/locked'
+                        }
+                    ]
                 },
                 {
+                    hidden: true,
                     label: 'Административно-территориальное деление',
-                    link: '/admin/administrative-divisions'
+                    link: '/administration/administrative-divisions'
                 },
                 {
+                    hidden: true,
                     label: 'Организационная структура SUMR',
-                    link: '/admin/organizational structure'
+                    link: '/administration/organizational-structure'
                 }
             ]
         }
     ];
-    constructor() {}
+    constructor(private router: Router, private app: AppComponent) {}
 
     ngOnInit() {}
 }

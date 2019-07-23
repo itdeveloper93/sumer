@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MiniProfileService } from './mini-profile.service';
-import User from './user.interface';
+import User, { MiniProfileService } from './mini-profile.service';
 
 @Component({
     selector: 'mini-profile',
@@ -10,9 +9,9 @@ import User from './user.interface';
 export class MiniProfileComponent implements OnInit {
     user: User;
 
-    constructor(private miniProfileService: MiniProfileService) {}
+    constructor(private service: MiniProfileService) {}
 
     ngOnInit() {
-        this.user = this.miniProfileService.getUser();
+        this.user = this.service.getUser();
     }
 }

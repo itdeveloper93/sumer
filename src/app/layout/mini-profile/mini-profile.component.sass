@@ -4,23 +4,26 @@
 
 .mini-profile
     background-color: lighten($black, 5%)
-    height: 89px
+    height: 69px
     color: $light-grey
-    +respond-to(tablet)
-        height: 69px
+    cursor: pointer
     +respond-to(phone-land)
         height: 59px
 
     .avatar
-        max-width: 50px
-        max-height: 50px
-        +respond-to(tablet)
-            max-width: 40px
-            max-height: 40px
+        object-fit: cover
+        width: 40px
+        height: 40px
     
     .full-name
-        margin-bottom: -3px
+        margin-bottom: -2px
     
     .position
         font-size: .875rem
-        opacity: .5
+        color: transparentize($light-grey, .5)
+    
+    .full-name,
+    .position
+        max-width: 160px
+        +respond-to(tablet)
+            max-width: 100%
