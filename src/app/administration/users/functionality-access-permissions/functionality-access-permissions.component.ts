@@ -72,7 +72,11 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
      */
     private get() {
         this.isRequesting = true;
+<<<<<<< HEAD
         this.isRequestingFunctionalityAccessPermissions.emit(true);
+=======
+        setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(true));
+>>>>>>> employees
 
         this.service.get(this.id).subscribe(
             response => {
@@ -90,11 +94,19 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
             },
             (error: Response) => {
                 this.isRequesting = false;
+<<<<<<< HEAD
                 this.isRequestingFunctionalityAccessPermissions.emit(true);
             },
             () => {
                 this.isRequesting = false;
                 this.isRequestingFunctionalityAccessPermissions.emit(true);
+=======
+                setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(false));
+            },
+            () => {
+                this.isRequesting = false;
+                setTimeout(() => this.isRequestingFunctionalityAccessPermissions.emit(false));
+>>>>>>> employees
             }
         );
     }

@@ -46,8 +46,13 @@ const routes: Routes = [
                                 data: {
                                     title: 'Активные сотрудники',
                                     permissions: ['Employee.All']
+<<<<<<< HEAD
                                 }
                                 //canActivate: [RoutePermissionsGuard]
+=======
+                                },
+                                canActivate: [RoutePermissionsGuard]
+>>>>>>> employees
                             },
                             {
                                 path: 'locked',
