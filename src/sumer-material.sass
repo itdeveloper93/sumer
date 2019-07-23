@@ -379,12 +379,17 @@ span.mat-select-value-text
     &:not([class*=mat-elevation-z])
         box-shadow: $shadow
 
-    &-header-title
-        color: $black
-        font-size: 16px
+    &-header
+        &[aria-disabled=true]
+            color: $light-grey
 
-    &-header-description, .mat-expansion-indicator::after
-        color: $light-grey
+        &-title
+            color: $black
+            font-size: 16px
+
+        &-description, 
+        .mat-expansion-indicator::after
+            color: $light-grey
 
 
 // MatDatePicker

@@ -20,14 +20,19 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         // Set MatDatePicker locale
         this.dateAdapter.setLocale('ru');
-
         this.resetPermissionsObject();
     }
 
+    /**
+     * Reset permission object
+     */
     resetPermissionsObject() {
         this.grantedPermissionsObject = this.permissionsService.get();
     }
 
+    /**
+     * Access for reseting permissions objects
+     */
     public get resetPermissions() {
         return this.resetPermissionsObject();
     }

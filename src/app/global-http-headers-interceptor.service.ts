@@ -12,7 +12,7 @@ import {
     HttpErrorResponse,
     HttpEvent
 } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, flatMap, tap } from 'rxjs/operators';
 import { AuthService } from './authentication/auth.service';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
@@ -95,6 +95,8 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
         return this.authService.refreshToken().pipe(
             flatMap(response => {
                 if (response.meta.success) {
+                    console.log(response);
+
                     this.authService.storeTokens(response.data.token, response.data.refreshToken);
 
                     request = this.addAuthToken(request, response.data.token);

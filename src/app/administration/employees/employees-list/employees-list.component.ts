@@ -105,7 +105,10 @@ export class EmployeesListComponent implements OnInit {
         } else {
             this.get(this.fetchCriterias);
 
-            this.displayedColumns = ['photo', 'fullName', 'department', 'hasAccount', 'email', 'actions'];
+            this.displayedColumns = ['photo', 'fullName', 'department', 'hasAccount', 'email'];
+
+            if (this.permissions['Employee.Details'] || this.permissions['Employee.Edit'])
+                this.displayedColumns.push('actions');
         }
     }
 

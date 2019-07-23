@@ -13,14 +13,24 @@ export class PermissionsService {
      * @returns An array of granted permissions.
      */
     get() {
-        const payload = this.jwtHelper.decodeToken(this.authService.getToken());
-        const permissionsArray = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        const permissionsObject = {};
+        const authToken = this.authService.getToken();
 
-        permissionsArray.forEach((permission: string) => {
-            permissionsObject[permission] = permission;
-        });
+        if (authToken) {
+            const payload = this.jwtHelper.decodeToken(authToken);
+            let grantedPermissions = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            const grantedPermissionsObject = {};
 
-        return permissionsObject;
+            // If there is only one granted permission, it'll come as single string in token,
+            // so we need to convert it into an array.
+            if (!Array.isArray(grantedPermissions)) grantedPermissions = JSON.parse(`["${grantedPermissions}"]`);
+
+            if (grantedPermissions) {
+                grantedPermissions.forEach((permission: string) => {
+                    grantedPermissionsObject[permission] = permission;
+                });
+            }
+
+            return grantedPermissionsObject;
+        }
     }
 }

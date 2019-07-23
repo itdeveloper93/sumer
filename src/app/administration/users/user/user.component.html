@@ -12,11 +12,14 @@
             <lock-form horisontal="true" entityType="user" id="{{ id }}"></lock-form>
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
+        <mat-expansion-panel [disabled]="isRequesting">
             <mat-expansion-panel-header>
                 <mat-panel-title>Права доступа к функционалу</mat-panel-title>
             </mat-expansion-panel-header>
-            <functionality-access-permissions id="{{ id }}"></functionality-access-permissions>
+            <functionality-access-permissions
+                id="{{ id }}"
+                (isRequestingFunctionalityAccessPermissions)="isRequesting = $event"
+            ></functionality-access-permissions>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
