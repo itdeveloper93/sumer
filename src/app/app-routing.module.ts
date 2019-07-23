@@ -11,6 +11,7 @@ import { EmployeeComponent } from './administration/employees/employee/employee.
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
 import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';
+import { RoutePermissionsGuard } from './authentication/route-permissions-guard.service';
 
 const routes: Routes = [
     {
@@ -41,55 +42,56 @@ const routes: Routes = [
                         children: [
                             {
                                 path: 'active',
-                                data: { title: 'Активные сотрудники' },
-                                component: EmployeesListComponent
+                                component: EmployeesListComponent,
+                                data: {
+                                    title: 'Активные сотрудники',
+                                    permissions: ['Employee.All']
+                                }
+                                //canActivate: [RoutePermissionsGuard]
                             },
                             {
                                 path: 'locked',
-                                data: { title: 'Заблокированные сотрудники', showLocked: true },
-                                component: EmployeesListComponent
+                                component: EmployeesListComponent,
+                                data: {
+                                    title: 'Заблокированные сотрудники',
+                                    permissions: ['Employee.All'],
+                                    showLocked: true
+                                },
+                                canActivate: [RoutePermissionsGuard]
                             },
                             {
                                 path: 'create',
-                                data: { title: 'Добавление сотрудника' },
-                                component: CreateEmployeeComponent
+                                data: {
+                                    title: 'Добавление сотрудника',
+                                    permissions: ['Employee.Create']
+                                },
+                                component: CreateEmployeeComponent,
+                                canActivate: [RoutePermissionsGuard]
                             },
                             {
                                 path: 'edit',
-                                data: { title: 'Редактирование сотрудника' },
+                                data: { title: 'Редактирование сотрудника', permissions: ['Employee.Edit'] },
+                                canActivate: [RoutePermissionsGuard],
                                 children: [
                                     {
                                         path: 'essentials/:id',
-                                        data: 'Главное',
+                                        data: { title: 'Главное' },
                                         component: CreateEmployeeComponent
                                     },
                                     {
                                         path: 'passport-data/:id',
-                                        data: 'Паспортные данные',
+                                        data: {
+                                            title: 'Редактирование паспортных данных'
+                                        },
                                         component: UpdatePassportDataComponent
                                     }
                                 ]
                             },
                             {
                                 path: ':id',
-                                data: { title: 'Сотрудник' },
-                                component: EmployeeComponent
-                            }
-                        ]
-                    },
-                    {
-                        path: 'users',
-                        data: { title: 'Пользователи', showLocked: false },
-                        children: [
-                            {
-                                path: 'active',
-                                data: { title: 'Активные' },
-                                component: EmployeesListComponent
-                            },
-                            {
-                                path: 'locked',
-                                data: { title: 'Заблокированные', showLocked: true },
-                                component: EmployeesListComponent
+                                data: { title: 'Сотрудник', permissions: ['Employee.Details'] },
+                                component: EmployeeComponent,
+                                canActivate: [RoutePermissionsGuard]
                             }
                         ]
                     }
