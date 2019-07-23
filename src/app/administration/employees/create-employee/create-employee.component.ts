@@ -12,14 +12,15 @@ import { Gender, GendersService } from 'src/app/common-services/genders.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService, EssentialData } from '../employee/employee.service';
 import * as moment from 'moment-timezone';
-import { Employee } from '../employees.service';
 import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.component';
 import { AppConfig, momentX } from 'src/app/app.config';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-create-employee',
     templateUrl: './create-employee.component.html',
-    styleUrls: ['./create-employee.component.sass']
+    styleUrls: ['./create-employee.component.sass'],
+    animations: [fade]
 })
 export class CreateEmployeeComponent implements OnInit {
     /**
@@ -31,11 +32,6 @@ export class CreateEmployeeComponent implements OnInit {
      * Page title
      */
     title: string;
-
-    /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting: boolean;
 
     /**
      * Minimum date available to choose from MatDatePicker
@@ -88,7 +84,6 @@ export class CreateEmployeeComponent implements OnInit {
         firstName: new FormControl('', [Validators.required, Validators.pattern('[а-яА-Я]*')]),
         middleName: new FormControl('', Validators.pattern('[а-яА-Я]*')),
         dateOfBirth: new FormControl(''),
-        // TODO: Fetch genders from server
         genderId: new FormControl(''),
         hireDate: new FormControl(''),
         departmentId: new FormControl(''),
@@ -129,8 +124,6 @@ export class CreateEmployeeComponent implements OnInit {
         this.getDepartments();
         this.getGenders();
 
-        this.form.get('positionId').disable();
-
         if (this.id) {
             this.title = 'Редактирование сотрудника';
             this.getEssentialData(this.id);
@@ -158,8 +151,6 @@ export class CreateEmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getEssentialData(id: string) {
-        this.isRequesting = true;
-
         this.employeeService.getEssentialData(id).subscribe(
             response => {
                 this.form.patchValue({
@@ -168,29 +159,9 @@ export class CreateEmployeeComponent implements OnInit {
                     hireDate: momentX(response.data.hireDate)
                 });
 
-                console.log(response.data);
-
                 this.essentialData = response.data;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    case 400:
-                        this.snackbar.open('Ошибка. Проверьте введенные данные.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        this.location.back();
-                        break;
-                }
-            },
-            () => (this.isRequesting = false)
+            (error: Response) => this.location.back()
         );
     }
 
@@ -198,58 +169,16 @@ export class CreateEmployeeComponent implements OnInit {
      * Get all genders
      */
     getGenders() {
-        this.isRequesting = true;
-        this.form.get('genderId').disable();
-
-        this.gendersService.get().subscribe(
-            response => (this.genders = response.data),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-                this.form.get('genderId').enable();
-            }
-        );
+        this.gendersService.get().subscribe(response => (this.genders = response.data));
     }
 
     /**
      * Get all departments
      */
     getDepartments() {
-        this.isRequesting = true;
-        this.form.get('departmentId').disable();
-
-        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
-            response => (this.departments = response.data),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-                this.form.get('departmentId').enable();
-            }
-        );
+        this.departmentsAndPositionsService
+            .getDepartmentsListItems()
+            .subscribe(response => (this.departments = response.data));
     }
 
     /**
@@ -257,23 +186,9 @@ export class CreateEmployeeComponent implements OnInit {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.departmentsAndPositionsService.getPositions(departmentId).subscribe(
-            response => (this.positions = response.data),
-            (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.form.get('positionId').enable();
-            }
-        );
+        this.departmentsAndPositionsService
+            .getPositions(departmentId)
+            .subscribe(response => (this.positions = response.data));
     }
 
     // TODO: Don't know what does this do. Fix.
@@ -324,7 +239,6 @@ export class CreateEmployeeComponent implements OnInit {
         const action = this.id ? 'Edit' : 'Create';
         const payload = this.constructRequestPayload();
 
-        this.isRequesting = true;
         this.form.disable();
 
         this.service.submit(action, payload).subscribe(
@@ -349,24 +263,8 @@ export class CreateEmployeeComponent implements OnInit {
                     if (this.form.touched) this.snackbar.open('Изменения сохранены.');
                 }
             },
-            (error: Response) => {
-                this.isRequesting = false;
-                this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору.`);
-                        break;
-                }
-            },
-            () => {
-                this.form.enable();
-                this.isRequesting = false;
-            }
+            (error: Response) => this.form.enable(),
+            () => this.form.enable()
         );
     }
 }

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import BaseResponseInterface from '../base-response.interface';
 
 /**
- * Sign-in credentials shape
+ * Sign-in credentials shape.
  */
 export interface SignInCredentials {
     phoneNumber: number;
@@ -17,14 +17,14 @@ export interface SignInCredentials {
 }
 
 /**
- * Reset password credentials shape
+ * Reset password credentials shape.
  */
 export interface ResetPasswordCredentials {
     phoneNumber: number;
 }
 
 /**
- * Sign-in response shape
+ * Sign-in response shape.
  */
 export interface SignInResponse {
     token: string;
@@ -39,7 +39,8 @@ export class AuthService {
 
     /**
      * Sign-in
-     * @param credentials Sign-in credentials
+     * @param credentials Sign-in credentials.
+     * @returns true | false – on success | error – respectively.
      */
     signIn(credentials: SignInCredentials): Observable<boolean> {
         return this.http
@@ -61,7 +62,7 @@ export class AuthService {
     }
 
     /**
-     * Sign-out
+     * Sign-out.
      */
     signOut() {
         this.removeTokens();
@@ -69,7 +70,9 @@ export class AuthService {
     }
 
     /**
-     * Detemines if user signed-in
+     * Detemines if user signed-in and auth token is valid
+     * @returns true if user signed in and token is valid, false if token
+     * is expired.
      */
     isSignedIn() {
         const token = this.getToken('auth');
@@ -82,8 +85,9 @@ export class AuthService {
     }
 
     /**
-     * Reset password
-     * @param credentials Reset password credentials
+     * Reset password.
+     * @param credentials Reset password credentials.
+     * @returns true | false – on success | error – respectively.
      */
     resetPassword(credentials: ResetPasswordCredentials): Observable<boolean> {
         return this.http
@@ -101,7 +105,8 @@ export class AuthService {
     }
 
     /**
-     * Refresh JWT
+     * Refresh JWT.
+     * @returns New tokens.
      */
     refreshToken(): Observable<BaseResponseInterface<SignInResponse>> {
         return this.http.post<BaseResponseInterface<SignInResponse>>(environment.API.URL + 'Account/RefreshToken', {
@@ -111,10 +116,11 @@ export class AuthService {
     }
 
     /**
-     * Get auth or refresh token
-     * @param type Type of the token to return (auth || refresh)
+     * Get auth or refresh token.
+     * @param type Type of the token to return (auth || refresh).
+     * @returns Auth or refresh token string.
      */
-    getToken(type = 'auth') {
+    getToken(type = 'auth'): string {
         return type === 'auth' ? localStorage.getItem('auth_token') : localStorage.getItem('refresh_token');
     }
 

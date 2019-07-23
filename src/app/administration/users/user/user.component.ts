@@ -14,11 +14,6 @@ export class UserComponent implements OnInit {
     @Input() id: string;
 
     /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting: boolean;
-
-    /**
      * Determines whther user is locked or not
      */
     isLocked: boolean;
@@ -33,30 +28,9 @@ export class UserComponent implements OnInit {
      * Get user data
      */
     get() {
-        this.isRequesting = true;
-
-        this.service.get(this.id).subscribe(
-            response => {
-                this.isLocked = response.data.isLocked;
-
-                this.isLocked;
-            },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-            }
-        );
+        this.service.get(this.id).subscribe(response => {
+            this.isLocked = response.data.isLocked;
+            this.isLocked;
+        });
     }
 }

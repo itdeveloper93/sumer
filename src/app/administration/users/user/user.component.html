@@ -1,15 +1,8 @@
 <div class="position-relative">
-    <mat-progress-bar
-        mode="indeterminate"
-        *ngIf="isRequesting"
-        class="mat-progress-bar_top rounded-top"
-    ></mat-progress-bar>
     <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Блокировка пользователя
-                </mat-panel-title>
+                <mat-panel-title>Блокировка пользователя</mat-panel-title>
             </mat-expansion-panel-header>
             <alert
                 message="Внимание! После блокировки пользователь потеряет доступ к системе."
@@ -21,36 +14,28 @@
 
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Права доступа к функционалу
-                </mat-panel-title>
+                <mat-panel-title>Права доступа к функционалу</mat-panel-title>
+            </mat-expansion-panel-header>
+            <functionality-access-permissions id="{{ id }}"></functionality-access-permissions>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>Права доступа к данным</mat-panel-title>
             </mat-expansion-panel-header>
             Ничего нет
         </mat-expansion-panel>
 
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Права доступа к данным
-                </mat-panel-title>
+                <mat-panel-title>Сбросить пароль</mat-panel-title>
             </mat-expansion-panel-header>
             Ничего нет
         </mat-expansion-panel>
 
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Сбросить пароль
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            Ничего нет
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Активность пользователя
-                </mat-panel-title>
+                <mat-panel-title>Активность пользователя</mat-panel-title>
             </mat-expansion-panel-header>
             Ничего нет
         </mat-expansion-panel>

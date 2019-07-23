@@ -12,7 +12,6 @@ import {
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatCheckboxModule,
     MatInputModule,
     MatSlideToggleModule,
     MatTabsModule,
@@ -42,6 +41,7 @@ import { UpdatePassportDataComponent } from './update-passport-data/update-passp
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { MyProfileComponent } from '../users/my-profile/my-profile.component';
 import { ChangePasswordComponent } from '../users/change-password/change-password.component';
+import { FunctionalityAccessPermissionsComponent } from '../users/functionality-access-permissions/functionality-access-permissions.component';
 
 @NgModule({
     declarations: [
@@ -58,7 +58,8 @@ import { ChangePasswordComponent } from '../users/change-password/change-passwor
         CreateEmployeeComponent,
         UpdatePassportDataComponent,
         MyProfileComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        FunctionalityAccessPermissionsComponent
     ],
     imports: [
         CommonModule,
@@ -74,7 +75,6 @@ import { ChangePasswordComponent } from '../users/change-password/change-passwor
         MatFormFieldModule,
         MatSelectModule,
         ReactiveFormsModule,
-        MatCheckboxModule,
         MatInputModule,
         FormsModule,
         MatSlideToggleModule,

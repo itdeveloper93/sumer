@@ -1,9 +1,9 @@
 <div class="container-fluid">
-    <h1 class="mb-4">{{ title }}</h1>
+    <h1 class="mb-4" [@fade]>{{ title }}</h1>
 
     <form class="row" [formGroup]="form" (ngSubmit)="submit()">
         <div class="col-12 col-md-4 col-lg-3 mb-3 mb-lg-0">
-            <mat-card class="p-0">
+            <mat-card class="p-0" *ngIf="passportData || nationalities" [@fade]>
                 <img
                     src="{{
                         passportData?.passportScanPath
@@ -26,7 +26,7 @@
             </mat-card>
         </div>
         <div class="col-12 col-md-8 col-lg-6 mb-4 mb-lg-0">
-            <mat-card>
+            <mat-card *ngIf="passportData || nationalities" [@fade]>
                 <mat-card-header>
                     <mat-card-title>Цифровые данные</mat-card-title>
                 </mat-card-header>
@@ -144,9 +144,11 @@
             </mat-card>
         </div>
         <div class="col-12 col-lg-3 d-flex flex-row-reverse flex-lg-column">
-            <button mat-flat-button color="primary" class="mb-3 w-100"> <mat-icon>save</mat-icon> Сохранить </button>
+            <button mat-flat-button color="primary" class="mb-3 w-100" *ngIf="passportData || nationalities" [@fade]>
+                <mat-icon>save</mat-icon> Сохранить
+            </button>
 
-            <button mat-button class="mb-3 mr-3 mr-lg-0 w-100" type="button" (click)="this.location.back()">
+            <button mat-button class="mb-3 mr-3 mr-lg-0 w-100" type="button" (click)="this.location.back()" [@fade]>
                 <mat-icon>keyboard_arrow_left</mat-icon> Назад
             </button>
         </div>

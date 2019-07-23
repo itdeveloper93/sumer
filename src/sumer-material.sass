@@ -29,11 +29,12 @@ $theme: mat-light-theme($primary, $accent, $warn)
 
 
 // MatCard
-mat-card.mat-card
+app-root .mat-card
+    $component: &
     padding: 30px
     box-shadow: $shadow !important
 
-    mat-card-header
+    &-header
         margin-bottom: 15px
 
         .mat-card-header-text
@@ -42,69 +43,69 @@ mat-card.mat-card
         .mat-card-title
             font-size: 22px
             line-height: 28px
+            margin-bottom: 0
         
         .mat-card-subtitle
             color: $grey
     
-    .mat-card-actions
+    &-actions
         margin: 0 !important
         padding: 0 !important
 
-// MatCheckbox
-label.mat-checkbox-layout
-    margin-bottom: 0
 
-
-// MatButton
+// MatButton, MatFab & MatMiniFab
 .mat-button
     background-color: $white
     color: $grey
 
-.mat-button-focus-overlay
-    background-color: $grey
-
-.mat-button, 
-.mat-flat-button, 
-.mat-stroked-button
-    line-height: 50px !important
-    padding: 0 27px !important
-
-    .mat-button-wrapper
-        display: flex
-        align-items: center
-        justify-content: center
-
-        .mat-icon
-            margin-right: 5px
+    &-focus-overlay
+        background-color: $grey
     
-    .material-icons
-        font-size: 16px
-        margin-top: 1px
+    &.mat-primary
+        color: $grey
 
-    &-sm
-        line-height: 36px !important
-        padding: 0 18px !important
+app-root
+    .mat-button, 
+    .mat-flat-button, 
+    .mat-stroked-button
+        line-height: 50px
+        padding: 0 27px
 
-        &.has-icon
-            padding-left: 10px !important
+        .mat-button-wrapper
+            display: flex
+            align-items: center
+            justify-content: center
 
-.mat-flat-button.mat-primary[disabled], 
-.mat-flat-button.mat-accent[disabled], 
-.mat-flat-button.mat-warn[disabled], 
-.mat-flat-button[disabled][disabled], 
-.mat-raised-button.mat-primary[disabled], 
-.mat-raised-button.mat-accent[disabled], 
-.mat-raised-button.mat-warn[disabled], 
-.mat-raised-button[disabled][disabled], 
-.mat-fab.mat-primary[disabled], 
-.mat-fab.mat-accent[disabled], 
-.mat-fab.mat-warn[disabled], 
-.mat-fab[disabled][disabled], 
-.mat-mini-fab.mat-primary[disabled], 
-.mat-mini-fab.mat-accent[disabled], 
-.mat-mini-fab.mat-warn[disabled], 
-.mat-mini-fab[disabled][disabled]
-    background-color: $light-grey
+            .mat-icon
+                margin-right: 5px
+        
+        .material-icons
+            font-size: 16px
+            margin-top: 1px
+
+        &-sm
+            line-height: 36px
+            padding: 0 18px
+
+.mat-flat-button[disabled],
+.mat-fab[disabled],
+.mat-mini-fab[disabled]
+    opacity: .5
+
+    &[disabled]
+        background-color: $white
+
+    &.mat-primary
+        background-color: $purple
+        color: #fff
+
+    &.mat-accent
+        background-color: $green
+        color: #fff
+
+    &.mat-warn
+        background-color: $red
+        color: #fff
 
 .mat-fab:not([class*=mat-elevation-z]), 
 .mat-mini-fab:not([class*=mat-elevation-z])
@@ -118,8 +119,8 @@ label.mat-checkbox-layout
     &-label
         color: $grey
 
-    mat-icon
-        transition: .1s ease
+    .mat-icon
+        transition: .1s
     
     .mat-hint
         color: $grey
@@ -135,7 +136,8 @@ label.mat-checkbox-layout
     opacity: .3
 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick
-    color: $black
+    color: $grey
+    transition: opacity .2s
 
 .mat-form-field-appearance-outline .mat-form-field-infix
     padding: .8em 0 1.1em 0
@@ -270,11 +272,17 @@ table
 
 
 // MatSlideToggle
-mat-slide-toggle
+.mat-slide-toggle
     width: 100% !important
 
-    .mat-slide-toggle-label
+    &-label
         justify-content: space-between
+    
+    &:not(.mat-checked) .mat-ripple-element
+        background-color: #2350d1
+    
+    &-bar
+        background-color: $light-grey
 
 
 // MatSelect
@@ -297,6 +305,9 @@ span.mat-select-value-text
 
 .mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled)
     background: transparentize($light-grey, .7)
+
+.mat-select-panel .mat-optgroup-label, .mat-select-panel .mat-option
+    transition: background .2s
 
 .mat-select-panel:not([class*=mat-elevation-z])
     box-shadow: $shadow-xl
@@ -380,15 +391,16 @@ span.mat-select-value-text
 .mat-datepicker-content
     box-shadow: $shadow-xl
 
-    .mat-calendar-controls
-        margin-top: 0 !important
-        align-items: center
+    .mat-calendar
+        &-controls
+            margin-top: 0 !important
+            align-items: center
 
-    .mat-calendar-body-cell-content:not(.mat-calendar-body-selected)
-        color: $black
+        &-body-cell-content:not(.mat-calendar-body-selected)
+            color: $black
 
-    .mat-calendar-body-today:not(.mat-calendar-body-selected)
-        border-color: $purple
+        &-body-today:not(.mat-calendar-body-selected)
+            border-color: $purple
 
     .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected), 
     .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected), 
@@ -397,3 +409,14 @@ span.mat-select-value-text
         background-color: $purple
         color: #fff !important
         transition: background-color .2s
+
+
+// MatTooltip
+.mat-tooltip
+    background: transparentize($black, .1)
+    box-shadow: $shadow
+
+
+// MatElevation
+.mat-elevation-z4
+    box-shadow: 0px 2px 4px -1px transparentize($black, .8), 0px 4px 5px 0px transparentize($black, .9), 0px 1px 10px 0px transparentize($black, .9)

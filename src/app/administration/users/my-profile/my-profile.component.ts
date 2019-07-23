@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { MyProfileService, EmployeeData } from './my-profile.service';
 import { fade } from 'src/app/animations/all';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'my-profile',
@@ -17,11 +19,6 @@ export class MyProfileComponent implements OnInit {
     employeeData: EmployeeData;
 
     /**
-     * Determines whether any fetch operation is in progress.
-     */
-    isRequesting: boolean;
-
-    /**
      * Does the same thing as field above, but extracted to separate
      * filed to not invoke global loading indicator while updating
      * just employee data. Maybe its better to extract editing this
@@ -33,7 +30,7 @@ export class MyProfileComponent implements OnInit {
     /**
      * Determines if user wants to edit his essential data.
      */
-    isEditing: boolean;
+    isEditingUserDetails: boolean;
 
     /**
      * Register update essentials form and it's controls.
@@ -48,7 +45,7 @@ export class MyProfileComponent implements OnInit {
         factualAddress: new FormControl('', Validators.required)
     });
 
-    constructor(private service: MyProfileService, private snackbar: MatSnackBar) {}
+    constructor(private service: MyProfileService, private snackbar: MatSnackBar, private http: HttpClient) {}
 
     ngOnInit() {
         this.getEmployeeData();
@@ -58,28 +55,10 @@ export class MyProfileComponent implements OnInit {
      * Get employee data.
      */
     getEmployeeData() {
-        this.isRequesting = true;
-
-        this.service.getEmployeeData().subscribe(
-            response => {
-                this.employeeData = response.data;
-                this.form.patchValue(response.data);
-            },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => (this.isRequesting = false)
-        );
+        this.service.getEmployeeData().subscribe(response => {
+            this.employeeData = response.data;
+            this.form.patchValue(response.data);
+        });
     }
 
     /**
@@ -107,20 +86,10 @@ export class MyProfileComponent implements OnInit {
             (error: Response) => {
                 this.isRequestingEditUserDetails = false;
                 this.form.enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
             },
             () => {
                 this.isRequestingEditUserDetails = false;
-                this.isEditing = false;
+                this.isEditingUserDetails = false;
                 this.form.enable();
             }
         );

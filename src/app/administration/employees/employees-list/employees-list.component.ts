@@ -3,12 +3,14 @@ import { EmployeesService, Employee, FetchCriterias } from '../employees.service
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
 import { AppConfig } from 'src/app/app.config';
-import { AuthService } from 'src/app/authentication/auth.service';
+import { fade } from 'src/app/animations/all';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'employees-list',
     templateUrl: './employees-list.component.html',
-    styleUrls: ['./employees-list.component.sass']
+    styleUrls: ['./employees-list.component.sass'],
+    animations: [fade]
 })
 export class EmployeesListComponent implements OnInit {
     /**
@@ -68,6 +70,11 @@ export class EmployeesListComponent implements OnInit {
      */
     pageEvent: PageEvent;
 
+    /**
+     * Granted permissions
+     */
+    permissions = this.app.grantedPermissions;
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -75,7 +82,7 @@ export class EmployeesListComponent implements OnInit {
         private service: EmployeesService,
         private route: ActivatedRoute,
         private router: Router,
-        private snackbar: MatSnackBar
+        private app: AppComponent
     ) {}
 
     ngOnInit() {
@@ -181,19 +188,7 @@ export class EmployeesListComponent implements OnInit {
                 this.employees = response.data.items;
                 this.employeesCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.employees.paginator = this.paginator;

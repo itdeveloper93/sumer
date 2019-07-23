@@ -9,17 +9,25 @@ import {
     HttpProgressEvent,
     HttpResponse,
     HttpUserEvent,
-    HttpErrorResponse
+    HttpErrorResponse,
+    HttpEvent
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, flatMap } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, flatMap, tap } from 'rxjs/operators';
 import { AuthService } from './authentication/auth.service';
+import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
-    constructor(private authService: AuthService) {}
+    /**
+     * Access dashboard layout props
+     */
+    private dashboardLayout = DashboardLayoutComponent;
+
+    constructor(private authService: AuthService, private snackbar: MatSnackBar) {}
 
     intercept(
         request: HttpRequest<any>,
@@ -40,23 +48,28 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
 
         if (authToken) request = this.addAuthToken(request, authToken);
 
+        // Defer progress-bar display to get rid of 'ExpressionChangedAfterItHasBeenCheckedError'
+        setTimeout(() => (this.dashboardLayout.isRequesting = true));
+
         return next.handle(request).pipe(
+            tap((event: HttpEvent<any>) => {
+                if (event instanceof HttpResponse) this.dashboardLayout.isRequesting = false;
+            }),
             catchError((error: HttpErrorResponse) => {
+                this.dashboardLayout.isRequesting = false;
+
                 switch (error.status) {
+                    case 0:
+                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
+                        break;
+
                     case 401:
-                        return this.authService.refreshToken().pipe(
-                            flatMap(response => {
-                                if (response.meta.success) {
-                                    this.authService.storeTokens(response.data.token, response.data.refreshToken);
+                        return this.refreshToken(request, next);
+                        break;
 
-                                    request = this.addAuthToken(request, response.data.token);
-
-                                    return next.handle(request);
-                                } else this.authService.signOut();
-
-                                return next.handle(request);
-                            })
-                        );
+                    case 500:
+                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
+                        break;
                 }
 
                 return throwError(error);
@@ -69,9 +82,28 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
      * @param request Request object
      * @param token Auth token
      */
-    addAuthToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    private addAuthToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
         return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }
 
-    refreshToken() {}
+    /**
+     * Refresh token
+     * @param request Request object
+     * @param next HTTP next handler
+     */
+    private refreshToken(request: HttpRequest<any>, next: HttpHandler) {
+        return this.authService.refreshToken().pipe(
+            flatMap(response => {
+                if (response.meta.success) {
+                    this.authService.storeTokens(response.data.token, response.data.refreshToken);
+
+                    request = this.addAuthToken(request, response.data.token);
+
+                    return next.handle(request);
+                } else this.authService.signOut();
+
+                return next.handle(request);
+            })
+        );
+    }
 }

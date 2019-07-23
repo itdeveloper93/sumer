@@ -1,5 +1,3 @@
-<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top rounded-top"></mat-progress-bar>
-
 <form
     *ngIf="!entityLockStatus?.isLocked; else unlockForm"
     class="lock-form"
@@ -42,6 +40,7 @@
         class="btn-lg btn-block unlock-btn"
         [style.max-width.px]="entityType === 'user' ? '200' : 'none'"
         [class.ml-auto]="entityType === 'user'"
+        [disabled]="isRequesting"
     >
         Разблокировать
     </button>

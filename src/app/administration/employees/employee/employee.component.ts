@@ -42,11 +42,6 @@ export class EmployeeComponent implements OnInit {
     logData: Log;
 
     /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting: boolean;
-
-    /**
      * Active tab title. Initially set to 'Главное' to fetch essential
      * data straight away
      */
@@ -87,11 +82,24 @@ export class EmployeeComponent implements OnInit {
         this.activeTabIndex = +this.route.snapshot.queryParamMap.get('activeTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
-        this.getEssentialData(this.id);
+        switch (this.activeTabIndex) {
+            case 1:
+                this.getPassportData(this.id);
+                this.activeTabLabel = 'Паспортные данные';
+                break;
+
+            case 2:
+                this.getUserData(this.id);
+                this.activeTabLabel = 'Учетная запись';
+                break;
+
+            default:
+                this.getEssentialData(this.id);
+                this.activeTabLabel = 'Главное';
+                break;
+        }
 
         if (this.activeTabIndex === 1) {
-            this.getPassportData(this.id);
-            this.activeTabLabel = 'Паспортные данные';
         }
 
         // Fetch and assign log data
@@ -107,27 +115,9 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getEssentialData(id: string) {
-        this.isRequesting = true;
-
-        this.service.getEssentialData(id).subscribe(
-            response => (this.essentialData = response.data),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-
-                this.location.back();
-            },
-            () => (this.isRequesting = false)
-        );
+        this.service
+            .getEssentialData(id)
+            .subscribe(response => (this.essentialData = response.data), (error: Response) => this.location.back());
     }
 
     /**
@@ -135,29 +125,11 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getPassportData(id: string) {
-        this.isRequesting = true;
+        return this.passportDataService.get(id).subscribe(response => {
+            this.passportData = response.data;
 
-        return this.passportDataService.get(id).subscribe(
-            response => {
-                this.passportData = response.data;
-
-                if (response.data.passportNumber) this.hasPassport = true;
-            },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => (this.isRequesting = false)
-        );
+            if (response.data.passportNumber) this.hasPassport = true;
+        });
     }
 
     /**
@@ -165,25 +137,7 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      */
     getUserData(id: string) {
-        this.isRequesting = true;
-
-        this.userService.get(id).subscribe(
-            response => (this.userData = response.data),
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => (this.isRequesting = false)
-        );
+        this.userService.get(id).subscribe(response => (this.userData = response.data));
     }
 
     /**

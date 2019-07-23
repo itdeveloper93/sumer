@@ -4,6 +4,7 @@ import { DepartmentsAndPositionsService, Department } from 'src/app/common-servi
 import { MatSnackBar } from '@angular/material';
 import { FetchCriterias } from '../employees.service';
 import { ActivatedRoute } from '@angular/router';
+import { fade } from 'src/app/animations/all';
 
 export interface FilterData {
     fullName?: string;
@@ -14,14 +15,10 @@ export interface FilterData {
 @Component({
     selector: 'employees-filter',
     templateUrl: './employees-filter.component.html',
-    styleUrls: ['./employees-filter.component.sass']
+    styleUrls: ['./employees-filter.component.sass'],
+    animations: [fade]
 })
 export class EmployeesFilterComponent implements OnInit {
-    /**
-     * Determines whether any fetch operation is in progress
-     */
-    isRequesting: boolean;
-
     /**
      * List of departments for selectbox
      */
@@ -62,30 +59,9 @@ export class EmployeesFilterComponent implements OnInit {
      * Get all departments
      */
     getDepartments() {
-        this.isRequesting = true;
-        this.form.get('departmentId').disable();
-
-        this.departmentsAndPositionsService.getDepartmentsListItems().subscribe(
-            response => (this.departments = response.data),
-            (error: Response) => {
-                this.isRequesting = false;
-                this.form.get('departmentId').enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-                this.form.get('departmentId').enable();
-            }
-        );
+        this.departmentsAndPositionsService
+            .getDepartmentsListItems()
+            .subscribe(response => (this.departments = response.data));
     }
 
     /**

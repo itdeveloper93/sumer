@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { EmployeeService } from '../employees/employee/employee.service';
 import { fade } from '../../animations/all';
 import { UserService } from '../users/user/user.service';
+import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
 
 @Component({
     selector: 'lock-form',
@@ -27,6 +28,11 @@ export class LockFormComponent implements OnInit {
      * Form layout
      */
     @Input() horisontal: boolean;
+
+    /**
+     * Access dashboard layout props and methods
+     */
+    dashboardLayout = DashboardLayoutComponent;
 
     /**
      * Determines whether any fetch operation is in progress
@@ -93,16 +99,6 @@ export class LockFormComponent implements OnInit {
                 this.form.enable();
             },
             (error: Response) => {
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-
                 this.onError.emit(true);
                 this.isRequesting = false;
                 this.form.enable();
@@ -142,22 +138,8 @@ export class LockFormComponent implements OnInit {
 
                 this.onLoad.emit(true);
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
-            () => {
-                this.isRequesting = false;
-            }
+            (error: Response) => (this.isRequesting = false),
+            () => (this.isRequesting = false)
         );
     }
 
@@ -205,16 +187,6 @@ export class LockFormComponent implements OnInit {
             (error: Response) => {
                 this.onSuccess.emit(false);
                 this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
             },
             () => {
                 this.isRequesting = false;

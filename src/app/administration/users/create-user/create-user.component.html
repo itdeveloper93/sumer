@@ -1,22 +1,11 @@
 <mat-card class="d-flex flex-column justify-content-center">
-    <mat-progress-bar
-        mode="indeterminate"
-        *ngIf="isRequesting"
-        class="mat-progress-bar_top rounded-top"
-    ></mat-progress-bar>
     <alert
         message="У этого сотрудника нет учетной записи и он не имеет доступа к системе."
         type="info"
         class="text-center mb-3"
     ></alert>
 
-    <button
-        mat-flat-button
-        color="primary"
-        (click)="createUser(employeeId)"
-        class="mx-auto"
-        [disabled]="isRequesting"
-    >
+    <button mat-flat-button color="primary" (click)="createUser(employeeId)" class="mx-auto" [disabled]="isRequesting">
         Создать учетную запись
     </button>
 </mat-card>
