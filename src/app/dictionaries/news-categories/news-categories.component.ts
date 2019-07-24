@@ -164,7 +164,7 @@ export class NewsCategoriesComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getNewsCategories(criterias?: FetchCriterias) {
+    private getNewsCategories(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'NewsCategories').subscribe(

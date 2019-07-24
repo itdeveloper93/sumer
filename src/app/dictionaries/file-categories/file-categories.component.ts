@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent, MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
-import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CreateUpdateNationalityComponent } from './create-update-nationality/create-update-nationality.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-nationality',
-    templateUrl: './nationality.component.html',
-    styleUrls: ['./nationality.component.sass'],
+    selector: 'app-file-categories',
+    templateUrl: './file-categories.component.html',
+    styleUrls: ['./file-categories.component.sass'],
     animations: [fade]
 })
-export class NationalityComponent implements OnInit {
+export class FileCategoryComponent implements OnInit {
     /**
      * Page title.
      */
@@ -43,9 +43,9 @@ export class NationalityComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of nationalities in DB.
+     * Total number of file-categories in DB.
      */
-    nationalitiesCount: number;
+    fileCategoriesCount: number;
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -54,12 +54,13 @@ export class NationalityComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * nationalities in the shape of MatTableDataSource.
+     * employeeLockReason in the shape of MatTableDataSource.
      */
-    nationalities = new MatTableDataSource<Item[]>();
+    fileCategories = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -72,25 +73,25 @@ export class NationalityComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getNationality();
+        this.getFileCategories();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getNationality(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getFileCategories(params);
         });
     }
 
     /**
      * Create or update department
-     * @param id nationalities ID
-     * @param name nationalities name
+     * @param id file-categories ID
+     * @param name file-categories name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateNationalityComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateFileCategoryComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getNationality();
+            this.getFileCategories();
             //TODO fetch only if touched
         });
     }
@@ -124,7 +125,7 @@ export class NationalityComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getNationality();
+        this.getFileCategories();
     }
 
     /**
@@ -160,23 +161,23 @@ export class NationalityComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get departments
+     * Send search criterias to departmentService and get file-categories
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getNationality(criterias?: FetchCriterias) {
+    private getFileCategories(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'Nationality').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'FileCategory').subscribe(
             response => {
-                this.nationalities = response.data.items;
-                this.nationalitiesCount = response.data.totalCount;
+                this.fileCategories = response.data.items;
+                this.fileCategoriesCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.nationalities.paginator = this.paginator;
-                this.nationalities.sort = this.sort;
+                this.fileCategories.paginator = this.paginator;
+                this.fileCategories.sort = this.sort;
             }
         );
     }

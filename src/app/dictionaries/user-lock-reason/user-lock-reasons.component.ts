@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
-import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { CreateUpdatePositionComponent } from './create-update-position/create-update-position.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
+import { DictionariesService, FetchCriterias, Item } from 'src/app/dictionaries/dictionaries.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-reason/create-update-user-lock-reason.component';
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-position',
-    templateUrl: './position.component.html',
-    styleUrls: ['./position.component.sass'],
+    selector: 'app-user-lock-reasons',
+    templateUrl: './user-lock-reasons.component.html',
+    styleUrls: ['./user-lock-reasons.component.sass'],
     animations: [fade]
 })
-export class PositionComponent implements OnInit {
+export class UserLockReasonComponent implements OnInit {
     /**
      * Page title.
      */
@@ -43,9 +43,9 @@ export class PositionComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of positions in DB.
+     * Total number of file-categories in DB.
      */
-    positionsCount: number;
+    userLockReasonsCount: number;
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -54,9 +54,9 @@ export class PositionComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * positions in the shape of MatTableDataSource.
+     * user-lock-reasons in the shape of MatTableDataSource.
      */
-    positions = new MatTableDataSource<Item[]>();
+    userLockReasons = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -72,25 +72,25 @@ export class PositionComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getPosition();
+        this.getUserLockReason();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getPosition(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUserLockReason(params);
         });
     }
 
     /**
      * Create or update department
-     * @param id positions ID
-     * @param name positions name
+     * @param id user-lock-reason ID
+     * @param name user-lock-reason name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdatePositionComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateUserLockReasonComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getPosition();
+            this.getUserLockReason();
             //TODO fetch only if touched
         });
     }
@@ -124,7 +124,7 @@ export class PositionComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getPosition();
+        this.getUserLockReason();
     }
 
     /**
@@ -164,19 +164,20 @@ export class PositionComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getPosition(criterias?: FetchCriterias) {
+    getUserLockReason(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'Position').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'UserLockReason').subscribe(
             response => {
-                this.positions = response.data.items;
-                this.positionsCount = response.data.totalCount;
+                this.userLockReasons = response.data.items;
+
+                this.userLockReasonsCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.positions.paginator = this.paginator;
-                this.positions.sort = this.sort;
+                this.userLockReasons.paginator = this.paginator;
+                this.userLockReasons.sort = this.sort;
             }
         );
     }

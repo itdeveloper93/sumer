@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { CreateUpdateEmployeeLockReasonComponent } from '../../employee-lock-reason/create-update-employee-lock-reason/create-update-employee-lock-reason.component';
+import { CreateUpdateEmployeeLockReasonComponent } from '../../employee-lock-reasons/create-update-employee-lock-reason/create-update-employee-lock-reason.component';
 import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({

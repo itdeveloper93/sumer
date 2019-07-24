@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import { DictionariesService, FetchCriterias, Item } from 'src/app/dictionaries/dictionaries.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-reason/create-update-user-lock-reason.component';
+import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
+import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CreateUpdateNationalityComponent } from './create-update-nationality/create-update-nationality.component';
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-user-lock-reason',
-    templateUrl: './user-lock-reason.component.html',
-    styleUrls: ['./user-lock-reason.component.sass'],
+    selector: 'app-nationalities',
+    templateUrl: './nationalities.component.html',
+    styleUrls: ['./nationalities.component.sass'],
     animations: [fade]
 })
-export class UserLockReasonComponent implements OnInit {
+export class NationalityComponent implements OnInit {
     /**
      * Page title.
      */
@@ -43,9 +43,9 @@ export class UserLockReasonComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of file-categories in DB.
+     * Total number of nationalities in DB.
      */
-    userLockReasonsCount: number;
+    nationalitiesCount: number;
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -54,9 +54,9 @@ export class UserLockReasonComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * user-lock-reasons in the shape of MatTableDataSource.
+     * nationalities in the shape of MatTableDataSource.
      */
-    userLockReasons = new MatTableDataSource<Item[]>();
+    nationalities = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -72,25 +72,25 @@ export class UserLockReasonComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getUserLockReason();
+        this.getNationalities();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUserLockReason(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getNationalities(params);
         });
     }
 
     /**
      * Create or update department
-     * @param id user-lock-reason ID
-     * @param name user-lock-reason name
+     * @param id nationalities ID
+     * @param name nationalities name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateUserLockReasonComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateNationalityComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getUserLockReason();
+            this.getNationalities();
             //TODO fetch only if touched
         });
     }
@@ -124,7 +124,7 @@ export class UserLockReasonComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getUserLockReason();
+        this.getNationalities();
     }
 
     /**
@@ -164,20 +164,19 @@ export class UserLockReasonComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getUserLockReason(criterias?: FetchCriterias) {
+    private getNationalities(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'UserLockReason').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'Nationality').subscribe(
             response => {
-                this.userLockReasons = response.data.items;
-
-                this.userLockReasonsCount = response.data.totalCount;
+                this.nationalities = response.data.items;
+                this.nationalitiesCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.userLockReasons.paginator = this.paginator;
-                this.userLockReasons.sort = this.sort;
+                this.nationalities.paginator = this.paginator;
+                this.nationalities.sort = this.sort;
             }
         );
     }

@@ -6,9 +6,9 @@ import { CreateUpdateEmployeeLockReasonComponent } from './create-update-employe
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-employee-lock-reason',
-    templateUrl: './employee-lock-reason.component.html',
-    styleUrls: ['./employee-lock-reason.component.sass'],
+    selector: 'app-employee-lock-reasons',
+    templateUrl: './employee-lock-reasons.component.html',
+    styleUrls: ['./employee-lock-reasons.component.sass'],
     animations: [fade]
 })
 export class EmployeeLockReasonComponent implements OnInit {
@@ -72,11 +72,11 @@ export class EmployeeLockReasonComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getEmployeeLockReason();
+        this.getEmployeeLockReasons();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getEmployeeLockReason(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getEmployeeLockReasons(params);
         });
     }
 
@@ -90,7 +90,7 @@ export class EmployeeLockReasonComponent implements OnInit {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getEmployeeLockReason();
+            this.getEmployeeLockReasons();
             //TODO fetch only if touched
         });
     }
@@ -124,7 +124,7 @@ export class EmployeeLockReasonComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getEmployeeLockReason();
+        this.getEmployeeLockReasons();
     }
 
     /**
@@ -164,7 +164,7 @@ export class EmployeeLockReasonComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getEmployeeLockReason(criterias?: FetchCriterias) {
+    private getEmployeeLockReasons(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'EmployeeLockReason').subscribe(

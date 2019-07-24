@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { DictionariesList } from 'src/app/dictionaries/dictionaries.service';
 
 const dictionariesValue: DictionariesList[] = [
-    { name: 'useful-link-categories', displayName: 'Полезная ссылка' },
-    { name: 'file-categories', displayName: 'Категория файла' },
-    { name: 'user-lock-reasons', displayName: 'Причина блокировки пользователя' },
-    { name: 'positions', displayName: 'Позиция' },
-    { name: 'employee-lock-reasons', displayName: 'Причина блокировки сотрудника' },
-    { name: 'nationalities', displayName: 'Национальность' },
-    { name: 'news-categories', displayName: 'Категория полезных ссылок' },
-    { name: 'departments', displayName: 'Отдел' }
+    { name: 'useful-link-categories', displayName: 'Полезные ссылки' },
+    { name: 'file-categories', displayName: 'Категории файлов' },
+    { name: 'user-lock-reasons', displayName: 'Причины блокировки пользователей' },
+    { name: 'positions', displayName: 'Должности' },
+    { name: 'employee-lock-reasons', displayName: 'Причины блокировки сотрудников' },
+    { name: 'nationalities', displayName: 'Национальности' },
+    { name: 'news-categories', displayName: 'Категории полезных ссылок' },
+    { name: 'departments', displayName: 'Отделы' }
 ];
 
 @Component({
@@ -19,11 +19,26 @@ const dictionariesValue: DictionariesList[] = [
     styleUrls: ['./dictionaries-list.component.sass']
 })
 export class DictionariesListComponent implements OnInit {
+    /**
+     * Page title.
+     */
     title = this.route.snapshot.data['title'];
 
+    /**
+     * Determines whether any fetch operation is in progress.
+     */
     isRequesting: boolean;
-    displayedColumns: any;
-    dictionaries = dictionariesValue;
+
+    /**
+     * Columns to display in the table.
+     */
+    displayedColumns: string[];
+
+    /**
+     * List of dictionaries.
+     */
+    dictionaries: DictionariesList[] = dictionariesValue;
+
     constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {

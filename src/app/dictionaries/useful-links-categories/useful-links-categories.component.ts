@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent, MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
+import { PageEvent, MatDialog, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
+import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-file-category',
-    templateUrl: './file-category.component.html',
-    styleUrls: ['./file-category.component.sass'],
+    selector: 'app-useful-links-categories',
+    templateUrl: './useful-links-categories.component.html',
+    styleUrls: ['./useful-links-categories.component.sass'],
     animations: [fade]
 })
-export class FileCategoryComponent implements OnInit {
+export class UsefulLinkCategoryComponent implements OnInit {
     /**
      * Page title.
      */
@@ -43,9 +43,9 @@ export class FileCategoryComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of file-categories in DB.
+     * Total number of usful-link-categories in DB.
      */
-    fileCategoriesCount: number;
+    usfulLinkCategoriesCount: number;
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -54,13 +54,12 @@ export class FileCategoryComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * employeeLockReason in the shape of MatTableDataSource.
+     * usful-link-categories in the shape of MatTableDataSource.
      */
-    fileCategories = new MatTableDataSource<Item[]>();
+    usfulLinkCategories = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
     constructor(
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
@@ -73,25 +72,25 @@ export class FileCategoryComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getFileCategory();
+        this.getUsfulLinkCategories();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getFileCategory(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUsfulLinkCategories(params);
         });
     }
 
     /**
      * Create or update department
-     * @param id file-categories ID
-     * @param name file-categories name
+     * @param id usful-link-categories ID
+     * @param name usful-link-categories name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateFileCategoryComponent, {
+        const dialogRef = this.dialog.open(CreateUpdateUsefulLinkCategoryComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getFileCategory();
+            this.getUsfulLinkCategories();
             //TODO fetch only if touched
         });
     }
@@ -125,7 +124,7 @@ export class FileCategoryComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getFileCategory();
+        this.getUsfulLinkCategories();
     }
 
     /**
@@ -161,23 +160,23 @@ export class FileCategoryComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get file-categories
+     * Send search criterias to departmentService and get departments
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getFileCategory(criterias?: FetchCriterias) {
+    getUsfulLinkCategories(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'FileCategory').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'UsefulLinkCategory').subscribe(
             response => {
-                this.fileCategories = response.data.items;
-                this.fileCategoriesCount = response.data.totalCount;
+                this.usfulLinkCategories = response.data.items;
+                this.usfulLinkCategoriesCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.fileCategories.paginator = this.paginator;
-                this.fileCategories.sort = this.sort;
+                this.usfulLinkCategories.paginator = this.paginator;
+                this.usfulLinkCategories.sort = this.sort;
             }
         );
     }

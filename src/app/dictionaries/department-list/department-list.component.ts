@@ -73,11 +73,11 @@ export class DepartmentListComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getDepartment();
+        this.getDepartments();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartments(params);
         });
     }
 
@@ -91,7 +91,7 @@ export class DepartmentListComponent implements OnInit {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getDepartment();
+            this.getDepartments();
             //TODO fetch only if touched
         });
     }
@@ -125,7 +125,7 @@ export class DepartmentListComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getDepartment();
+        this.getDepartments();
     }
 
     /**
@@ -165,7 +165,7 @@ export class DepartmentListComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getDepartment(criterias?: FetchCriterias) {
+    private getDepartments(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
         this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(

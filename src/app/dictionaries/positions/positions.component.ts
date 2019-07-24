@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
-import { PageEvent, MatDialog, MatSnackBar, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
+import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { CreateUpdatePositionComponent } from './create-update-position/create-update-position.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-useful-link-category',
-    templateUrl: './useful-link-category.component.html',
-    styleUrls: ['./useful-link-category.component.sass'],
+    selector: 'app-positions',
+    templateUrl: './positions.component.html',
+    styleUrls: ['./positions.component.sass'],
     animations: [fade]
 })
-export class UsefulLinkCategoryComponent implements OnInit {
+export class PositionComponent implements OnInit {
     /**
      * Page title.
      */
@@ -43,9 +43,9 @@ export class UsefulLinkCategoryComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of usful-link-categories in DB.
+     * Total number of positions in DB.
      */
-    usfulLinkCategoriesCount: number;
+    positionsCount: number;
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -54,9 +54,9 @@ export class UsefulLinkCategoryComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * usful-link-categories in the shape of MatTableDataSource.
+     * positions in the shape of MatTableDataSource.
      */
-    usfulLinkCategories = new MatTableDataSource<Item[]>();
+    positions = new MatTableDataSource<Item[]>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -72,25 +72,25 @@ export class UsefulLinkCategoryComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getUsfulLinkCategory();
+        this.getPosition();
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUsfulLinkCategory(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getPosition(params);
         });
     }
 
     /**
      * Create or update department
-     * @param id usful-link-categories ID
-     * @param name usful-link-categories name
+     * @param id positions ID
+     * @param name positions name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateUsefulLinkCategoryComponent, {
+        const dialogRef = this.dialog.open(CreateUpdatePositionComponent, {
             data: { id, name }
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.getUsfulLinkCategory();
+            this.getPosition();
             //TODO fetch only if touched
         });
     }
@@ -124,7 +124,7 @@ export class UsefulLinkCategoryComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getUsfulLinkCategory();
+        this.getPosition();
     }
 
     /**
@@ -164,19 +164,19 @@ export class UsefulLinkCategoryComponent implements OnInit {
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    getUsfulLinkCategory(criterias?: FetchCriterias) {
+    getPosition(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'UsefulLinkCategory').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, 'Position').subscribe(
             response => {
-                this.usfulLinkCategories = response.data.items;
-                this.usfulLinkCategoriesCount = response.data.totalCount;
+                this.positions = response.data.items;
+                this.positionsCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.usfulLinkCategories.paginator = this.paginator;
-                this.usfulLinkCategories.sort = this.sort;
+                this.positions.paginator = this.paginator;
+                this.positions.sort = this.sort;
             }
         );
     }
