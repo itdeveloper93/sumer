@@ -92,6 +92,7 @@ export class FileCategoryComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getFileCategory();
+            //TODO fetch only if touched
         });
     }
 

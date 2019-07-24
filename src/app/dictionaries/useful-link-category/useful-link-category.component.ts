@@ -91,6 +91,7 @@ export class UsefulLinkCategoryComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getUsfulLinkCategory();
+            //TODO fetch only if touched
         });
     }
 
@@ -169,7 +170,6 @@ export class UsefulLinkCategoryComponent implements OnInit {
         this.dictionarieService.getDictionariesSubValues(criterias, 'UsefulLinkCategory').subscribe(
             response => {
                 this.usfulLinkCategories = response.data.items;
-
                 this.usfulLinkCategoriesCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),

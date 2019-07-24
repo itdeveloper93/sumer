@@ -42,6 +42,7 @@ export class CreateUpdatePositionComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         // Fetch nesessary initial data
         this.getDepartments();
 
@@ -64,6 +65,7 @@ export class CreateUpdatePositionComponent implements OnInit {
                         departmentId: response.data.departmentId,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
                 error => (this.isRequesting = false),
                 () => (this.isRequesting = false)

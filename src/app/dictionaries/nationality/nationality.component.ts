@@ -91,6 +91,7 @@ export class NationalityComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getNationality();
+            //TODO fetch only if touched
         });
     }
 

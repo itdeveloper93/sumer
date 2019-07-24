@@ -36,6 +36,7 @@ export class CreateUpdateDepartmentComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         this.getDepartmentById();
     }
 
@@ -54,6 +55,7 @@ export class CreateUpdateDepartmentComponent implements OnInit {
                         name: this.data.name,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
                 error => (this.isRequesting = false),
                 () => (this.isRequesting = false)

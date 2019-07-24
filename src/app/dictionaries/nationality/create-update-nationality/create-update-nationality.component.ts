@@ -37,6 +37,7 @@ export class CreateUpdateNationalityComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         this.getNationalityById();
     }
 
@@ -55,6 +56,7 @@ export class CreateUpdateNationalityComponent implements OnInit {
                         name: this.data.name,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
                 error => (this.isRequesting = false),
                 () => (this.isRequesting = false)

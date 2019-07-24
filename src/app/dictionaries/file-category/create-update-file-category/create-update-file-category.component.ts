@@ -27,6 +27,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateFileCategoryComponent>,
@@ -35,6 +36,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         this.getFileCategoryById();
     }
 
@@ -53,6 +55,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
                         name: this.data.name,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
                 error => (this.isRequesting = false),
                 () => (this.isRequesting = false)

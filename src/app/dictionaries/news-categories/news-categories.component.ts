@@ -91,6 +91,7 @@ export class NewsCategoriesComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getNewsCategories();
+            //TODO fetch only if touched
         });
     }
 

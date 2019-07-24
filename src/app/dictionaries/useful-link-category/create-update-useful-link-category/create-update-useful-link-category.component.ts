@@ -36,6 +36,7 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         this.getUsefulLinkCategoryById();
     }
 
@@ -54,6 +55,7 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
                         name: this.data.name,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
                 error => (this.isRequesting = false),
                 () => (this.isRequesting = false)

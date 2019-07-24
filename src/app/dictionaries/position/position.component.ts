@@ -91,6 +91,7 @@ export class PositionComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getPosition();
+            //TODO fetch only if touched
         });
     }
 

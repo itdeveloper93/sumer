@@ -91,6 +91,7 @@ export class EmployeeLockReasonComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getEmployeeLockReason();
+            //TODO fetch only if touched
         });
     }
 

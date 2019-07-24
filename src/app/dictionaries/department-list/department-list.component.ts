@@ -92,6 +92,7 @@ export class DepartmentListComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getDepartment();
+            //TODO fetch only if touched
         });
     }
 

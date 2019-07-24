@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-12 col-lg-7 col-xl-9">
-            <mat-card class="p-0 table-responsive mb-3" *ngIf="departments?.length" [@fade]>
+            <mat-card class="p-0 table-responsive mb-3" *ngIf="departmentsCount" [@fade]>
                 <perfect-scrollbar style="max-height: 70vh">
                     <table mat-table [dataSource]="departments" class="stripped" matSort matSortStart="desc"
                         matSortDirection="asc" matSortDisableClear (matSortChange)="setSortingQueryParams($event)">
