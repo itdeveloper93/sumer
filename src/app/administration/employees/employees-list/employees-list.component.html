@@ -5,35 +5,53 @@
         <div class="col-12 col-lg-8 col-xl-9">
             <mat-card class="p-0 table-responsive mb-3" *ngIf="employees" [@fade]>
                 <perfect-scrollbar class="table-wrapper">
-                    <style></style>
-                    <loading-indicator *ngIf="isRequesting"></loading-indicator>
-                    <table mat-table [dataSource]="employees" class="stripped" matSort matSortStart="desc"
-                        matSortDirection="asc" matSortDisableClear (matSortChange)="setSortingQueryParams($event)">
+                    <table
+                        mat-table
+                        [dataSource]="employees"
+                        class="stripped"
+                        matSort
+                        matSortStart="desc"
+                        matSortDirection="asc"
+                        matSortDisableClear
+                        (matSortChange)="setSortingQueryParams($event)"
+                    >
                         <ng-container matColumnDef="photo">
                             <th mat-header-cell *matHeaderCellDef>Фото</th>
                             <td mat-cell *matCellDef="let employee">
-                                <img src="{{
+                                <img
+                                    src="{{
                                         employee.photoPath
                                             ? employee.photoPath
                                             : '../../../../../../assets/img/noavatar.jpg'
-                                    }}" alt="{{ employee.fullName }}" class="avatar rounded-circle object-cover" />
+                                    }}"
+                                    alt="{{ employee.fullName }}"
+                                    class="avatar rounded-circle object-cover"
+                                />
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="fullName">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>ФИО</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.fullName }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="department">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Подразделение, должность</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.department }},<br />
                                 {{ employee.position }}
                             </td>
@@ -41,46 +59,69 @@
 
                         <ng-container matColumnDef="hireDate">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Дата приема</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.hireDate }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="lockDate">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Дата блокировки</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.lockDate }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="lockReason">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Причина</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.lockReason }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="hasAccount">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Пользователь</th>
-                            <td mat-cell *matCellDef="let employee" class="text-center" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                class="text-center"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
-                                <table-badge state="{{ employee.userId ? true : false }}"
-                                    value="{{ employee.userId ? 'да' : 'нет' }}"></table-badge>
+                                "
+                            >
+                                <table-badge
+                                    state="{{ employee.userId ? true : false }}"
+                                    value="{{ employee.userId ? 'да' : 'нет' }}"
+                                ></table-badge>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="email">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Контакты</th>
-                            <td mat-cell *matCellDef="let employee" [routerLink]="
+                            <td
+                                mat-cell
+                                *matCellDef="let employee"
+                                [routerLink]="
                                     permissions['Employee.Details'] ? ['/administration/employees', employee.id] : []
-                                ">
+                                "
+                            >
                                 {{ employee.phone }},<br />
                                 {{ employee.email }}
                             </td>
@@ -89,24 +130,36 @@
                         <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef class="text-right">Действия</th>
                             <td mat-cell *matCellDef="let employee" class="text-right">
-                                <button mat-mini-fab class="mat-fab-basic" [class.mr-3]="permissions['Employee.Edit']"
-                                    matTooltip="Просмотреть карточку" matTooltipPosition="above"
+                                <button
+                                    mat-mini-fab
+                                    class="mat-fab-basic"
+                                    [class.mr-3]="permissions['Employee.Edit']"
+                                    matTooltip="Просмотреть карточку"
+                                    matTooltipPosition="above"
                                     [routerLink]="['/administration/employees/', employee.id]"
-                                    *ngIf="permissions['Employee.Details']">
+                                    *ngIf="permissions['Employee.Details']"
+                                >
                                     <mat-icon>remove_red_eye</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="mat-fab-basic" matTooltip="Редактировать данные"
+                                <button
+                                    mat-mini-fab
+                                    class="mat-fab-basic"
+                                    matTooltip="Редактировать данные"
                                     matTooltipPosition="above"
                                     [routerLink]="['/administration/employees/edit/essentials/', employee.id]"
-                                    *ngIf="permissions['Employee.Edit']">
+                                    *ngIf="permissions['Employee.Edit']"
+                                >
                                     <mat-icon>edit</mat-icon>
                                 </button>
                             </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"
-                            [class.cursor-pointer]="permissions['Employee.Details']"></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let row; columns: displayedColumns"
+                            [class.cursor-pointer]="permissions['Employee.Details']"
+                        ></tr>
                     </table>
                 </perfect-scrollbar>
             </mat-card>
@@ -118,9 +171,15 @@
                 </div>
 
                 <mat-card class="p-0 mb-4 mb-lg-0" *ngIf="employees?.length">
-                    <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="employeesCount" class="rounded"
-                        [disabled]="isRequesting" (page)="pageEvent = setPaginationQueryParams($event)"
-                        [pageIndex]="pageIndex" [pageSize]="pageSize"></mat-paginator>
+                    <mat-paginator
+                        [pageSizeOptions]="pageSizeOptions"
+                        [length]="employeesCount"
+                        class="rounded"
+                        [disabled]="isRequesting"
+                        (page)="pageEvent = setPaginationQueryParams($event)"
+                        [pageIndex]="pageIndex"
+                        [pageSize]="pageSize"
+                    ></mat-paginator>
                 </mat-card>
             </ng-container>
         </div>
@@ -133,5 +192,9 @@
         </div>
     </div>
 </div>
-<floating-fab link="/administration/employees/create" title="Добавить сотрудника" icon="add"
-    *ngIf="permissions['Employee.Create']"></floating-fab>
+<floating-fab
+    link="/administration/employees/create"
+    title="Добавить сотрудника"
+    icon="add"
+    *ngIf="permissions['Employee.Create']"
+></floating-fab>

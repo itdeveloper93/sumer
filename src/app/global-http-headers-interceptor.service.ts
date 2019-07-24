@@ -64,7 +64,7 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
                         break;
 
                     case 401:
-                        return this.refreshToken(request, next).pipe(tap(res => console.log(res)));
+                        return this.refreshToken(request, next);
                         break;
 
                     case 500:
