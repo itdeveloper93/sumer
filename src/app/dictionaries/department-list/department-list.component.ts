@@ -3,11 +3,13 @@ import { MatDialog, MatPaginator, MatTableDataSource, PageEvent, MatSnackBar, So
 import { ActivatedRoute, Router } from '@angular/router';
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-department-list',
     templateUrl: './department-list.component.html',
-    styleUrls: ['./department-list.component.sass']
+    styleUrls: ['./department-list.component.sass'],
+    animations: [fade]
 })
 export class DepartmentListComponent implements OnInit {
     /**
@@ -21,7 +23,7 @@ export class DepartmentListComponent implements OnInit {
     isRequesting: boolean;
 
     /**
-     *
+     * Columns to display in the table.
      */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
@@ -54,7 +56,7 @@ export class DepartmentListComponent implements OnInit {
     /**
      * Department in the shape of MatTableDataSource.
      */
-    departments = new MatTableDataSource<Item[]>();
+    departments = new MatTableDataSource();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -63,9 +65,21 @@ export class DepartmentListComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getDepartment();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -78,18 +92,6 @@ export class DepartmentListComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getDepartment();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getDepartment();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDepartment(params);
         });
     }
 
@@ -168,22 +170,9 @@ export class DepartmentListComponent implements OnInit {
         this.dictionarieService.getDictionariesSubValues(criterias, 'Department').subscribe(
             response => {
                 this.departments = response.data.items;
-
                 this.departmentsCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.departments.paginator = this.paginator;

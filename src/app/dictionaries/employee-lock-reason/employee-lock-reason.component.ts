@@ -3,11 +3,13 @@ import { MatSort, MatPaginator, PageEvent, MatTableDataSource, MatDialog, MatSna
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateEmployeeLockReasonComponent } from './create-update-employee-lock-reason/create-update-employee-lock-reason.component';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-employee-lock-reason',
     templateUrl: './employee-lock-reason.component.html',
-    styleUrls: ['./employee-lock-reason.component.sass']
+    styleUrls: ['./employee-lock-reason.component.sass'],
+    animations: [fade]
 })
 export class EmployeeLockReasonComponent implements OnInit {
     /**
@@ -20,6 +22,9 @@ export class EmployeeLockReasonComponent implements OnInit {
      */
     isRequesting: boolean;
 
+    /**
+     * Columns to display in the table.
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
     /**
@@ -59,9 +64,21 @@ export class EmployeeLockReasonComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getEmployeeLockReason();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getEmployeeLockReason(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -74,18 +91,6 @@ export class EmployeeLockReasonComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getEmployeeLockReason();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getEmployeeLockReason();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getEmployeeLockReason(params);
         });
     }
 
@@ -166,19 +171,7 @@ export class EmployeeLockReasonComponent implements OnInit {
                 this.employeeLockReasons = response.data.items;
                 this.employeeLockReasonsCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.employeeLockReasons.paginator = this.paginator;

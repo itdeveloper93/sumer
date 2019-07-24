@@ -3,11 +3,13 @@ import { PageEvent, MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSna
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-file-category',
     templateUrl: './file-category.component.html',
-    styleUrls: ['./file-category.component.sass']
+    styleUrls: ['./file-category.component.sass'],
+    animations: [fade]
 })
 export class FileCategoryComponent implements OnInit {
     /**
@@ -20,6 +22,9 @@ export class FileCategoryComponent implements OnInit {
      */
     isRequesting: boolean;
 
+    /**
+     * Columns to display in the table.
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
     /**
@@ -60,9 +65,21 @@ export class FileCategoryComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getFileCategory();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getFileCategory(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -75,18 +92,6 @@ export class FileCategoryComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getFileCategory();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getFileCategory();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getFileCategory(params);
         });
     }
 
@@ -167,19 +172,7 @@ export class FileCategoryComponent implements OnInit {
                 this.fileCategories = response.data.items;
                 this.fileCategoriesCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.fileCategories.paginator = this.paginator;

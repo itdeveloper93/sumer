@@ -3,11 +3,13 @@ import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/
 import { PageEvent, MatDialog, MatSnackBar, MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-useful-link-category',
     templateUrl: './useful-link-category.component.html',
-    styleUrls: ['./useful-link-category.component.sass']
+    styleUrls: ['./useful-link-category.component.sass'],
+    animations: [fade]
 })
 export class UsefulLinkCategoryComponent implements OnInit {
     /**
@@ -20,6 +22,9 @@ export class UsefulLinkCategoryComponent implements OnInit {
      */
     isRequesting: boolean;
 
+    /**
+     * Columns to display in the table.
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
     /**
@@ -59,9 +64,21 @@ export class UsefulLinkCategoryComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getUsfulLinkCategory();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUsfulLinkCategory(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -74,18 +91,6 @@ export class UsefulLinkCategoryComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getUsfulLinkCategory();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getUsfulLinkCategory();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getUsfulLinkCategory(params);
         });
     }
 
@@ -167,19 +172,7 @@ export class UsefulLinkCategoryComponent implements OnInit {
 
                 this.usfulLinkCategoriesCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.usfulLinkCategories.paginator = this.paginator;

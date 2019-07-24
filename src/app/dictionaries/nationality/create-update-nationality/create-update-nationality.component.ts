@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { CreateUpdateEmployeeLockReasonComponent } from '../../employee-lock-reason/create-update-employee-lock-reason/create-update-employee-lock-reason.component';
-import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({
     selector: 'app-create-update-nationality',
@@ -28,6 +28,7 @@ export class CreateUpdateNationalityComponent implements OnInit {
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateEmployeeLockReasonComponent>,
@@ -46,6 +47,7 @@ export class CreateUpdateNationalityComponent implements OnInit {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
+
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'Nationality').subscribe(
                 response => {
                     this.form.patchValue({
@@ -54,51 +56,42 @@ export class CreateUpdateNationalityComponent implements OnInit {
                         isActive: response.data.isActive
                     });
                 },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
+                error => (this.isRequesting = false),
+                () => (this.isRequesting = false)
             );
         }
     }
 
-    onSubmit() {
+    submit() {
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
+
+        let payload: Item = {
+            name: this.form.get('name').value,
+            isActive: this.form.get('isActive').value
+        };
+
+        let action = 'Create';
+
         if (this.data.id) {
-            this.isRequesting = true;
-            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'Nationality').subscribe(
-                response => {
-                    this.dialogRef.close();
-                },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
-            );
-        } else {
-            this.isRequesting = true;
-            const { name, isActive } = this.form.value;
-            this.dictionarieService.createDictionariesSubValues(name, isActive, 'Nationality').subscribe(
-                response => {
-                    this.dialogRef.close();
-                },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
-            );
+            action = 'Edit';
+            payload.id = this.data.id;
         }
+
+        this.form.disable();
+
+        this.dictionarieService.submit(action, 'Nationality', payload).subscribe(
+            response => this.dialogRef.close(),
+            error => {
+                this.isRequesting = false;
+                this.form.enable();
+            },
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
+        );
     }
 }

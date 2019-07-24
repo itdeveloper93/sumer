@@ -3,11 +3,13 @@ import { PageEvent, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSna
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateNewsCategoriesComponent } from './create-update-news-categories/create-update-news-categories.component';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-news-categories',
     templateUrl: './news-categories.component.html',
-    styleUrls: ['./news-categories.component.sass']
+    styleUrls: ['./news-categories.component.sass'],
+    animations: [fade]
 })
 export class NewsCategoriesComponent implements OnInit {
     /**
@@ -20,6 +22,9 @@ export class NewsCategoriesComponent implements OnInit {
      */
     isRequesting: boolean;
 
+    /**
+     * Columns to display in the table.
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
     /**
@@ -59,9 +64,21 @@ export class NewsCategoriesComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getNewsCategories();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getNewsCategories(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -74,18 +91,6 @@ export class NewsCategoriesComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getNewsCategories();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getNewsCategories();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getNewsCategories(params);
         });
     }
 
@@ -166,19 +171,7 @@ export class NewsCategoriesComponent implements OnInit {
                 this.newsCategories = response.data.items;
                 this.newsCategoriesCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.newsCategories.paginator = this.paginator;

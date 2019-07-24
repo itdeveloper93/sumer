@@ -29,6 +29,7 @@ import {
 } from 'ngx-perfect-scrollbar';
 import { AdministrationModule } from '../administration/administration.module';
 import { EmployeesModule } from '../administration/employees/employees.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -59,6 +60,7 @@ const common = [];
     ],
     imports: [
         CommonModule,
+        BrowserAnimationsModule,
         common,
         MaterialModule,
         HttpClientModule,
