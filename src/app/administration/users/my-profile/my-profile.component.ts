@@ -5,6 +5,7 @@ import { MyProfileService, EmployeeData } from './my-profile.service';
 import { fade } from 'src/app/animations/all';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'my-profile',
@@ -45,7 +46,7 @@ export class MyProfileComponent implements OnInit {
         factualAddress: new FormControl('', Validators.required)
     });
 
-    constructor(private service: MyProfileService, private snackbar: MatSnackBar, private http: HttpClient) {}
+    constructor(private service: MyProfileService, private snackbar: MatSnackBar) {}
 
     ngOnInit() {
         this.getEmployeeData();

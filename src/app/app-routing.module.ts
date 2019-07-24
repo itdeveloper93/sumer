@@ -113,10 +113,10 @@ const routes: Routes = [
             },
             {
                 path: 'dictionaries',
-                data: { title: 'Справочники' },
                 children: [
                     {
                         path: '',
+                        data: { title: 'Справочники' },
                         component: DictionariesListComponent
                     },
                     {
