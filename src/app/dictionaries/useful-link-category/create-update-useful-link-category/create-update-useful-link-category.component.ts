@@ -12,7 +12,7 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
     /**
      * Page heading
      */
-    heading = true;
+    title: string;
 
     /**
      * Determines whether any fetch operation is in progress.
@@ -36,7 +36,11 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.form.disable();
+        if (this.data.id) {
+            this.form.disable();
+            this.title = 'Редактировние записи';
+        } else this.title = 'Добавить запись';
+
         this.getUsefulLinkCategoryById();
     }
 
@@ -45,7 +49,6 @@ export class CreateUpdateUsefulLinkCategoryComponent implements OnInit {
      */
     getUsefulLinkCategoryById() {
         if (this.data.id) {
-            this.heading = false;
             this.isRequesting = true;
 
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'UsefulLinkCategory').subscribe(

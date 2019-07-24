@@ -12,7 +12,7 @@ export class CreateUpdatePositionComponent implements OnInit {
     /**
      * Page heading
      */
-    heading = true;
+    title: string;
 
     /**
      * Hold departments values
@@ -42,7 +42,11 @@ export class CreateUpdatePositionComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.form.disable();
+        if (this.data.id) {
+            this.form.disable();
+            this.title = 'Редактировние записи';
+        } else this.title = 'Добавить запись';
+
         // Fetch nesessary initial data
         this.getDepartments();
 
@@ -54,7 +58,6 @@ export class CreateUpdatePositionComponent implements OnInit {
      */
     getPositionsById() {
         if (this.data.id) {
-            this.heading = false;
             this.isRequesting = true;
 
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'Position').subscribe(

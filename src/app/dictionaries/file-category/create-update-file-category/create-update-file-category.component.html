@@ -1,9 +1,6 @@
 <mat-card class="p-0 shadow-none">
   <mat-card-header>
-    <mat-card-title class="m-0">
-      <p *ngIf="heading">Добавить запись</p>
-      <p *ngIf="!heading">Редактировние записи</p>
-    </mat-card-title>
+    <mat-card-title class="m-0">{{ title }}</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mb-0">
     <form [formGroup]="form" (ngSubmit)="submit()" #submitForm="ngForm">
