@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { DictionariesService } from 'src/app/dictionaries/dictionaries.service';
+import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({
     selector: 'app-create-update-file-category',
@@ -27,6 +27,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
         name: new FormControl(''),
         isActive: new FormControl(true)
     });
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateFileCategoryComponent>,
@@ -35,6 +36,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.form.disable();
         this.getFileCategoryById();
     }
 
@@ -45,6 +47,7 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
         if (this.data.id) {
             this.heading = false;
             this.isRequesting = true;
+
             this.dictionarieService.getDictionariesSubValuesById(this.data.id, 'FileCategory').subscribe(
                 response => {
                     this.form.patchValue({
@@ -52,52 +55,44 @@ export class CreateUpdateFileCategoryComponent implements OnInit {
                         name: this.data.name,
                         isActive: response.data.isActive
                     });
+                    this.form.enable();
                 },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
+                error => (this.isRequesting = false),
+                () => (this.isRequesting = false)
             );
         }
     }
 
-    onSubmit() {
+    submit() {
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
         }
+
+        let payload: Item = {
+            name: this.form.get('name').value,
+            isActive: this.form.get('isActive').value
+        };
+
+        let action = 'Create';
+
         if (this.data.id) {
-            this.isRequesting = true;
-            this.dictionarieService.updateDictionariesSubValues(this.form.value, 'FileCategory').subscribe(
-                response => {
-                    this.dialogRef.close();
-                },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
-            );
-        } else {
-            this.isRequesting = true;
-            const { name, isActive } = this.form.value;
-            this.dictionarieService.createDictionariesSubValues(name, isActive, 'FileCategory').subscribe(
-                response => {
-                    this.dialogRef.close();
-                },
-                () => {
-                    this.isRequesting = false;
-                },
-
-                () => {
-                    this.isRequesting = false;
-                }
-            );
+            action = 'Edit';
+            payload.id = this.data.id;
         }
+
+        this.form.disable();
+
+        this.dictionarieService.submit(action, 'FileCategory', payload).subscribe(
+            response => this.dialogRef.close(),
+            error => {
+                this.isRequesting = false;
+                this.form.enable();
+            },
+            () => {
+                this.isRequesting = false;
+                this.form.enable();
+            }
+        );
     }
 }

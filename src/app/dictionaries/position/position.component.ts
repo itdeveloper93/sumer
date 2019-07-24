@@ -3,11 +3,13 @@ import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/
 import { PageEvent, Sort, MatSnackBar, MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { CreateUpdatePositionComponent } from './create-update-position/create-update-position.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { fade } from 'src/app/animations/all';
 
 @Component({
     selector: 'app-position',
     templateUrl: './position.component.html',
-    styleUrls: ['./position.component.sass']
+    styleUrls: ['./position.component.sass'],
+    animations: [fade]
 })
 export class PositionComponent implements OnInit {
     /**
@@ -20,6 +22,9 @@ export class PositionComponent implements OnInit {
      */
     isRequesting: boolean;
 
+    /**
+     * Columns to display in the table.
+     */
     displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
 
     /**
@@ -59,9 +64,21 @@ export class PositionComponent implements OnInit {
         private dictionarieService: DictionariesService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private router: Router,
-        private snackbar: MatSnackBar
+        private router: Router
     ) {}
+
+    ngOnInit() {
+        // Set paginator values if department navigated from paginated link
+        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
+        this.pageSize = +this.route.snapshot.queryParams.pageSize;
+
+        this.getPosition();
+
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getPosition(params);
+        });
+    }
 
     /**
      * Create or update department
@@ -74,18 +91,7 @@ export class PositionComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getPosition();
-        });
-    }
-    ngOnInit() {
-        // Set paginator values if department navigated from paginated link
-        this.pageIndex = +this.route.snapshot.queryParams.page - 1;
-        this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        this.getPosition();
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getPosition(params);
+            //TODO fetch only if touched
         });
     }
 
@@ -166,19 +172,7 @@ export class PositionComponent implements OnInit {
                 this.positions = response.data.items;
                 this.positionsCount = response.data.totalCount;
             },
-            (error: Response) => {
-                this.isRequesting = false;
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
-            },
+            (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
                 this.positions.paginator = this.paginator;

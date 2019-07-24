@@ -31,12 +31,12 @@ interface Items<T> {
 }
 
 export interface Item {
-    id: string;
+    id?: string;
     name: string;
-    rootId: string;
+    rootId?: string;
     isActive: boolean;
-    createdUserName: string;
-    createdAt: string;
+    createdUserName?: string;
+    createdAt?: string;
     departmentId?: string;
 }
 
@@ -88,15 +88,22 @@ export class DictionariesService {
         return this.http.get<BaseResponseInterface<Items<Department[]>>>(this.url + actionName + '/All');
     }
 
+    /**
+     *
+     * @param id
+     * @param actionName
+     */
     getDictionariesSubValuesById(id?: string, actionName?: string): Observable<BaseResponseInterface<Item>> {
         return this.http.get<BaseResponseInterface<Item>>(this.url + actionName + '/Get/' + id);
     }
 
-    updateDictionariesSubValues(value: string, actionName: string) {
-        return this.http.post(this.url + actionName + '/Edit', value);
-    }
-
-    createDictionariesSubValues(name?: string, isActive?: boolean, actionName?: string, departmentId?: string) {
-        return this.http.post(this.url + actionName + '/Create', { name, isActive, departmentId });
+    /**
+     *
+     * @param action The type of job to do (Create | Edit)
+     * @param controlller Name of dictionary ('Department' | 'Position' | ...)
+     * @param payload Form value
+     */
+    submit(action: string, controlller: string, payload: Item) {
+        return this.http.post(this.url + controlller + '/' + action, payload);
     }
 }
