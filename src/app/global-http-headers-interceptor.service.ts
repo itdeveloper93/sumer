@@ -64,7 +64,7 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
                         break;
 
                     case 401:
-                        return this.refreshToken(request, next);
+                        return this.refreshToken(request, next).pipe(tap(res => console.log(res)));
                         break;
 
                     case 500:
@@ -94,17 +94,20 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
     private refreshToken(request: HttpRequest<any>, next: HttpHandler) {
         return this.authService.refreshToken().pipe(
             flatMap(response => {
-                if (response.meta.success) {
-                    console.log(response);
+                if (response.ok && response.body.meta.success) {
+                    this.authService.storeTokens(response.body.data.token, response.body.data.refreshToken);
 
-                    this.authService.storeTokens(response.data.token, response.data.refreshToken);
-
-                    request = this.addAuthToken(request, response.data.token);
+                    request = this.addAuthToken(request, response.body.data.token);
 
                     return next.handle(request);
                 } else this.authService.signOut();
 
                 return next.handle(request);
+            }),
+            catchError((error: HttpErrorResponse) => {
+                this.authService.signOut();
+
+                return throwError(error);
             })
         );
     }

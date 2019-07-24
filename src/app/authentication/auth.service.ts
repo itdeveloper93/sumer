@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { environment } from './../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, tap, share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import BaseResponseInterface from '../base-response.interface';
@@ -108,11 +108,15 @@ export class AuthService {
      * Refresh JWT.
      * @returns New tokens.
      */
-    refreshToken(): Observable<BaseResponseInterface<SignInResponse>> {
-        return this.http.post<BaseResponseInterface<SignInResponse>>(environment.API.URL + 'Account/RefreshToken', {
-            accessToken: this.getToken(),
-            refreshToken: this.getToken('refresh')
-        });
+    refreshToken(): Observable<HttpResponse<any>> {
+        return this.http.post<HttpResponse<any>>(
+            environment.API.URL + 'Account/RefreshToken',
+            {
+                accessToken: this.getToken(),
+                refreshToken: this.getToken('refresh')
+            },
+            { observe: 'response' }
+        );
     }
 
     /**

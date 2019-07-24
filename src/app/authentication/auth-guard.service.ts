@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Route } from '@angular/compiler/src/core';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 import { DashboardLayoutComponent } from '../layout/dashboard-layout/dashboard-layout.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -33,9 +35,15 @@ export class AuthGuard implements CanActivate {
             return this.authService.refreshToken().pipe(
                 map(response => {
                     this.dashboardLayout.isRequesting = false;
+                    this.authService.storeTokens(response.body.data.token, response.body.data.refreshToken);
 
-                    if (response.meta.success) return true;
+                    if (response.body.meta.success) return true;
                     else this.cantActivate(state);
+                }),
+                catchError((error: HttpErrorResponse) => {
+                    this.cantActivate(state);
+
+                    return throwError(error);
                 })
             );
             // Else navigate user to auth page.
