@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
 import { CreateUpdateDepartmentComponent } from './create-update-department/create-update-department.component';
 import { fade } from 'src/app/animations/all';
+import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
 
 @Component({
     selector: 'app-department-list',
@@ -87,8 +88,8 @@ export class DepartmentListComponent implements OnInit {
      * @param name Department name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateDepartmentComponent, {
-            data: { id, name }
+        const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
+            data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getDepartments();

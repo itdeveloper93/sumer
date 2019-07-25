@@ -4,6 +4,7 @@ import { PageEvent, MatDialog, MatTableDataSource, MatSort, MatPaginator, Sort }
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUsefulLinkCategoryComponent } from './create-update-useful-link-category/create-update-useful-link-category.component';
 import { fade } from 'src/app/animations/all';
+import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
 
 @Component({
     selector: 'app-useful-links-categories',
@@ -86,8 +87,8 @@ export class UsefulLinkCategoryComponent implements OnInit {
      * @param name usful-link-categories name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateUsefulLinkCategoryComponent, {
-            data: { id, name }
+        const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
+            data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getUsfulLinkCategories();

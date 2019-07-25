@@ -4,6 +4,7 @@ import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateNewsCategoriesComponent } from './create-update-news-categories/create-update-news-categories.component';
 import { fade } from 'src/app/animations/all';
+import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
 
 @Component({
     selector: 'app-news-categories',
@@ -86,8 +87,8 @@ export class NewsCategoriesComponent implements OnInit {
      * @param name news-categories name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateNewsCategoriesComponent, {
-            data: { id, name }
+        const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
+            data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getNewsCategories();

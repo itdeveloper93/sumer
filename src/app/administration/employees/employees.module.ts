@@ -90,6 +90,6 @@ import { FunctionalityAccessPermissionsComponent } from '../users/functionality-
         PerfectScrollbarModule,
         MatSortModule
     ],
-    exports: [UserComponent, FloatingFabComponent]
+    exports: [UserComponent, FloatingFabComponent, TableBadgeComponent]
 })
 export class EmployeesModule {}

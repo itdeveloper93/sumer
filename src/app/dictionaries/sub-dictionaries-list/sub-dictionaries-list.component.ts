@@ -1,18 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent, MatSort, MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, Sort } from '@angular/material';
-import { DictionariesService, Item, FetchCriterias } from 'src/app/dictionaries/dictionaries.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CreateUpdateFileCategoryComponent } from './create-update-file-category/create-update-file-category.component';
-import { fade } from 'src/app/animations/all';
+import { FetchCriterias, DictionariesService, Department } from '../dictionaries.service';
+import { PageEvent, Sort, MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { fade } from 'src/app/animations/all';
 
 @Component({
-    selector: 'app-file-categories',
-    templateUrl: './file-categories.component.html',
-    styleUrls: ['./file-categories.component.sass'],
+    selector: 'app-sub-dictionaries-list',
+    templateUrl: './sub-dictionaries-list.component.html',
+    styleUrls: ['./sub-dictionaries-list.component.sass'],
     animations: [fade]
 })
-export class FileCategoryComponent implements OnInit {
+export class SubDictionariesListComponent implements OnInit {
     /**
      * Page title.
      */
@@ -26,7 +25,7 @@ export class FileCategoryComponent implements OnInit {
     /**
      * Columns to display in the table.
      */
-    displayedColumns: string[] = ['name', 'lastEdit', 'author', 'actions'];
+    displayedColumns: string[] = ['name', 'isActive', 'lastEdit', 'author', 'actions'];
 
     /**
      * Number of department to show on one page.
@@ -44,9 +43,19 @@ export class FileCategoryComponent implements OnInit {
     pageIndex: number;
 
     /**
-     * Total number of file-categories in DB.
+     * Total number of department in DB.
      */
-    fileCategoriesCount: number;
+    dictionarieSubValuesCount: number;
+
+    /**
+     * Department ID
+     */
+    departmentId: string;
+
+    /**
+     * Department values
+     */
+    departments: Department[];
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -55,9 +64,19 @@ export class FileCategoryComponent implements OnInit {
     pageEvent: PageEvent;
 
     /**
-     * employeeLockReason in the shape of MatTableDataSource.
+     * Current URL
      */
-    fileCategories = new MatTableDataSource<Item[]>();
+    currentDictionaryUrl: string;
+
+    /**
+     * Name of dictionary ('Department' | 'Position' | ...)
+     */
+    controller: string;
+
+    /**
+     * Department in the shape of MatTableDataSource.
+     */
+    dictionarieSubValues = new MatTableDataSource();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -74,25 +93,66 @@ export class FileCategoryComponent implements OnInit {
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
 
-        this.getFileCategories();
-
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getFileCategories(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDictionarieSubValues(params);
         });
+
+        this.currentDictionaryUrl = this.route.snapshot.url[0].path;
+
+        switch (this.currentDictionaryUrl) {
+            case 'useful-link-categories':
+                this.controller = 'UsefulLinkCategory';
+                break;
+
+            case 'file-categories':
+                this.controller = 'FileCategory';
+                break;
+
+            case 'user-lock-reasons':
+                this.controller = 'UserLockReason';
+                break;
+
+            case 'positions':
+                this.controller = 'Position';
+                break;
+
+            case 'employee-lock-reasons':
+                this.controller = 'EmployeeLockReason';
+                break;
+
+            case 'nationalities':
+                this.controller = 'Nationality';
+                break;
+
+            case 'news-categories':
+                this.controller = 'NewsCategories';
+                break;
+
+            case 'departments':
+                this.controller = 'Department';
+                break;
+        }
+
+        this.getDictionarieSubValues();
     }
 
     /**
      * Create or update department
-     * @param id file-categories ID
-     * @param name file-categories name
+     * @param id Department ID
+     * @param name Department name
      */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
             data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
+        if (this.controller === 'Position') {
+            this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
+                this.departments = response.data.items;
+            });
+        }
         dialogRef.afterClosed().subscribe(result => {
-            this.getFileCategories();
+            this.getDictionarieSubValues();
             //TODO fetch only if touched
         });
     }
@@ -126,7 +186,7 @@ export class FileCategoryComponent implements OnInit {
 
         // TODO: fugure out how to fetch on query params change,
         // but not here
-        this.getFileCategories();
+        this.getDictionarieSubValues();
     }
 
     /**
@@ -162,23 +222,23 @@ export class FileCategoryComponent implements OnInit {
     }
 
     /**
-     * Send search criterias to departmentService and get file-categories
+     * Send search criterias to departmentService and get departments
      * list in return
      * @param criterias Fetch criterias for DB searching
      */
-    private getFileCategories(criterias?: FetchCriterias) {
+    private getDictionarieSubValues(criterias?: FetchCriterias) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValues(criterias, 'FileCategory').subscribe(
+        this.dictionarieService.getDictionariesSubValues(criterias, this.controller).subscribe(
             response => {
-                this.fileCategories = response.data.items;
-                this.fileCategoriesCount = response.data.totalCount;
+                this.dictionarieSubValues = response.data.items;
+                this.dictionarieSubValuesCount = response.data.totalCount;
             },
             (error: Response) => (this.isRequesting = false),
             () => {
                 this.isRequesting = false;
-                this.fileCategories.paginator = this.paginator;
-                this.fileCategories.sort = this.sort;
+                this.dictionarieSubValues.paginator = this.paginator;
+                this.dictionarieSubValues.sort = this.sort;
             }
         );
     }
