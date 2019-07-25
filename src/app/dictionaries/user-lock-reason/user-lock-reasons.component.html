@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-12 col-lg-7 col-xl-9">
       <mat-card class="p-0 table-responsive mb-3" *ngIf="userLockReasonsCount" [@fade]>
-        <perfect-scrollbar style="max-height: 70vh">
+        <perfect-scrollbar class="table-wrapper">
           <table mat-table [dataSource]="userLockReasons" class="stripped" matSort matSortStart="desc"
             matSortDirection="asc" matSortDisableClear (matSortChange)="setSortingQueryParams($event)">
 
@@ -63,10 +63,6 @@
 
     </div>
     <div class="col-12 col-lg-4 col-xl-3">
-      <button mat-flat-button mat-button type="button" class="btn-lg btn-block m-0 mb-4"
-        [routerLink]="['/dictionaries']">
-        <mat-icon class="mat-18">keyboard_arrow_left</mat-icon>Назад к списку
-      </button>
       <app-dictionaries-filter (onFilter)="setFilterQueryParams($event)" (onResetFilter)="resetFilter()">
       </app-dictionaries-filter>
     </div>

@@ -120,7 +120,6 @@ const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        data: { title: 'Справочники' },
                         component: DictionariesListComponent
                     },
                     {
