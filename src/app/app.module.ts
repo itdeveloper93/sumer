@@ -59,7 +59,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
-    maxWidth: '87vw',
+    maxWidth: '370px',
     hasBackdrop: true,
     panelClass: 'position-relative'
 };
@@ -128,7 +128,6 @@ const CUSTOM_DATE_FORMAT = {
             useValue: MAT_DIALOG_GLOBAL_OPTIONS
         },
         { provide: MatPaginatorIntl, useClass: MatPaginatorIntlRus },
-        // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
         { provide: DateAdapter, useClass: MomentUtcDateAdapter },
         { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
         AuthService,

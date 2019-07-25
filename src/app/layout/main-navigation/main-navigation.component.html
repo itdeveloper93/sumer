@@ -1,2 +1,5 @@
-<ng-material-multilevel-menu [configuration]='config' [items]='appitems'>
-</ng-material-multilevel-menu>
+<ng-material-multilevel-menu
+    [configuration]="config"
+    [items]="appitems"
+    (selectedItem)="closeSideBarOnSmallScreen()"
+></ng-material-multilevel-menu>
