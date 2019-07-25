@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
+import { SidenavStateService } from '../dashboard-layout/sidenav-state.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     selector: 'main-navigation',
     templateUrl: './main-navigation.component.html',
     styleUrls: ['./main-navigation.component.sass']
 })
-export class MainNavigationComponent implements OnInit {
+export class MainNavigationComponent implements OnInit, AfterViewInit {
     /**
      * Granted permissions
      */
@@ -21,7 +22,8 @@ export class MainNavigationComponent implements OnInit {
         fontColor: '#D2D7E8',
         selectedListFontColor: '#533DFE',
         interfaceWithRoute: true,
-        highlightOnSelect: true
+        highlightOnSelect: true,
+        collapseOnSelect: true
     };
 
     appitems = [
@@ -198,7 +200,34 @@ export class MainNavigationComponent implements OnInit {
             ]
         }
     ];
-    constructor(private router: Router, private app: AppComponent) {}
 
-    ngOnInit() {}
+    /**
+     * Determines if it's app init state.
+     */
+    isInit: boolean;
+
+    constructor(
+        private app: AppComponent,
+        private sidenavService: SidenavStateService,
+        private breakpointObserver: BreakpointObserver
+    ) {}
+
+    ngOnInit() {
+        this.isInit = true;
+    }
+
+    ngAfterViewInit() {
+        this.isInit = false;
+    }
+
+    /**
+     * Close sedebar on screens less that 767px wide.
+     */
+    closeSideBarOnSmallScreen() {
+        if (!this.isInit) {
+            this.breakpointObserver.observe('(max-width: 767px)').subscribe((state: BreakpointState) => {
+                if (state.matches) this.sidenavService.onSideNavToggle.emit();
+            });
+        }
+    }
 }
