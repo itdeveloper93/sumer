@@ -30,6 +30,8 @@ import {
 import { AdministrationModule } from '../administration/administration.module';
 import { EmployeesModule } from '../administration/employees/employees.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CreateUpdateDictionariesComponent } from './create-update-dictionaries/create-update-dictionaries.component';
+import { SubDictionariesListComponent } from './sub-dictionaries-list/sub-dictionaries-list.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,
@@ -56,7 +58,9 @@ const common = [];
         CreateUpdatePositionComponent,
         CreateUpdateEmployeeLockReasonComponent,
         CreateUpdateNationalityComponent,
-        CreateUpdateNewsCategoriesComponent
+        CreateUpdateNewsCategoriesComponent,
+        CreateUpdateDictionariesComponent,
+        SubDictionariesListComponent
     ],
     imports: [
         CommonModule,
@@ -80,7 +84,8 @@ const common = [];
         CreateUpdatePositionComponent,
         CreateUpdateEmployeeLockReasonComponent,
         CreateUpdateNationalityComponent,
-        CreateUpdateNewsCategoriesComponent
+        CreateUpdateNewsCategoriesComponent,
+        CreateUpdateDictionariesComponent
     ],
     providers: [
         {

@@ -28,6 +28,7 @@ interface Items<T> {
     totalPages: number;
     totalCount: number;
     pageSize: number;
+    departmentId?: string;
 }
 
 export interface Item {

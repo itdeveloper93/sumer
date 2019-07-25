@@ -4,6 +4,7 @@ import { DictionariesService, FetchCriterias, Item } from 'src/app/dictionaries/
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateUpdateUserLockReasonComponent } from './create-update-user-lock-reason/create-update-user-lock-reason.component';
 import { fade } from 'src/app/animations/all';
+import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
 
 @Component({
     selector: 'app-user-lock-reasons',
@@ -86,8 +87,8 @@ export class UserLockReasonComponent implements OnInit {
      * @param name user-lock-reason name
      */
     openDialogUpdate(id?: string, name?: string): void {
-        const dialogRef = this.dialog.open(CreateUpdateUserLockReasonComponent, {
-            data: { id, name }
+        const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
+            data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
         dialogRef.afterClosed().subscribe(result => {
             this.getUserLockReason();

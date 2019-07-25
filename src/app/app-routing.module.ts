@@ -21,6 +21,7 @@ import { NewsCategoriesComponent } from './dictionaries/news-categories/news-cat
 import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
 import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';
 import { RoutePermissionsGuard } from './authentication/route-permissions-guard.service';
+import { SubDictionariesListComponent } from './dictionaries/sub-dictionaries-list/sub-dictionaries-list.component';
 
 const routes: Routes = [
     {
@@ -124,42 +125,42 @@ const routes: Routes = [
                     },
                     {
                         path: 'useful-link-categories',
-                        component: UsefulLinkCategoryComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Полезные ссылки' }
                     },
                     {
                         path: 'file-categories',
-                        component: FileCategoryComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Категории файлов' }
                     },
                     {
                         path: 'user-lock-reasons',
-                        component: UserLockReasonComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Причины блокировки пользователей' }
                     },
                     {
                         path: 'positions',
-                        component: PositionComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Должности' }
                     },
                     {
                         path: 'employee-lock-reasons',
-                        component: EmployeeLockReasonComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Причины блокировки сотрудников' }
                     },
                     {
                         path: 'nationalities',
-                        component: NationalityComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Национальности' }
                     },
                     {
                         path: 'news-categories',
-                        component: NewsCategoriesComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Категории новостей' }
                     },
                     {
                         path: 'departments',
-                        component: DepartmentListComponent,
+                        component: SubDictionariesListComponent,
                         data: { title: 'Отделы' }
                     }
                 ]
