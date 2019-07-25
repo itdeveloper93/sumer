@@ -25,6 +25,7 @@ import { RoutePermissionsGuard } from './authentication/route-permissions-guard.
 const routes: Routes = [
     {
         path: '',
+        data: { title: 'SAMR' },
         component: DashboardLayoutComponent,
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
@@ -47,6 +48,7 @@ const routes: Routes = [
                 children: [
                     {
                         path: 'employees',
+                        component: EmployeesListComponent,
                         data: { title: 'Сотрудники', showLocked: false },
                         children: [
                             {
@@ -113,6 +115,8 @@ const routes: Routes = [
             },
             {
                 path: 'dictionaries',
+                data: { title: 'Справочники' },
+                //component: DictionariesListComponent,
                 children: [
                     {
                         path: '',
@@ -122,58 +126,42 @@ const routes: Routes = [
                     {
                         path: 'useful-link-categories',
                         component: UsefulLinkCategoryComponent,
-                        data: {
-                            title: 'Полезные ссылки'
-                        }
+                        data: { title: 'Полезные ссылки' }
                     },
                     {
                         path: 'file-categories',
                         component: FileCategoryComponent,
-                        data: {
-                            title: 'Категории файлов'
-                        }
+                        data: { title: 'Категории файлов' }
                     },
                     {
                         path: 'user-lock-reasons',
                         component: UserLockReasonComponent,
-                        data: {
-                            title: 'Причины блокировки пользователей'
-                        }
+                        data: { title: 'Причины блокировки пользователей' }
                     },
                     {
                         path: 'positions',
                         component: PositionComponent,
-                        data: {
-                            title: 'Должности'
-                        }
+                        data: { title: 'Должности' }
                     },
                     {
                         path: 'employee-lock-reasons',
                         component: EmployeeLockReasonComponent,
-                        data: {
-                            title: 'Причины блокировки сотрудников'
-                        }
+                        data: { title: 'Причины блокировки сотрудников' }
                     },
                     {
                         path: 'nationalities',
                         component: NationalityComponent,
-                        data: {
-                            title: 'Национальности'
-                        }
+                        data: { title: 'Национальности' }
                     },
                     {
                         path: 'news-categories',
                         component: NewsCategoriesComponent,
-                        data: {
-                            title: 'Категории полезных ссылок'
-                        }
+                        data: { title: 'Категории новостей' }
                     },
                     {
                         path: 'departments',
                         component: DepartmentListComponent,
-                        data: {
-                            title: 'Список подразделений'
-                        }
+                        data: { title: 'Отделы' }
                     }
                 ]
             }

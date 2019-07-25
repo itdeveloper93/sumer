@@ -125,7 +125,40 @@ export class MainNavigationComponent implements OnInit {
             // hidden: true,
             label: 'Справочники',
             icon: 'view_list',
-            link: 'dictionaries'
+            items: [
+                {
+                    label: 'Отделы',
+                    link: '/dictionaries/departments'
+                },
+                {
+                    label: 'Должности',
+                    link: '/dictionaries/positions'
+                },
+                {
+                    label: 'Национальности',
+                    link: '/dictionaries/nationalities'
+                },
+                {
+                    label: 'Причины блокировки сотрудников',
+                    link: '/dictionaries/employee-lock-reasons'
+                },
+                {
+                    label: 'Причины блокировки пользователей',
+                    link: '/dictionaries/user-lock-reasons'
+                },
+                {
+                    label: 'Категории новостей',
+                    link: '/dictionaries/news-categories'
+                },
+                {
+                    label: 'Категории полезных ссылок',
+                    link: '/dictionaries/useful-link-categories'
+                },
+                {
+                    label: 'Категории файлов',
+                    link: '/dictionaries/file-categories'
+                }
+            ]
         },
         {
             label: 'Администрирование',
