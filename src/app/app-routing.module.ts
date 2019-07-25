@@ -48,9 +48,17 @@ const routes: Routes = [
                 children: [
                     {
                         path: 'employees',
-                        component: EmployeesListComponent,
-                        data: { title: 'Сотрудники', showLocked: false },
+                        data: { title: 'Сотрудники' },
                         children: [
+                            {
+                                path: '',
+                                component: EmployeesListComponent,
+                                data: {
+                                    title: 'Активные сотрудники',
+                                    permissions: ['Employee.All']
+                                },
+                                canActivate: [RoutePermissionsGuard]
+                            },
                             {
                                 path: 'active',
                                 component: EmployeesListComponent,

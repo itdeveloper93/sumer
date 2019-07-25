@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { EmployeesService, Employee, FetchCriterias } from '../employees.service';
+import { EmployeesService, Employee, FetchCriterias, ExportCriterias } from '../employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
 import { AppConfig } from 'src/app/app.config';
@@ -75,6 +75,11 @@ export class EmployeesListComponent implements OnInit {
      */
     permissions = this.app.grantedPermissions;
 
+    /**
+     * Export list params.
+     */
+    exportCriterias: any;
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -95,7 +100,10 @@ export class EmployeesListComponent implements OnInit {
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.get(params);
+            if (params.constructor === Object && Object.keys(params).length !== 0) {
+                this.get(params);
+                this.exportCriterias = params;
+            }
         });
 
         if (this.showLocked) {
@@ -201,10 +209,41 @@ export class EmployeesListComponent implements OnInit {
     }
 
     /**
+     * Set export params.
+     * @param event Export params object
+     */
+    setExportCriterias(event: ExportCriterias) {
+        this.exportCriterias = event;
+    }
+
+    /**
      * Send current viewing employee list to server and start downloading
      * of the returned file
      */
     export() {
-        console.log('EmployeesList.export()', this.employees.data);
+        this.isRequesting = true;
+
+        this.service.export(this.exportCriterias).subscribe(
+            response => {
+                this.downloadFileFromBlob(response.headers.get('content-disposition'), response.body);
+            },
+            (error: Response) => (this.isRequesting = false),
+            () => (this.isRequesting = false)
+        );
+    }
+
+    /**
+     * Initiates download of the given blob as file
+     * @param disposition Content-disposition header value
+     * @param blob Blob
+     */
+    downloadFileFromBlob(disposition: string, blob: Blob) {
+        const fileName = decodeURIComponent(disposition.split('filename*=')[1].split(`''`)[1]);
+        const fileUrl = window.URL.createObjectURL(blob);
+
+        const anchor = document.createElement('a');
+        anchor.download = decodeURIComponent(fileName);
+        anchor.href = fileUrl;
+        anchor.click();
     }
 }

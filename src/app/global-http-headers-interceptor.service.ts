@@ -40,8 +40,8 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
         if (!(request.body instanceof FormData)) {
             request = request.clone({
                 headers: new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json'
+                    'Content-Type': 'application/json'
+                    //Accept: 'application/json'
                 })
             });
         }

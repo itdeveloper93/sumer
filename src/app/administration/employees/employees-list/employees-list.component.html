@@ -184,10 +184,21 @@
             </ng-container>
         </div>
         <div class="col-12 col-lg-4 col-xl-3">
-            <button (click)="export()" mat-flat-button color="accent" class="w-100 mb-4" *ngIf="employees" [@fade]>
+            <button
+                (click)="export()"
+                mat-flat-button
+                color="accent"
+                class="w-100 mb-4"
+                *ngIf="employees"
+                [@fade]
+                [disabled]="isRequesting"
+            >
                 Выгрузить список в Excel
             </button>
-            <employees-filter (onFilter)="setFilterQueryParams($event)" (onResetFilter)="resetFilter()">
+            <employees-filter
+                (onFilter)="setFilterQueryParams($event); setExportCriterias($event)"
+                (onResetFilter)="resetFilter()"
+            >
             </employees-filter>
         </div>
     </div>
