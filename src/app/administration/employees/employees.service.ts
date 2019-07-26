@@ -83,7 +83,11 @@ export class EmployeesService {
      * @param criterias Export criterias.
      */
     export(criterias: ExportCriterias) {
-        return this.http.get(environment.API.URL + 'Employee/ExportExcel?' + this.objectToQueryString(criterias), {
+        let ENDPOINT = environment.API.URL + 'Employee/ExportExcel';
+
+        if (criterias) ENDPOINT += '?' + this.objectToQueryString(criterias);
+
+        return this.http.get(ENDPOINT, {
             responseType: 'blob',
             observe: 'response'
         });
