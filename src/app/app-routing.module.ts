@@ -10,14 +10,6 @@ import { EmployeesListComponent } from './administration/employees/employees-lis
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
 import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
 import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
-import { DepartmentListComponent } from './dictionaries/department-list/department-list.component';
-import { UsefulLinkCategoryComponent } from './dictionaries/useful-links-categories/useful-links-categories.component';
-import { FileCategoryComponent } from './dictionaries/file-categories/file-categories.component';
-import { UserLockReasonComponent } from './dictionaries/user-lock-reason/user-lock-reasons.component';
-import { PositionComponent } from './dictionaries/positions/positions.component';
-import { EmployeeLockReasonComponent } from './dictionaries/employee-lock-reasons/employee-lock-reasons.component';
-import { NationalityComponent } from './dictionaries/nationalities/nationalities.component';
-import { NewsCategoriesComponent } from './dictionaries/news-categories/news-categories.component';
 import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
 import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';
 import { RoutePermissionsGuard } from './authentication/route-permissions-guard.service';
@@ -125,7 +117,6 @@ const routes: Routes = [
             {
                 path: 'dictionaries',
                 data: { title: 'Справочники' },
-                //component: DictionariesListComponent,
                 children: [
                     {
                         path: '',
