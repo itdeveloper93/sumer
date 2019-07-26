@@ -3,12 +3,12 @@ import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UpdatePassportDataService, PassportData } from './update-passport-data.service';
-import { Nationality, NationalitiesService } from 'src/app/common-services/nationalities.service';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
 import { AppConfig, momentX } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
+import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({
     selector: 'update-passport-data',
@@ -60,7 +60,7 @@ export class UpdatePassportDataComponent implements OnInit {
     /**
      * List of nationalities for selectbox
      */
-    nationalities: Nationality[];
+    nationalities: Item[];
 
     /**
      * Register form and it's controls
@@ -79,9 +79,9 @@ export class UpdatePassportDataComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private service: UpdatePassportDataService,
-        private nationalitiesService: NationalitiesService,
         public location: Location,
-        private snackbar: MatSnackBar
+        private snackbar: MatSnackBar,
+        private dictionariesService: DictionariesService
     ) {}
 
     ngOnInit() {
@@ -139,7 +139,7 @@ export class UpdatePassportDataComponent implements OnInit {
     getNationalities() {
         this.isRequesting = true;
 
-        this.nationalitiesService.getListItems().subscribe(
+        this.dictionariesService.getDictionariesForDropdown('Nationality').subscribe(
             response => {
                 this.nationalities = response.data;
                 this.form.get('nationalityId').enable();

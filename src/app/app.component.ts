@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { routerTransition } from './router-transitions';
+import { routerTransition } from './animations/router-transitions';
 import { DateAdapter } from '@angular/material';
 import { PermissionsService } from './authentication/permissions.service';
 import { Router, NavigationEnd, ActivatedRoute, RouterStateSnapshot } from '@angular/router';

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FetchCriterias, DictionariesService, Department } from '../dictionaries.service';
+import { FetchCriterias, DictionariesService, Item } from '../dictionaries.service';
 import { PageEvent, Sort, MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { CreateUpdateDictionariesComponent } from '../create-update-dictionaries/create-update-dictionaries.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -55,7 +55,7 @@ export class SubDictionariesListComponent implements OnInit {
     /**
      * Department values
      */
-    departments: Department[];
+    departments: Item[];
 
     /**
      * En event that fires when user interacts with MatPaginator.
@@ -148,7 +148,7 @@ export class SubDictionariesListComponent implements OnInit {
         });
         if (this.controller === 'Position') {
             this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
-                this.departments = response.data.items;
+                this.departments = response.data;
             });
         }
         dialogRef.afterClosed().subscribe(result => {

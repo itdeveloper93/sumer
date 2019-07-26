@@ -7,7 +7,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { GlobalHttpHeadersInterceptorService } from './global-http-headers-interceptor.service';
+import { GlobalHttpHeadersInterceptorService } from './common/services/http-interceptor.service';
 import { LayoutModule } from '@angular/cdk/layout';
 
 /**
@@ -37,7 +37,7 @@ import { BreadcrumbsComponent } from './layout/breadcrumbs/breadcrumbs.component
 import { MiniProfileComponent } from './layout/mini-profile/mini-profile.component';
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
-import { MatPaginatorIntlRus } from './paginator';
+import { MatPaginatorIntlRus } from './common/paginator-translation';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';

@@ -35,6 +35,7 @@
             <ng-container matColumnDef="author">
               <th mat-header-cell *matHeaderCellDef>Автор</th>
               <td mat-cell *matCellDef="let dictionarieSubValue">
+                {{dictionarieSubValue.createdUserName}}
               </td>
             </ng-container>
 

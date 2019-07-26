@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import BaseResponseInterface from 'src/app/base-response.interface';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 

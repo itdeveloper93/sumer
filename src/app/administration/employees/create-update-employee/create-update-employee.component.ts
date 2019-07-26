@@ -1,25 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import {
-    DepartmentsAndPositionsService,
-    Department,
-    Position
-} from 'src/app/common-services/departments-and-positions.service';
 import { CreateUpdateEmployeeService } from './create-update-employee.service';
 import { Location } from '@angular/common';
-import { Gender, GendersService } from 'src/app/common-services/genders.service';
+import { Gender, GendersService } from 'src/app/common/services/genders.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService, EssentialData } from '../employee/employee.service';
 import * as moment from 'moment-timezone';
 import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.component';
 import { AppConfig, momentX } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
+import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 @Component({
-    selector: 'app-create-employee',
-    templateUrl: './create-employee.component.html',
-    styleUrls: ['./create-employee.component.sass'],
+    selector: 'create-update-employee',
+    templateUrl: './create-update-employee.component.html',
+    styleUrls: ['./create-update-employee.component.sass'],
     animations: [fade]
 })
 export class CreateEmployeeComponent implements OnInit {
@@ -63,7 +59,7 @@ export class CreateEmployeeComponent implements OnInit {
     /**
      * List of departments for selectbox
      */
-    departments: Department[];
+    departments: Item[];
 
     /**
      * List of positions for selectbox
@@ -98,7 +94,7 @@ export class CreateEmployeeComponent implements OnInit {
             '',
             Validators.pattern(
                 // tslint:disable-next-line:max-line-length
-                '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
+                "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             )
         ),
         factualAddress: new FormControl('', Validators.required),
@@ -109,7 +105,7 @@ export class CreateEmployeeComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
-        private departmentsAndPositionsService: DepartmentsAndPositionsService,
+        private dictionariesService: DictionariesService,
         private service: CreateUpdateEmployeeService,
         public location: Location,
         private gendersService: GendersService,
@@ -176,8 +172,8 @@ export class CreateEmployeeComponent implements OnInit {
      * Get all departments
      */
     getDepartments() {
-        this.departmentsAndPositionsService
-            .getDepartmentsListItems()
+        this.dictionariesService
+            .getDictionariesForDropdown('Department')
             .subscribe(response => (this.departments = response.data));
     }
 
@@ -186,8 +182,8 @@ export class CreateEmployeeComponent implements OnInit {
      * @param departmentId Department ID
      */
     getPositions(departmentId: string) {
-        this.departmentsAndPositionsService
-            .getPositions(departmentId)
+        this.dictionariesService
+            .getPositionsByDepartmentId(departmentId)
             .subscribe(response => (this.positions = response.data));
     }
 

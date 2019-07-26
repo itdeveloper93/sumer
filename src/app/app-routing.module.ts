@@ -8,7 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { EmployeesListComponent } from './administration/employees/employees-list/employees-list.component';
 import { EmployeeComponent } from './administration/employees/employee/employee.component';
-import { CreateEmployeeComponent } from './administration/employees/create-employee/create-employee.component';
+import { CreateEmployeeComponent } from './administration/employees/create-update-employee/create-update-employee.component';
 import { DictionariesListComponent } from './dictionaries/dictionaries-list/dictionaries-list.component';
 import { UpdatePassportDataComponent } from './administration/employees/update-passport-data/update-passport-data.component';
 import { MyProfileComponent } from './administration/users/my-profile/my-profile.component';

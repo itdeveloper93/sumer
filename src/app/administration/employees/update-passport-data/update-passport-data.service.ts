@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import BaseResponseInterface from 'src/app/base-response.interface';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 
 /**
  * Shape of passport data to be fetched and sent

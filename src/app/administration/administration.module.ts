@@ -5,9 +5,8 @@ import { MyProfileComponent } from './users/my-profile/my-profile.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { FunctionalityAccessPermissionsComponent } from './users/functionality-access-permissions/functionality-access-permissions.component';
 import { LockFormComponent } from './lock-form/lock-form.component';
-import { AlertComponent } from 'src/app/alert/alert.component';
 import { CreateUserComponent } from './users/create-user/create-user.component';
-import { CreateEmployeeComponent } from './employees/create-employee/create-employee.component';
+import { CreateEmployeeComponent } from './employees/create-update-employee/create-update-employee.component';
 import { UpdatePassportDataComponent } from './employees/update-passport-data/update-passport-data.component';
 import { EmployeeComponent } from './employees/employee/employee.component';
 import { EmployeesFilterComponent } from './employees/employees-filter/employees-filter.component';
@@ -16,7 +15,7 @@ import { UserComponent } from './users/user/user.component';
 import { MaterialModule } from '../material/material.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonComponentsModule } from '../common-components/common-components.module';
+import { CommonComponentsModule } from '../common/components/common-components.module';
 
 @NgModule({
     declarations: [
@@ -25,7 +24,6 @@ import { CommonComponentsModule } from '../common-components/common-components.m
         EmployeeComponent,
         UserComponent,
         LockFormComponent,
-        AlertComponent,
         CreateUserComponent,
         CreateEmployeeComponent,
         UpdatePassportDataComponent,

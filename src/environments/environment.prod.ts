@@ -5,6 +5,7 @@ export const environment = {
         blacklistedRoutes: ['http://sumr.evomedia.pro/auth']
     },
     API: {
-        URL: 'https://samr-dev.azurewebsites.net/api/'
+        URL: 'http://51.145.98.38/api/'
+        // 'https://samr-dev.azurewebsites.net/api/'
     }
 };

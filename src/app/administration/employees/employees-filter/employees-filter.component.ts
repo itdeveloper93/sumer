@@ -1,10 +1,10 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { DepartmentsAndPositionsService, Department } from 'src/app/common-services/departments-and-positions.service';
 import { MatSnackBar } from '@angular/material';
 import { FetchCriterias } from '../employees.service';
 import { ActivatedRoute } from '@angular/router';
 import { fade } from 'src/app/animations/all';
+import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
 
 export interface FilterData {
     fullName?: string;
@@ -22,7 +22,7 @@ export class EmployeesFilterComponent implements OnInit {
     /**
      * List of departments for selectbox
      */
-    departments: Department[];
+    departments: Item[];
 
     /**
      * Register form and it's controls
@@ -34,7 +34,7 @@ export class EmployeesFilterComponent implements OnInit {
     });
 
     constructor(
-        private departmentsAndPositionsService: DepartmentsAndPositionsService,
+        private dictionariesService: DictionariesService,
         private snackbar: MatSnackBar,
         private route: ActivatedRoute
     ) {}
@@ -59,8 +59,8 @@ export class EmployeesFilterComponent implements OnInit {
      * Get all departments
      */
     getDepartments() {
-        this.departmentsAndPositionsService
-            .getDepartmentsListItems()
+        this.dictionariesService
+            .getDictionariesForDropdown('Department')
             .subscribe(response => (this.departments = response.data));
     }
 

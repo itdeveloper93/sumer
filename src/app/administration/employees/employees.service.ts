@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import BaseResponseInterface from 'src/app/base-response.interface';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 import { MatTableDataSource } from '@angular/material';
 
 /**

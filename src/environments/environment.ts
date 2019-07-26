@@ -9,7 +9,8 @@ export const environment = {
         blacklistedRoutes: ['localhost:4200/auth']
     },
     API: {
-        URL: 'https://samr-dev.azurewebsites.net/api/'
+        URL: 'http://51.145.98.38/api/'
+        // 'https://samr-dev.azurewebsites.net/api/'
     }
 };
 

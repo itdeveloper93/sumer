@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import BaseResponseInterface from 'src/app/base-response.interface';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 
 export interface LockReason {
     id: string;

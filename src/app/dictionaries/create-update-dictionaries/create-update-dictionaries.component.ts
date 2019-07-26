@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { DictionariesService, Department, Item } from '../dictionaries.service';
+import { DictionariesService, Item } from '../dictionaries.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-create-update-dictionaries',
@@ -38,7 +37,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
     /**
      * Departments values
      */
-    departments: Department[];
+    departments: Item[];
 
     /**
      * Department form
@@ -78,7 +77,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
             case 'positions':
                 this.controller = 'Position';
                 this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
-                    this.departments = response.data.items;
+                    this.departments = response.data;
                 });
                 break;
 

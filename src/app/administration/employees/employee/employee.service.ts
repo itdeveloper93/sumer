@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { Observable } from 'rxjs';
 import { PassportData } from '../update-passport-data/update-passport-data.service';
-import BaseResponseInterface from 'src/app/base-response.interface';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 
 /**
  * Shape of essential employee data that gets populated

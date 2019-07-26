@@ -14,7 +14,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateUpdateDictionariesComponent } from './create-update-dictionaries/create-update-dictionaries.component';
 import { SubDictionariesListComponent } from './sub-dictionaries-list/sub-dictionaries-list.component';
-import { CommonComponentsModule } from '../common-components/common-components.module';
+import { CommonComponentsModule } from '../common/components/common-components.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true,

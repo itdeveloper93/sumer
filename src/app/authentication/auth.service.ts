@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, tap, share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import BaseResponseInterface from '../base-response.interface';
+import BaseResponseInterface from '../common/base-response.interface';
 
 /**
  * Sign-in credentials shape.

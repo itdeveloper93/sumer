@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import BaseResponseInterface from '../base-response.interface';
+import BaseResponseInterface from '../common/base-response.interface';
 import { MatTableDataSource } from '@angular/material';
 
 /**
@@ -41,17 +41,12 @@ export interface Item {
     departmentId?: string;
 }
 
-export interface Department {
-    id: string;
-    name: string;
-    rootId: string;
-}
-
 @Injectable({
     providedIn: 'root'
 })
 export class DictionariesService {
     url = environment.API.URL;
+
     constructor(private http: HttpClient) {}
 
     getDictionaries(): Observable<any> {
@@ -65,7 +60,8 @@ export class DictionariesService {
         criterias?: FetchCriterias,
         actionName?: string
     ): Observable<BaseResponseInterface<Items<MatTableDataSource<Item[]>>>> {
-        let ENDPOINT = actionName + '/ALL';
+        let ENDPOINT = actionName + '/All';
+
         if (criterias) {
             return this.http.get<BaseResponseInterface<Items<MatTableDataSource<Item[]>>>>(
                 this.url +
@@ -82,11 +78,11 @@ export class DictionariesService {
     }
 
     /**
-     *
+     * Get total list of given dictionary items.
      * @param actionName
      */
-    getDictionariesForDropdown(actionName?: string): Observable<BaseResponseInterface<Items<Department[]>>> {
-        return this.http.get<BaseResponseInterface<Items<Department[]>>>(this.url + actionName + '/All');
+    getDictionariesForDropdown(actionName?: string): Observable<BaseResponseInterface<Item[]>> {
+        return this.http.get<BaseResponseInterface<Item[]>>(this.url + actionName + '/SelectListItem');
     }
 
     /**
@@ -96,6 +92,16 @@ export class DictionariesService {
      */
     getDictionariesSubValuesById(id?: string, actionName?: string): Observable<BaseResponseInterface<Item>> {
         return this.http.get<BaseResponseInterface<Item>>(this.url + actionName + '/Get/' + id);
+    }
+
+    /**
+     * Get positions by department ID
+     * @param departmentId Department ID
+     */
+    getPositionsByDepartmentId(departmentId: string): Observable<BaseResponseInterface<Position[]>> {
+        return this.http.get<BaseResponseInterface<Position[]>>(
+            environment.API.URL + 'Position/AllByDepartmentId/' + departmentId
+        );
     }
 
     /**
