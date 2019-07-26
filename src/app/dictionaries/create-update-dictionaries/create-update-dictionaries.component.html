@@ -12,7 +12,7 @@
         <mat-error *ngIf="form.get('name').errors?.required">Название обязательно</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" *ngIf="departmentId || departments">
+      <mat-form-field appearance="outline" *ngIf="controller === 'Position'">
         <mat-label>Подразделение</mat-label>
         <mat-select formControlName="departmentId">
           <ng-container *ngFor="let department of departments">
