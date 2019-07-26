@@ -12,7 +12,6 @@ import {
     PerfectScrollbarModule
 } from 'ngx-perfect-scrollbar';
 import { AdministrationModule } from '../administration/administration.module';
-import { EmployeesModule } from '../administration/employees/employees.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateUpdateDictionariesComponent } from './create-update-dictionaries/create-update-dictionaries.component';
 import { SubDictionariesListComponent } from './sub-dictionaries-list/sub-dictionaries-list.component';
@@ -40,8 +39,7 @@ const common = [];
         ReactiveFormsModule,
         RouterModule,
         PerfectScrollbarModule,
-        AdministrationModule,
-        EmployeesModule
+        AdministrationModule
     ],
     exports: [common],
     entryComponents: [CreateUpdateDictionariesComponent],

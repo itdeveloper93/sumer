@@ -38,7 +38,6 @@ import { MiniProfileComponent } from './layout/mini-profile/mini-profile.compone
 import { NotificationWidgetComponent } from './layout/notification-widget/notification-widget.component';
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
 import { MatPaginatorIntlRus } from './paginator';
-import { EmployeesModule } from './administration/employees/employees.module';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
 import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
@@ -103,7 +102,6 @@ const CUSTOM_DATE_FORMAT = {
         PerfectScrollbarModule,
         AuthModule,
         AdministrationModule,
-        EmployeesModule,
         DictionariesModule
     ],
     entryComponents: [],
