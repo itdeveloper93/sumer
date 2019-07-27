@@ -257,9 +257,10 @@
             <button
                 mat-flat-button
                 color="primary"
-                (click)="export(id, 'essential')"
+                (click)="export()"
                 class="mb-4 w-100"
                 *ngIf="activeTabLabel !== 'Учетная запись'"
+                [disabled]="isRequesting"
             >
                 <mat-icon>insert_drive_file</mat-icon> Выгрузить карточку в PDF
             </button>

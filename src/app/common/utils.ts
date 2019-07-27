@@ -22,3 +22,16 @@ export function downloadFileFromBlob(disposition: string, blob: Blob) {
 export function momentX(date: string) {
     return moment.utc(date, 'DD.MM.YYYY', 'Asia/Dushanbe').utcOffset(300);
 }
+
+/**
+ * Convert given object to query string.
+ * @param object Object
+ */
+export function objectToQueryString(object): string {
+    return Object.keys(object)
+        .reduce(function(a, k) {
+            a.push(k + '=' + encodeURIComponent(object[k]));
+            return a;
+        }, [])
+        .join('&');
+}

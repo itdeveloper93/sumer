@@ -8,6 +8,7 @@ import { SidenavStateService } from 'src/app/layout/dashboard-layout/sidenav-sta
 import { UpdatePassportDataService, PassportData } from '../update-passport-data/update-passport-data.service';
 import { fade } from 'src/app/animations/all';
 import { UserService, User } from '../../users/user/user.service';
+import { downloadFileFromBlob } from 'src/app/common/utils';
 
 @Component({
     selector: 'employee',
@@ -17,53 +18,58 @@ import { UserService, User } from '../../users/user/user.service';
 })
 export class EmployeeComponent implements OnInit {
     /**
-     * Employee ID
+     * Determines, whether any fetch operation is in progress.
+     */
+    isRequesting: boolean;
+
+    /**
+     * Employee ID.
      */
     id: string;
 
     /**
-     * Employee data that gets populated to 'Главное' tab
+     * Employee data that gets populated to 'Главное' tab.
      */
     essentialData: EssentialData;
 
     /**
-     * Passport data that gets populated to 'Паспортные данные' tab
+     * Passport data that gets populated to 'Паспортные данные' tab.
      */
     passportData: PassportData;
 
     /**
-     * User data that gets populated to 'Учетная запись' tab
+     * User data that gets populated to 'Учетная запись' tab.
      */
     userData: User;
 
     /**
-     * Log data that gets populated to right side widget
+     * Log data that gets populated to right side widget.
      */
     logData: Log;
 
     /**
      * Active tab title. Initially set to 'Главное' to fetch essential
-     * data straight away
+     * data straight away.
      */
     activeTabLabel = 'Главное';
 
     /**
-     * Active tab index
+     * Active tab index.
      */
     activeTabIndex: number;
 
     /**
-     * Determines if sidebar is opened
+     * Determines if sidebar is opened.
      */
     isSidebarOpened: boolean;
 
     /**
-     * Determines if employee has passport data
+     * Determines if employee has passport data.
      */
     hasPassport = false;
 
     /**
-     * Determines whether lock form is loaded
+     * Determines whether lock form is loaded.
      */
     lockFormLoaded: boolean;
 
@@ -111,7 +117,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     /**
-     * Get essential data
+     * Get essential data.
      * @param id Employee ID
      */
     getEssentialData(id: string) {
@@ -121,7 +127,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     /**
-     * Get passport data
+     * Get passport data.
      * @param id Employee ID
      */
     getPassportData(id: string) {
@@ -133,7 +139,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     /**
-     * Get user data
+     * Get user data.
      * @param id Employee ID
      */
     getUserData(id: string) {
@@ -141,7 +147,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     /**
-     * Get log data
+     * Get log data.
      * @param id Employee ID
      */
     getLogData(id: string): Log {
@@ -153,8 +159,16 @@ export class EmployeeComponent implements OnInit {
      * @param id Employee ID
      * @param dataType The type of data to export ('essential' | 'passport')
      */
-    export(id: string, dataType: string) {
-        console.log('export()', id, dataType);
+    export() {
+        this.isRequesting = true;
+
+        this.service
+            .export(this.id)
+            .subscribe(
+                response => downloadFileFromBlob(response.headers.get('content-disposition'), response.body),
+                (error: Response) => (this.isRequesting = false),
+                () => (this.isRequesting = false)
+            );
     }
 
     /**

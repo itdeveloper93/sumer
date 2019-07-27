@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import BaseResponseInterface from 'src/app/common/base-response.interface';
 import { MatTableDataSource } from '@angular/material';
+import { objectToQueryString } from 'src/app/common/utils';
 
 /**
  * The shape of fetched Employee
@@ -70,7 +71,7 @@ export class EmployeesService {
             if (criterias.locked) ENDPOINT = 'Employee/AllLockedEmployees';
 
             return this.http.get<BaseResponseInterface<Employees<MatTableDataSource<Employee[]>>>>(
-                environment.API.URL + ENDPOINT + '?' + this.objectToQueryString(criterias)
+                environment.API.URL + ENDPOINT + '?' + objectToQueryString(criterias)
             );
         } else
             return this.http.get<BaseResponseInterface<Employees<MatTableDataSource<Employee[]>>>>(
@@ -85,24 +86,11 @@ export class EmployeesService {
     export(criterias: ExportCriterias) {
         let ENDPOINT = environment.API.URL + 'Employee/ExportExcel';
 
-        if (criterias) ENDPOINT += '?' + this.objectToQueryString(criterias);
+        if (criterias) ENDPOINT += '?' + objectToQueryString(criterias);
 
         return this.http.get(ENDPOINT, {
             responseType: 'blob',
             observe: 'response'
         });
-    }
-
-    /**
-     * Convert given object to query string.
-     * @param object Object
-     */
-    objectToQueryString(object): string {
-        return Object.keys(object)
-            .reduce(function(a, k) {
-                a.push(k + '=' + encodeURIComponent(object[k]));
-                return a;
-            }, [])
-            .join('&');
     }
 }

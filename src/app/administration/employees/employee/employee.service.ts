@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.prod';
 import { Observable } from 'rxjs';
 import { PassportData } from '../update-passport-data/update-passport-data.service';
 import BaseResponseInterface from 'src/app/common/base-response.interface';
+import { objectToQueryString } from 'src/app/common/utils';
 
 /**
  * Shape of essential employee data that gets populated
@@ -73,5 +74,16 @@ export class EmployeeService {
             createdAt: '22.06.2019',
             lastEdit: '5.07.2019, 12:32'
         };
+    }
+
+    /**
+     * Export employee as file.
+     * @param id Employee ID.
+     */
+    export(id: string) {
+        return this.http.get(environment.API.URL + 'Employee/DownloadEmployeeCard/' + id, {
+            responseType: 'blob',
+            observe: 'response'
+        });
     }
 }
