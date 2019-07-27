@@ -34,10 +34,12 @@ import {
     MatExpansionModule,
     MatTabsModule,
     MatButtonToggleModule,
-    MatChipsModule
+    MatChipsModule,
+    MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_SNACK_BAR_OPTIONS } from '../app.config';
 
 const modules = [
     BrowserModule,
@@ -81,7 +83,7 @@ const modules = [
 @NgModule({
     declarations: [],
     imports: [CommonModule, modules],
-    providers: [],
+    providers: [{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: MAT_SNACK_BAR_OPTIONS }],
     exports: [modules]
 })
 export class MaterialModule {}

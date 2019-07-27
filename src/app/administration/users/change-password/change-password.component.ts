@@ -68,35 +68,19 @@ export class ChangePasswordComponent implements OnInit {
         }
 
         this.isRequesting = true;
-        this.form.get('password').disable();
-        this.form.get('confirmPassword').disable();
-        this.form.get('smsConfirmationCode').disable();
+        this.form.disable();
         this.isConfirmationCodeResendButtonVisible = false;
 
         this.service.requestConfirmationCode().subscribe(
             response => {},
             (error: Response) => {
                 this.isRequesting = false;
-                this.form.get('password').enable();
-                this.form.get('confirmPassword').enable();
-                this.form.get('smsConfirmationCode').enable();
-
-                switch (error.status) {
-                    case 0:
-                        this.snackbar.open('Ошибка. Проверьте подключение к Интернету или настройки Firewall.');
-                        break;
-
-                    default:
-                        this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                        break;
-                }
+                this.form.enable();
             },
             () => {
                 this.isRequesting = false;
                 this.isConfirmationCodePending = true;
-                this.form.get('password').enable();
-                this.form.get('confirmPassword').enable();
-                this.form.get('smsConfirmationCode').enable();
+                this.form.enable();
 
                 setTimeout(() => {
                     this.isConfirmationCodeResendButtonVisible = !this.isConfirmationCodeResendButtonVisible;

@@ -6,9 +6,10 @@ import { UpdatePassportDataService, PassportData } from './update-passport-data.
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ImageUploaderComponent } from '../../../image-uploader/image-uploader.component';
-import { AppConfig, momentX } from 'src/app/app.config';
+import { MIN_DATE, ADULT_DATE } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
 import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
+import { momentX } from 'src/app/common/utils';
 
 @Component({
     selector: 'update-passport-data',
@@ -35,12 +36,12 @@ export class UpdatePassportDataComponent implements OnInit {
     /**
      * Minimum date available to choose from MatDatePicker
      */
-    minDate = AppConfig.constants.MIN_DATE;
+    minDate = MIN_DATE;
 
     /**
      * The max date to show in MatDate picker for age
      */
-    aultDate = AppConfig.constants.ADULT_DATE;
+    aultDate = ADULT_DATE;
 
     /**
      * Current date

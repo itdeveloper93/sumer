@@ -19,8 +19,8 @@ export class ChangePasswordService {
     /**
      * Request confirmation code
      */
-    requestConfirmationCode(): Observable<BaseResponseInterface<{}>> {
-        return this.http.post<BaseResponseInterface<{}>>(
+    requestConfirmationCode(): Observable<BaseResponseInterface<any>> {
+        return this.http.post<BaseResponseInterface<any>>(
             environment.API.URL + 'Account/SendChangePasswordConfirmationCodeToCurrentUser',
             {}
         );

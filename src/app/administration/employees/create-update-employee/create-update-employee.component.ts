@@ -8,9 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService, EssentialData } from '../employee/employee.service';
 import * as moment from 'moment-timezone';
 import { ImageUploaderComponent } from 'src/app/image-uploader/image-uploader.component';
-import { AppConfig, momentX } from 'src/app/app.config';
+import { MIN_DATE, ADULT_DATE } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
 import { DictionariesService, Item } from 'src/app/dictionaries/dictionaries.service';
+import { momentX } from 'src/app/common/utils';
 
 @Component({
     selector: 'create-update-employee',
@@ -32,7 +33,7 @@ export class CreateEmployeeComponent implements OnInit {
     /**
      * Minimum date available to choose from MatDatePicker
      */
-    minDate = AppConfig.constants.MIN_DATE;
+    minDate = MIN_DATE;
 
     /**
      * Current date
@@ -42,7 +43,7 @@ export class CreateEmployeeComponent implements OnInit {
     /**
      * The max date to show in MatDate picker for age
      */
-    aultDate = AppConfig.constants.ADULT_DATE;
+    aultDate = ADULT_DATE;
 
     /**
      * ID of current employee. If has value, then we're updating an

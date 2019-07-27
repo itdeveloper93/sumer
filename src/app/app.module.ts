@@ -1,35 +1,19 @@
-/**
- * Angular
- */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { GlobalHttpHeadersInterceptorService } from './common/services/http-interceptor.service';
 import { LayoutModule } from '@angular/cdk/layout';
-
-/**
- * Third party modules/components
- */
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-
-/**
- * Sumer
- */
 import { AppComponent } from './app.component';
-
 import { MaterialModule } from './material/material.module';
-
 import { AuthModule } from './authentication/auth.module';
 import { AuthService } from './authentication/auth.service';
-
 import { AdministrationModule } from './administration/administration.module';
-
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -39,41 +23,13 @@ import { NotificationWidgetComponent } from './layout/notification-widget/notifi
 import { MainNavigationComponent } from './layout/main-navigation/main-navigation.component';
 import { MatPaginatorIntlRus } from './common/paginator-translation';
 import { SidenavStateService } from './layout/dashboard-layout/sidenav-state.service';
-import { MomentUtcDateAdapter } from './MomentUtcDateAdapter';
+import { MomentUtcDateAdapter } from './common/MomentUtcDateAdapter';
 import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 import { SidebarToggleComponent } from './layout/sidebar-toggle/sidebar-toggle.component';
 import { JwtInterceptor } from '@auth0/angular-jwt';
 import { DictionariesModule } from './dictionaries/dictionaries.module';
-import {
-    MatDialogConfig,
-    MAT_DIALOG_DEFAULT_OPTIONS,
-    MatPaginatorIntl,
-    MAT_DATE_FORMATS,
-    DateAdapter
-} from '@angular/material';
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true,
-    wheelPropagation: false
-};
-
-const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
-    maxWidth: '370px',
-    hasBackdrop: true,
-    panelClass: 'position-relative'
-};
-
-const CUSTOM_DATE_FORMAT = {
-    parse: {
-        dateInput: 'DD/MM/YYYY'
-    },
-    display: {
-        dateInput: 'DD.MM.YYYY',
-        monthYearLabel: 'MMMM YYYY',
-        dateA11yLabel: 'DD',
-        monthYearA11yLabel: 'MMMM YYYY'
-    }
-};
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatPaginatorIntl, MAT_DATE_FORMATS, DateAdapter } from '@angular/material';
+import { DEFAULT_PERFECT_SCROLLBAR_CONFIG, MAT_DIALOG_GLOBAL_OPTIONS, CUSTOM_MAT_DATE_FORMATS } from './app.config';
 
 @NgModule({
     declarations: [
@@ -127,11 +83,10 @@ const CUSTOM_DATE_FORMAT = {
         },
         { provide: MatPaginatorIntl, useClass: MatPaginatorIntlRus },
         { provide: DateAdapter, useClass: MomentUtcDateAdapter },
-        { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
+        { provide: MAT_DATE_FORMATS, useValue: CUSTOM_MAT_DATE_FORMATS },
         AuthService,
         SidenavStateService
     ],
-    bootstrap: [AppComponent],
-    schemas: [NO_ERRORS_SCHEMA]
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

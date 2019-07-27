@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeesService, Employee, FetchCriterias, ExportCriterias } from '../employees.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSort, MatSnackBar, PageEvent, Sort } from '@angular/material';
-import { AppConfig } from 'src/app/app.config';
+import { MatTableDataSource, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
+import { PAGE_SIZE_OPTIONS } from 'src/app/app.config';
 import { fade } from 'src/app/animations/all';
 import { AppComponent } from 'src/app/app.component';
+import { downloadFileFromBlob } from 'src/app/common/utils';
 
 @Component({
     selector: 'employees-list',
@@ -52,7 +53,7 @@ export class EmployeesListComponent implements OnInit {
     /**
      * An array of numbers to show on one page.
      */
-    pageSizeOptions = AppConfig.constants.PAGE_SIZE_OPTIONS;
+    pageSizeOptions = PAGE_SIZE_OPTIONS;
 
     /**
      * Page number.
@@ -225,25 +226,10 @@ export class EmployeesListComponent implements OnInit {
 
         this.service.export(this.exportCriterias).subscribe(
             response => {
-                this.downloadFileFromBlob(response.headers.get('content-disposition'), response.body);
+                downloadFileFromBlob(response.headers.get('content-disposition'), response.body);
             },
             (error: Response) => (this.isRequesting = false),
             () => (this.isRequesting = false)
         );
-    }
-
-    /**
-     * Initiates download of the given blob as file
-     * @param disposition Content-disposition header value
-     * @param blob Blob
-     */
-    downloadFileFromBlob(disposition: string, blob: Blob) {
-        const fileName = decodeURIComponent(disposition.split('filename*=')[1].split(`''`)[1]);
-        const fileUrl = window.URL.createObjectURL(blob);
-
-        const anchor = document.createElement('a');
-        anchor.download = decodeURIComponent(fileName);
-        anchor.href = fileUrl;
-        anchor.click();
     }
 }

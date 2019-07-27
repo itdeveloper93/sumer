@@ -2,10 +2,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { LockService, LockReason } from './lock.service';
 import { MatSnackBar } from '@angular/material';
-import { EmployeeService } from '../employees/employee/employee.service';
+import { EmployeeService, EssentialData } from '../employees/employee/employee.service';
 import { fade } from '../../animations/all';
 import { UserService } from '../users/user/user.service';
 import { DashboardLayoutComponent } from 'src/app/layout/dashboard-layout/dashboard-layout.component';
+import { Subscription, Observable } from 'rxjs';
+import BaseResponseInterface from 'src/app/common/base-response.interface';
 
 @Component({
     selector: 'lock-form',
@@ -113,7 +115,7 @@ export class LockFormComponent implements OnInit {
     getEntityLockStatus() {
         this.isRequesting = true;
 
-        let get;
+        let get: Observable<BaseResponseInterface<any>>;
 
         switch (this.entityType) {
             case 'employee':
