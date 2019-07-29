@@ -207,5 +207,5 @@
     link="/administration/employees/create"
     title="Добавить сотрудника"
     icon="add"
-    *ngIf="permissions['Employee.Create']"
+    *ngIf="!showLocked && permissions['Employee.Create']"
 ></floating-fab>

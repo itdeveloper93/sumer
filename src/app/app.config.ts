@@ -38,7 +38,7 @@ export const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface =
  * MatDialog config
  */
 export const MAT_DIALOG_GLOBAL_OPTIONS: MatDialogConfig<any> = {
-    maxWidth: '370px',
+    maxWidth: '400px',
     hasBackdrop: true,
     panelClass: 'position-relative'
 };
