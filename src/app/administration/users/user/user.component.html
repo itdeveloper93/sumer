@@ -7,7 +7,7 @@
             <alert
                 message="Внимание! После блокировки пользователь потеряет доступ к системе."
                 type="danger"
-                *ngIf="!isLocked"
+                *ngIf="!user?.isLocked"
             ></alert>
             <lock-form horisontal="true" entityType="user" id="{{ id }}"></lock-form>
         </mat-expansion-panel>
@@ -31,9 +31,11 @@
 
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title>Сбросить пароль</mat-panel-title>
+                <mat-panel-title>Сброс пароля</mat-panel-title>
             </mat-expansion-panel-header>
-            Ничего нет
+            <button mat-flat-button color="primary" (click)="resetPassword()" [disabled]="isRequesting">
+                <mat-icon>refresh</mat-icon> Сбросить пароль
+            </button>
         </mat-expansion-panel>
 
         <mat-expansion-panel>

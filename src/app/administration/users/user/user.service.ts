@@ -8,9 +8,9 @@ import { environment } from 'src/environments/environment.prod';
  * Shape of user data
  */
 export interface User {
-    userName: string;
+    userName: number;
     email: string;
-    phone: string;
+    phone: number;
     isLocked: boolean;
     userLockReasonId: string;
     userLockReasonName: string;

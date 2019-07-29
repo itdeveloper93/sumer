@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from './user.service';
+import { UserService, User } from './user.service';
 import { MatSnackBar } from '@angular/material';
+import { AuthService } from 'src/app/authentication/auth.service';
 
 @Component({
     selector: 'user',
@@ -9,21 +10,26 @@ import { MatSnackBar } from '@angular/material';
 })
 export class UserComponent implements OnInit {
     /**
-     * User ID
+     * User ID.
      */
     @Input() id: string;
 
     /**
-     * Determines whether any fetch operation is in progress
+     * Determines whether any fetch operation is in progress.
      */
     isRequesting: boolean;
 
     /**
-     * Determines whther user is locked or not
+     * Determines whther user is locked or not.
      */
     isLocked: boolean;
 
-    constructor(private service: UserService, private snackbar: MatSnackBar) {}
+    /**
+     * User data.
+     */
+    user: User;
+
+    constructor(private service: UserService, private snackbar: MatSnackBar, private authService: AuthService) {}
 
     ngOnInit() {
         this.get();
@@ -33,9 +39,21 @@ export class UserComponent implements OnInit {
      * Get user data
      */
     get() {
-        this.service.get(this.id).subscribe(response => {
-            this.isLocked = response.data.isLocked;
-            this.isLocked;
-        });
+        this.service.get(this.id).subscribe(response => (this.user = response.data));
+    }
+
+    /**
+     * Reset password.
+     */
+    resetPassword() {
+        this.isRequesting = true;
+
+        this.authService
+            .resetPassword({ phoneNumber: this.user.userName })
+            .subscribe(
+                response => this.snackbar.open('Новый пароль отправлен на номер ' + this.user.userName),
+                (error: Response) => (this.isRequesting = false),
+                () => (this.isRequesting = false)
+            );
     }
 }

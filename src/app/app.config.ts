@@ -64,6 +64,6 @@ export const CUSTOM_MAT_DATE_FORMATS = {
  * MatSnackbar options.
  */
 export const MAT_SNACK_BAR_OPTIONS = {
-    duration: 50000,
+    duration: 5000,
     panelClass: 'text-center'
 };
