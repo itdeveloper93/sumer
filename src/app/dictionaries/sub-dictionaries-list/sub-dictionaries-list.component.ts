@@ -142,7 +142,7 @@ export class SubDictionariesListComponent implements OnInit {
             case 'departments':
                 this.controller = 'Department';
                 break;
-        }
+        } 
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
