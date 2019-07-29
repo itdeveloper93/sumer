@@ -223,10 +223,10 @@ export class MainNavigationComponent implements OnInit, AfterViewInit {
     /**
      * Close sedebar on screens less that 767px wide.
      */
-    closeSideBarOnSmallScreen() {
+    closeSideBarOnSmallScreen(event) {
         if (!this.isInit) {
             this.breakpointObserver.observe('(max-width: 767px)').subscribe((state: BreakpointState) => {
-                if (state.matches) this.sidenavService.onSideNavToggle.emit();
+                if (state.matches) this.sidenavService.onSideNavToggle.emit(false);
             });
         }
     }

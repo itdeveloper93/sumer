@@ -20,7 +20,7 @@ export interface SignInCredentials {
  * Reset password credentials shape.
  */
 export interface ResetPasswordCredentials {
-    phoneNumber: number;
+    phoneNumber: string;
 }
 
 /**
