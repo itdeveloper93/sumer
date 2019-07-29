@@ -39,7 +39,10 @@ export class UserComponent implements OnInit {
      * Get user data
      */
     get() {
-        this.service.get(this.id).subscribe(response => (this.user = response.data));
+        this.service.get(this.id).subscribe(response => {
+            this.user = response.data;
+            this.isLocked = response.data.isLocked;
+        });
     }
 
     /**

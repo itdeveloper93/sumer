@@ -58,13 +58,12 @@ export class FunctionalityAccessPermissionsComponent implements OnInit {
     ngOnInit() {
         this.get();
 
-        // TODO: This doesn't work on mobile initially. Fix.
-        if (this.permissions) {
-            this.breakpointObserver.observe(['(max-width: 991px)']).subscribe((state: BreakpointState) => {
-                if (state.matches) this.isSmallScreen = true;
-                else this.isSmallScreen = false;
-            });
-        }
+        this.breakpointObserver.observe(['(max-width: 991px)']).subscribe((state: BreakpointState) => {
+            if (state.matches) this.isSmallScreen = true;
+            else this.isSmallScreen = false;
+
+            console.log(this.isSmallScreen);
+        });
     }
 
     /**

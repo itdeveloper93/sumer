@@ -71,6 +71,11 @@ export class LockFormComponent implements OnInit {
     @Output() onSuccess = new EventEmitter<boolean>();
 
     /**
+     * Event which fires if lock was toggled.
+     */
+    @Output() locked = new EventEmitter<boolean>();
+
+    /**
      * Register form and it's controls
      */
     form = new FormGroup({
@@ -161,6 +166,7 @@ export class LockFormComponent implements OnInit {
             response => {
                 this.ngOnInit();
                 this.onSuccess.emit(true);
+                this.locked.emit(true);
             },
             (error: Response) => {
                 this.onSuccess.emit(false);
@@ -185,6 +191,7 @@ export class LockFormComponent implements OnInit {
             response => {
                 this.ngOnInit();
                 this.onSuccess.emit(true);
+                this.locked.emit(false);
             },
             (error: Response) => {
                 this.onSuccess.emit(false);

@@ -7,9 +7,9 @@
             <alert
                 message="Внимание! После блокировки пользователь потеряет доступ к системе."
                 type="danger"
-                *ngIf="!user?.isLocked"
+                *ngIf="!isLocked"
             ></alert>
-            <lock-form horisontal="true" entityType="user" id="{{ id }}"></lock-form>
+            <lock-form horisontal="true" entityType="user" id="{{ id }}" (locked)="isLocked = $event"></lock-form>
         </mat-expansion-panel>
 
         <mat-expansion-panel [disabled]="isRequesting">

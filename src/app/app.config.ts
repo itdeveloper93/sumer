@@ -4,8 +4,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { MatDialogConfig } from '@angular/material';
 
 /**
- * Custom moment method for returning dates as
- * strings.
+ * Custom moment method for returning date as string.
  */
 // @ts-ignore
 moment.fn.toDateString = function() {
