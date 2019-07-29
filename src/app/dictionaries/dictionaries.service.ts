@@ -9,9 +9,10 @@ import { MatTableDataSource } from '@angular/material';
  * The shape of fetch criterias for DB searching
  */
 export interface FetchCriterias {
-    isActive?: boolean;
-    name?: string;
     id?: string;
+    name?: string;
+    departmentId?: string;
+    isActive?: boolean;
     onlyActive?: boolean;
     page?: number;
     pageSize?: number;

@@ -23,6 +23,12 @@ export class SubDictionariesListComponent implements OnInit {
     isRequesting: boolean;
 
     /**
+     * Object of criterias collected from paginator and filter
+     * to be sent to API.
+     */
+    fetchCriterias: FetchCriterias;
+
+    /**
      * Columns to display in the table.
      */
     displayedColumns: string[] = ['name', 'isActive', 'lastEdit', 'author', 'actions'];
@@ -78,6 +84,11 @@ export class SubDictionariesListComponent implements OnInit {
      */
     dictionarieSubValues = new MatTableDataSource();
 
+    /**
+     * Export list params.
+     */
+    exportCriterias: any;
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -89,16 +100,14 @@ export class SubDictionariesListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.currentDictionaryUrl = this.route.snapshot.url[0].path;
+
+        // Get initial fetch criterias from URL query params if user navigated from filtered link
+        this.fetchCriterias = this.route.snapshot.queryParams;
+
         // Set paginator values if department navigated from paginated link
         this.pageIndex = +this.route.snapshot.queryParams.page - 1;
         this.pageSize = +this.route.snapshot.queryParams.pageSize;
-
-        // Fetch data on every URL query params change
-        this.route.queryParams.subscribe(params => {
-            if (params.constructor === Object && Object.keys(params).length !== 0) this.getDictionarieSubValues(params);
-        });
-
-        this.currentDictionaryUrl = this.route.snapshot.url[0].path;
 
         switch (this.currentDictionaryUrl) {
             case 'useful-link-categories':
@@ -115,6 +124,7 @@ export class SubDictionariesListComponent implements OnInit {
 
             case 'positions':
                 this.controller = 'Position';
+                this.displayedColumns.splice(4, 0, 'departmentName');
                 break;
 
             case 'employee-lock-reasons':
@@ -134,7 +144,15 @@ export class SubDictionariesListComponent implements OnInit {
                 break;
         }
 
-        this.getDictionarieSubValues();
+        // Fetch data on every URL query params change
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length !== 0) {
+                this.getDictionarieSubValues(params);
+                this.exportCriterias = params;
+            } else this.getDictionarieSubValues();
+        });
+
+        //this.getDictionarieSubValues();
     }
 
     /**
@@ -177,6 +195,7 @@ export class SubDictionariesListComponent implements OnInit {
     resetFilter() {
         const params = { ...this.route.snapshot.queryParams };
         delete params.name;
+        delete params.departmentId;
         delete params.onlyActive;
 
         this.router.navigate([], {

@@ -10,7 +10,7 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Подразделение</mat-label>
+                <mat-label>Отдел</mat-label>
                 <mat-select formControlName="departmentId">
                     <mat-option value="all">Все</mat-option>
                     <mat-option *ngFor="let department of departments" value="{{ department.id }}">{{
@@ -25,17 +25,11 @@
         </form>
     </mat-card-content>
     <mat-card-actions>
-        <button
-            mat-flat-button
-            color="primary"
-            type="submit"
-            class="btn-lg btn-block mb-3"
-            (click)="filterForm.ngSubmit.emit()"
-        >
+        <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block mb-3"
+            (click)="filterForm.ngSubmit.emit()">
             Найти
         </button>
-        <button mat-flat-button mat-button type="button" class="btn-lg btn-block m-0" (click)="reset()"
-            >Сбросить</button
-        >
+        <button mat-flat-button mat-button type="button" class="btn-lg btn-block m-0"
+            (click)="reset()">Сбросить</button>
     </mat-card-actions>
 </mat-card>

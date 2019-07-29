@@ -1,6 +1,4 @@
-<mat-progress-bar mode="indeterminate" *ngIf="isRequesting" class="mat-progress-bar_top rounded-top">
-</mat-progress-bar>
-<mat-card class="mb-4">
+<mat-card class="mb-4" [@fade]>
     <mat-card-header>
         <mat-card-title class="m-0">Фильтр</mat-card-title>
     </mat-card-header>
@@ -9,6 +7,16 @@
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Название</mat-label>
                 <input matInput formControlName="name" placeholder="Название" type="text" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100" *ngIf="controller === 'Position'">
+                <mat-label>Отдел</mat-label>
+                <mat-select formControlName="departmentId">
+                    <mat-option value="all">Все</mat-option>
+                    <mat-option *ngFor="let department of departments" value="{{ department.id }}">{{
+                                    department.name
+                                }}</mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-slide-toggle labelPosition="before" class="mb-3" color="primary" checked formControlName="onlyActive">
