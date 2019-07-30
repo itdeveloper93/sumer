@@ -43,7 +43,7 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
             });
         }
 
-        if (authToken) request = this.addAuthToken(request, authToken);
+        if (authToken && !this.isRefreshingToken(request.url)) request = this.addAuthToken(request, authToken);
 
         // Defer progress-bar display to get rid of 'ExpressionChangedAfterItHasBeenCheckedError'
         setTimeout(() => (this.dashboardLayout.isRequesting = true));
@@ -107,5 +107,11 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
                 return throwError(error);
             })
         );
+    }
+
+    private isRefreshingToken(url: string): boolean {
+        const matches = url.split('/').lastIndexOf('RefreshToken') > 0 ? true : false;
+
+        return matches;
     }
 }
