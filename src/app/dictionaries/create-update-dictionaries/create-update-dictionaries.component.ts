@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { DictionariesService, Item } from '../dictionaries.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -129,6 +129,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
     }
 
     submit() {
+        this.dialogRef.close('submit');
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;

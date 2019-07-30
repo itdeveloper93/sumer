@@ -154,9 +154,9 @@ export class SubDictionariesListComponent implements OnInit {
     }
 
     /**
-     * Create or update department
-     * @param id Department ID
-     * @param name Department name
+     * Create or update dictionaries sub-values
+     * @param id sub-dictionary ID
+     * @param name sub-dictionary name
      */
     openDialogUpdate(id?: string, name?: string): void {
         const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
@@ -169,11 +169,11 @@ export class SubDictionariesListComponent implements OnInit {
             });
         }
 
-        dialogRef.afterClosed().subscribe(() => {
-            this.getDictionarieSubValues();
-            this.resetFilter();
-
-            //TODO fetch only if touched
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === 'submit') {
+                this.getDictionarieSubValues();
+                this.resetFilter();
+            }
         });
     }
 
