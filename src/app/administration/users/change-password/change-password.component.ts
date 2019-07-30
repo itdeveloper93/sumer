@@ -50,6 +50,10 @@ export class ChangePasswordComponent {
      * Request confirmation code.
      */
     requestConfirmationCode() {
+        // Mark all form fields as touched to trigger validation
+        this.form.get('password').markAsTouched();
+        this.form.get('confirmPassword').markAsTouched();
+
         if (!this.form.get('password').value) {
             this.snackbar.open('Введите новый пароль');
 
@@ -92,6 +96,9 @@ export class ChangePasswordComponent {
      * @param formDirective Form directive for clearing form values.
      */
     submit(formDirective: FormGroupDirective) {
+        // Mark all form fields as touched to trigger validation
+        this.form.get('smsConfirmationCode').markAsTouched();
+
         if (!this.form.get('smsConfirmationCode').value) {
             this.snackbar.open('Введите код подтверждения');
 

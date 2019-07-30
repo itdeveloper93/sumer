@@ -187,6 +187,9 @@ export class UpdatePassportDataComponent implements OnInit {
      * @param payload Form data
      */
     submit() {
+        // Mark all form fields as touched to trigger validation
+        this.form.markAllAsTouched();
+
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки.');
 

@@ -19,7 +19,9 @@
     </div>
 
     <button
-        routerLink="/administration/employees/active"
+        [routerLink]="[
+            essentialData.isLocked ? '/administration/employees/locked' : '/administration/employees/active'
+        ]"
         mat-button
         class="mat-button-sm has-icon d-none d-md-block ml-3"
     >

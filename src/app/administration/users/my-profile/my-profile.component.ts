@@ -34,12 +34,12 @@ export class MyProfileComponent implements OnInit {
      * Register update essentials form and it's controls.
      */
     form = new FormGroup({
-        email: new FormControl(
-            '',
+        email: new FormControl('', [
+            Validators.required,
             Validators.pattern(
                 "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
             )
-        ),
+        ]),
         factualAddress: new FormControl('', Validators.required)
     });
 
@@ -63,6 +63,9 @@ export class MyProfileComponent implements OnInit {
      * Edit employee data.
      */
     editUserDetails() {
+        // Mark form controls as touched to trigger validation visibility
+        this.form.markAllAsTouched();
+
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
 

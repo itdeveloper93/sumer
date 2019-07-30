@@ -104,6 +104,10 @@
                                                                 placeholder="email@host.tj"
                                                                 type="email"
                                                             />
+
+                                                            <mat-error *ngIf="form.get('email').errors?.required">
+                                                                Email обязателен
+                                                            </mat-error>
                                                         </mat-form-field>
 
                                                         <mat-form-field appearance="outline" class="w-100">
@@ -114,6 +118,12 @@
                                                                 placeholder="г. Душанбе, ул. Лохути, д. 5, кв. 8"
                                                                 type="text"
                                                             />
+
+                                                            <mat-error
+                                                                *ngIf="form.get('factualAddress').errors?.required"
+                                                            >
+                                                                Адрес обязателен
+                                                            </mat-error>
                                                         </mat-form-field>
                                                     </form>
                                                 </mat-card-content>

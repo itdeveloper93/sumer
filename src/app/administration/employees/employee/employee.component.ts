@@ -85,8 +85,6 @@ export class EmployeeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        console.log(1);
-
         this.activeTabIndex = +this.route.snapshot.queryParamMap.get('activeTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 

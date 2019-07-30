@@ -226,6 +226,9 @@ export class CreateEmployeeComponent implements OnInit {
      * @param formDirective
      */
     submit(redirectTo: string, formDirective: FormGroupDirective) {
+        // Mark all form fields as touched to trigger validation
+        this.form.markAllAsTouched();
+
         // Don't submit if form has errors
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
