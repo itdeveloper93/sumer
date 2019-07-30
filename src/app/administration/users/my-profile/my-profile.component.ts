@@ -3,9 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { MyProfileService, EmployeeData } from './my-profile.service';
 import { fade } from 'src/app/animations/all';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'my-profile',

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from './animations/router-transitions';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatSnackBar } from '@angular/material';
 import { PermissionsService } from './authentication/permissions.service';
-import { Router, NavigationEnd, ActivatedRoute, RouterStateSnapshot } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, RouterEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs/operators';
+import { PartialObserver } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnInit {
         private dateAdapter: DateAdapter<any>,
         private permissionsService: PermissionsService,
         private router: Router,
-        private titleService: Title
+        private titleService: Title,
+        private snackbar: MatSnackBar
     ) {}
 
     ngOnInit() {
@@ -42,6 +44,11 @@ export class AppComponent implements OnInit {
                     .join(' ‹ ');
                 this.titleService.setTitle(title);
             });
+
+        // Close matSnackbar on navigation
+        this.router.events
+            .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+            .subscribe(() => this.snackbar.dismiss());
     }
 
     /**

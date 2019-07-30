@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { ChangePasswordService } from './change-password.service';
 import { MatSnackBar } from '@angular/material';
@@ -10,7 +10,7 @@ import { fade } from 'src/app/animations/all';
     styleUrls: ['./change-password.component.sass'],
     animations: [fade]
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
     /**
      * User phone number / login.
      */
@@ -45,8 +45,6 @@ export class ChangePasswordComponent implements OnInit {
     });
 
     constructor(private service: ChangePasswordService, private snackbar: MatSnackBar) {}
-
-    ngOnInit() {}
 
     /**
      * Request confirmation code.

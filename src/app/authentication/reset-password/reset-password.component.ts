@@ -52,10 +52,6 @@ export class ResetPasswordComponent {
                         this.snackbar.open('Неверный номер телефона');
                         break;
                 }
-
-                if (error.status >= 500) {
-                    this.snackbar.open(`Ошибка ${error.status}. Обратитесь к администратору`);
-                }
             },
             () => this.authComponent.switchFormState(this.form, 'enable')
         );
