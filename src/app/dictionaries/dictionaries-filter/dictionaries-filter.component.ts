@@ -55,6 +55,10 @@ export class DictionariesFilterComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length === 0) this.reset();
+        });
+
         this.form.patchValue({
             name: this.route.snapshot.queryParams.name,
             onlyActive: this.route.snapshot.queryParams.onlyActive
@@ -111,7 +115,6 @@ export class DictionariesFilterComponent implements OnInit {
 
         this.onFilter.emit(criterias);
     }
-
     /**
      * Clear form and Emit filter criterias up
      */

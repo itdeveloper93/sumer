@@ -94,7 +94,7 @@ export class SubDictionariesListComponent implements OnInit {
 
     constructor(
         private dictionarieService: DictionariesService,
-        public dialog: MatDialog,
+        private dialog: MatDialog,
         private route: ActivatedRoute,
         private router: Router
     ) {}
@@ -142,7 +142,7 @@ export class SubDictionariesListComponent implements OnInit {
             case 'departments':
                 this.controller = 'Department';
                 break;
-        } 
+        }
 
         // Fetch data on every URL query params change
         this.route.queryParams.subscribe(params => {
@@ -151,8 +151,6 @@ export class SubDictionariesListComponent implements OnInit {
                 this.exportCriterias = params;
             } else this.getDictionarieSubValues();
         });
-
-        //this.getDictionarieSubValues();
     }
 
     /**
@@ -164,13 +162,17 @@ export class SubDictionariesListComponent implements OnInit {
         const dialogRef = this.dialog.open(CreateUpdateDictionariesComponent, {
             data: { id, name, currentDictionaryUrl: this.route.snapshot.url[0].path }
         });
+
         if (this.controller === 'Position') {
             this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
                 this.departments = response.data;
             });
         }
-        dialogRef.afterClosed().subscribe(result => {
+
+        dialogRef.afterClosed().subscribe(() => {
             this.getDictionarieSubValues();
+            this.resetFilter();
+
             //TODO fetch only if touched
         });
     }

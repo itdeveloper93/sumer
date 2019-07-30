@@ -29,7 +29,7 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-flat-button color="primary" type="submit" class="btn-lg btn-block m-0"
-      (click)="submitForm.ngSubmit.emit()">
+      (click)="submitForm.ngSubmit.emit()" [disabled]="isRequesting">
       <mat-icon class="mat-18">save</mat-icon>Сохранить
     </button>
   </mat-card-actions>
