@@ -129,7 +129,9 @@ export class CreateUpdateDictionariesComponent implements OnInit {
     }
 
     submit() {
-        this.dialogRef.close('submit');
+        // Mark form controls as touched to trigger validation visibility
+        this.form.markAllAsTouched();
+
         if (this.form.invalid) {
             this.snackbar.open('В форме содержатся ошибки');
             return false;
@@ -152,7 +154,9 @@ export class CreateUpdateDictionariesComponent implements OnInit {
         this.form.disable();
 
         this.dictionariesService.submit(action, this.controller, this.payload).subscribe(
-            response => this.dialogRef.close(),
+            response => {
+                if (this.form.get('name').value !== '') this.dialogRef.close('submit');
+            },
             error => {
                 this.isRequesting = false;
                 this.form.enable();
