@@ -52,7 +52,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<CreateUpdateDictionariesComponent>,
         private snackbar: MatSnackBar,
-        private dictionarieService: DictionariesService
+        private dictionariesService: DictionariesService
     ) {}
 
     ngOnInit() {
@@ -76,7 +76,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
 
             case 'positions':
                 this.controller = 'Position';
-                this.dictionarieService.getDictionariesForDropdown('Department').subscribe(response => {
+                this.dictionariesService.getDictionariesForDropdown('Department').subscribe(response => {
                     this.departments = response.data;
                 });
                 break;
@@ -107,7 +107,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
     getDictionariesSubValuesById(controller = this.controller) {
         this.isRequesting = true;
 
-        this.dictionarieService.getDictionariesSubValuesById(this.data.id, controller).subscribe(
+        this.dictionariesService.getDictionariesSubValuesById(this.data.id, controller).subscribe(
             response => {
                 this.form.patchValue({
                     name: this.data.name,
@@ -150,7 +150,7 @@ export class CreateUpdateDictionariesComponent implements OnInit {
 
         this.form.disable();
 
-        this.dictionarieService.submit(action, this.controller, this.payload).subscribe(
+        this.dictionariesService.submit(action, this.controller, this.payload).subscribe(
             response => this.dialogRef.close(),
             error => {
                 this.isRequesting = false;

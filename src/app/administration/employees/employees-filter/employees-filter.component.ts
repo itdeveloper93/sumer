@@ -40,6 +40,10 @@ export class EmployeesFilterComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            if (params.constructor === Object && Object.keys(params).length === 0) this.reset();
+        });
+
         this.getDepartments();
 
         this.form.patchValue({
