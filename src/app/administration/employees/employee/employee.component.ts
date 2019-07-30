@@ -85,6 +85,8 @@ export class EmployeeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        console.log(1);
+
         this.activeTabIndex = +this.route.snapshot.queryParamMap.get('activeTabIndex');
         this.route.paramMap.subscribe(params => (this.id = params.get('id')));
 
@@ -103,9 +105,6 @@ export class EmployeeComponent implements OnInit {
                 this.getEssentialData(this.id);
                 this.activeTabLabel = 'Главное';
                 break;
-        }
-
-        if (this.activeTabIndex === 1) {
         }
 
         // Fetch and assign log data
@@ -176,7 +175,6 @@ export class EmployeeComponent implements OnInit {
      * @param event Event object
      */
     catchTabChange(event: MatTabChangeEvent) {
-        // Load nessesary data on first tab activation
         switch (event.tab.textLabel) {
             case 'Главное':
                 this.getEssentialData(this.id);

@@ -228,7 +228,10 @@
                                 *ngIf="essentialData.userId; else createUser"
                             ></user>
                             <ng-template #createUser>
-                                <create-user employeeId="{{ id }}" (onAddEnd)="ngOnInit()"></create-user>
+                                <create-user
+                                    employeeId="{{ id }}"
+                                    (onAddEnd)="ngOnInit(); activeTabLabel = 'Учетная запись'"
+                                ></create-user>
                             </ng-template>
                         </ng-container>
                     </mat-tab>
