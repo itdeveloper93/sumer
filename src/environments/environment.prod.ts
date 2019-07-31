@@ -6,5 +6,6 @@ export const environment = {
     },
     API: {
         URL: 'https://51.145.98.38/api/'
-    }
+    },
+    hmr: false
 };
