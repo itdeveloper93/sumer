@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
 import { environment } from './../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { map, tap, share } from 'rxjs/operators';
+import { Injectable, NgZone } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import BaseResponseInterface from '../common/base-response.interface';
+import { BootController } from '../common/boot-control';
 
 /**
  * Sign-in credentials shape.
@@ -35,7 +36,12 @@ export interface SignInResponse {
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(private http: HttpClient, public jwtHelper: JwtHelperService, private router: Router) {}
+    constructor(
+        private http: HttpClient,
+        public jwtHelper: JwtHelperService,
+        private router: Router,
+        private ngZone: NgZone
+    ) {}
 
     /**
      * Sign-in
@@ -44,10 +50,7 @@ export class AuthService {
      */
     signIn(credentials: SignInCredentials): Observable<boolean> {
         return this.http
-            .post<BaseResponseInterface<SignInResponse>>(
-                environment.API.URL + 'Account/Login',
-                JSON.stringify(credentials)
-            )
+            .post<BaseResponseInterface<SignInResponse>>(environment.API.LOGIN, JSON.stringify(credentials))
             .pipe(
                 map(response => {
                     if (response.meta.success) {
@@ -66,6 +69,10 @@ export class AuthService {
      */
     signOut() {
         this.removeTokens();
+
+        // Triggers the reboot in main.ts
+        this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+
         this.router.navigate(['/auth']);
     }
 
@@ -110,7 +117,7 @@ export class AuthService {
      */
     refreshToken(): Observable<HttpResponse<any>> {
         return this.http.post<HttpResponse<any>>(
-            environment.API.URL + 'Account/RefreshToken',
+            environment.API.REFRESH_TOKEN,
             {
                 accessToken: this.getToken(),
                 refreshToken: this.getToken('refresh')

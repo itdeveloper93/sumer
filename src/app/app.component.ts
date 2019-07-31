@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from './animations/router-transitions';
 import { DateAdapter, MatSnackBar } from '@angular/material';
 import { PermissionsService } from './authentication/permissions.service';
-import { Router, NavigationEnd, ActivatedRoute, RouterEvent } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs/operators';
-import { PartialObserver } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -32,7 +31,6 @@ export class AppComponent implements OnInit {
         this.dateAdapter.setLocale('ru');
         this.resetPermissionsObject();
 
-        // Set document title
         this.router.events
             .pipe(
                 filter(event => event instanceof NavigationEnd),
@@ -43,12 +41,9 @@ export class AppComponent implements OnInit {
                     .reverse()
                     .join(' ‹ ');
                 this.titleService.setTitle(title);
-            });
 
-        // Close matSnackbar on navigation
-        this.router.events
-            .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
-            .subscribe(() => this.snackbar.dismiss());
+                this.snackbar.dismiss();
+            });
     }
 
     /**
@@ -83,6 +78,8 @@ export class AppComponent implements OnInit {
      * Access granted permissions array from outside
      */
     public get grantedPermissions(): object {
+        this.resetPermissionsObject();
+
         return this.grantedPermissionsObject;
     }
 

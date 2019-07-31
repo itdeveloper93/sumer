@@ -5,6 +5,8 @@ export const environment = {
         blacklistedRoutes: ['http://sumr.evomedia.pro/auth']
     },
     API: {
-        URL: 'https://51.145.98.38/api/'
+        URL: 'https://51.145.98.38/api/',
+        LOGIN: 'https://51.145.98.38/api/Account/Login',
+        REFRESH_TOKEN: 'https://51.145.98.38/api/Account/RefreshToken'
     }
 };
