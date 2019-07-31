@@ -8,4 +8,8 @@ export const environment = {
         URL: 'https://51.145.98.38/api/'
     },
     hmr: false
+        URL: 'https://51.145.98.38/api/',
+        LOGIN: 'https://51.145.98.38/api/Account/Login',
+        REFRESH_TOKEN: 'https://51.145.98.38/api/Account/RefreshToken'
+    }
 };

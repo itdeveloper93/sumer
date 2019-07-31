@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
     /**
-     * Access dashboard layout props
+     * Access dashboard layout props.
      */
     private dashboardLayout = DashboardLayoutComponent;
 
@@ -75,18 +75,18 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
     }
 
     /**
-     * Add auth token to given request
-     * @param request Request object
-     * @param token Auth token
+     * Add auth token to given request.
+     * @param request Request object.
+     * @param token Auth token.
      */
     private addAuthToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
         return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }
 
     /**
-     * Refresh token
-     * @param request Request object
-     * @param next HTTP next handler
+     * Refresh token.
+     * @param request Request object.
+     * @param next HTTP next handler.
      */
     private refreshToken(request: HttpRequest<any>, next: HttpHandler) {
         return this.authService.refreshToken().pipe(
@@ -109,9 +109,12 @@ export class GlobalHttpHeadersInterceptorService implements HttpInterceptor {
         );
     }
 
+    /**
+     * Determines whether we're refreshing token currently.
+     * @param url Request URL.
+     * @returns Boolean.
+     */
     private isRefreshingToken(url: string): boolean {
-        const matches = url.split('/').lastIndexOf('RefreshToken') > 0 ? true : false;
-
-        return matches;
+        return url.split('/').lastIndexOf('RefreshToken') > 0;
     }
 }
