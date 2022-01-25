@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sumer
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
@@ -25,3 +26,6 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+=======
+# sumer
+>>>>>>> 246474e33c4cc038a2bc5464095ad1db1f0e5432
